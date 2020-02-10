@@ -145,7 +145,8 @@ very well for image synthesis tasks ...
 56
 — Page 701, Deep Learning, 2016.
 
-Figure 5.1: Example of the Generator Model Architecture for the DCGAN. Taken from: Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks.
+![](../images/-.jpg)
+
 The findings in this paper were hard earned, developed after extensive empirical trial and
 error with different model architectures, configurations, and training schemes. Their approach
 remains highly recommended as a starting point when developing new GANs, at least for
@@ -157,7 +158,8 @@ resolution and deeper generative models.
 Networks, 2015.
 Below provides a summary of the GAN architecture recommendations from the paper.
 
-Figure 5.2: Summary of Architectural Guidelines for Training Stable Deep Convolutional
+![](../images/-.jpg)
+
 Generative Adversarial Networks. Taken from: Unsupervised Representation Learning with
 Deep Convolutional Generative Adversarial Networks.
 We will look at how to implement seven best practices for the DCGAN model architecture
@@ -191,7 +193,8 @@ model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,6
 # summarize model
 model.summary()
 
-Listing 5.1: Example of using strided convolutions for downsampling.
+```
+
 Running the example shows the shape of the output of the convolutional layer, where the
 feature maps have one quarter of the area.
 _________________________________________________________________
@@ -208,7 +211,8 @@ Trainable params: 1,792
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 5.2: Example output from using strided convolutions for downsampling.
+```
+
 
 5.4.2
 
@@ -239,7 +243,8 @@ model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬, input_sh
 # summarize model
 model.summary()
 
-Listing 5.3: Example of using strided convolutions for upsampling.
+```
+
 Running the example shows the shape of the output of the convolutional layer, where the
 feature maps have quadruple the area.
 _________________________________________________________________
@@ -254,7 +259,8 @@ Trainable params: 3,136
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 5.4: Example output from using strided convolutions for upsampling.
+```
+
 
 5.4.3
 
@@ -281,7 +287,8 @@ model.add(LeakyReLU(0.2))
 # summarize model
 model.summary()
 
-Listing 5.5: Example of using the LeakyReLU activation function.
+```
+
 
 ### 5.4. Deep Convolutional GANs (DCGANs)
 
@@ -306,7 +313,8 @@ Trainable params: 1,792
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 5.6: Example output from using the LeakyReLU activation function.
+```
+
 
 5.4.4
 
@@ -331,7 +339,8 @@ model.add(LeakyReLU(0.2))
 # summarize model
 model.summary()
 
-Listing 5.7: Example of using BatchNormalization.
+```
+
 Running the example shows the desired usage of batch norm between the outputs of the
 convolutional layer and the activation function.
 _________________________________________________________________
@@ -358,7 +367,8 @@ Trainable params: 1,920
 Non-trainable params: 128
 _________________________________________________________________
 
-Listing 5.8: Example output from using BatchNormalization.
+```
+
 
 5.4.5
 
@@ -381,7 +391,8 @@ init = RandomNormal(mean=0.0, stddev=0.02)
 model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
 kernel_initializer=init, input_shape=(64,64,3)))
 
-Listing 5.9: Example of using Gaussian weight initialization.
+```
+
 
 5.4.6
 
@@ -406,7 +417,8 @@ model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,6
 opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 
-Listing 5.10: Example of using the Adam version of stochastic gradient descent.
+```
+
 
 ### 5.5. Soumith Chintala’s GAN Hacks
 
@@ -443,14 +455,16 @@ scaled = scale_images(images)
 # summarize pixel scaled values
 print(scaled.min(), scaled.max())
 
-Listing 5.11: Example of scaling images to a new range.
+```
+
 Running the example contrives a single color image with random pixel values in [0,255]. The
 pixel values are then scaled to the range [-1,1] and the minimum and maximum pixel values are
 then reported.
 0 255
 -1.0 1.0
 
-Listing 5.12: Example output from scaling images to a new range.
+```
+
 
 5.5
 
@@ -503,13 +517,15 @@ samples = generate_latent_points(n_dim, n_samples)
 # summarize
 print(samples.shape, samples.mean(), samples.std())
 
-Listing 5.13: Example of sampling a Gaussian latent space.
+```
+
 Running the example summarizes the generation of 500 points, each comprised of 100 random
 Gaussian values with a mean close to zero and a standard deviation close to 1, e.g. a standard
 Gaussian distribution.
 (500, 100) -0.004791256735601787 0.9976912528950904
 
-Listing 5.14: Example output from sampling a Gaussian latent space.
+```
+
 
 5.5.2
 
@@ -536,7 +552,8 @@ X_fake, y_fake = ...
 # update discriminator model weights
 discriminator.train_on_batch(X_fake, y_fake)
 
-Listing 5.15: Example of separate batches for real and fake images.
+```
+
 
 5.5.3
 
@@ -564,12 +581,14 @@ y = smooth_positive_labels(y)
 # summarize smooth labels
 print(y.shape, y.min(), y.max())
 
-Listing 5.16: Example demonstrating positive label smoothing.
+```
+
 Running the example summarizes the min and max values for the smooth values, showing
 they are close to the expected values.
 (1000, 1) 0.7003103006957805 1.1997858934066357
 
-Listing 5.17: Example output from demonstrating positive label smoothing.
+```
+
 There have been some suggestions that only positive-class label smoothing is required and
 to values less than 1.0. Nevertheless, you can also smooth negative class labels. The example
 below demonstrates generating 1,000 labels for the negative class (class = 0) and smoothing
@@ -593,10 +612,12 @@ y = smooth_negative_labels(y)
 # summarize smooth labels
 print(y.shape, y.min(), y.max())
 
-Listing 5.18: Example demonstrating negative label smoothing.
+```
+
 (1000, 1) 0.00019305316963429408 0.299785314665858
 
-Listing 5.19: Example output from demonstrating negative label smoothing.
+```
+
 
 5.5.4
 
@@ -644,14 +665,16 @@ y = noisy_labels(y, 0.05)
 # summarize labels
 print(y.sum())
 
-Listing 5.20: Example demonstrating noisy labels.
+```
+
 Try running the example a few times. The results show that approximately 50 of the 1s are
 flipped to 0s for the positive labels (e.g. 5% of 1,000) and approximately 50 0s are flopped to 1s
 in for the negative labels.
 951.0
 49.0
 
-Listing 5.21: Example output from demonstrating noisy labels.
+```
+
 
 5.6
 

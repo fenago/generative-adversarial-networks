@@ -90,14 +90,16 @@ robust result.
 
 173
 
-Figure 9.1: Example of Vector Arithmetic on Points in the Latent Space for Generating Faces
+![](../images/-.jpg)
+
 With a GAN. Taken from: Unsupervised Representation Learning with Deep Convolutional
 Generative Adversarial Networks.
 The second demonstration was the transition between two generated faces, specifically by
 creating a linear path through the latent dimension between the points that generated two faces
 and then generating all of the faces for the points along the path.
 
-Figure 9.2: Example of Faces on a Path Between Two GAN Generated Faces. Taken from Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks.
+![](../images/-.jpg)
+
 
 ### 9.3. Large-Scale CelebFaces Dataset (CelebA)
 
@@ -149,7 +151,8 @@ image = image.convert(✬RGB✬)
 pixels = asarray(image)
 return pixels
 
-Listing 9.1: Example of a function for loading an image as a NumPy array.
+```
+
 Next, we can enumerate the directory of images, load each as an array of pixels in turn, and
 return an array with all of the images. There are 200K images in the dataset, which is probably
 more than we need so we can also limit the number of images to load with an argument. The
@@ -176,7 +179,8 @@ if len(faces) >= n_faces:
 break
 return asarray(faces)
 
-Listing 9.2: Example of a loading all images in a directory.
+```
+
 Finally, once the images are loaded, we can plot them using the imshow() function from the
 Matplotlib library. The plot faces() function below does this, plotting images arranged into
 in a square.
@@ -191,7 +195,8 @@ pyplot.axis(✬off✬)
 pyplot.imshow(faces[i])
 pyplot.show()
 
-Listing 9.3: Example of a function for plotting loaded faces.
+```
+
 Tying this together, the complete example is listed below.
 # load and plot faces
 from os import listdir
@@ -243,19 +248,22 @@ print(✬Loaded: ✬, faces.shape)
 # plot faces
 plot_faces(faces, 5)
 
-Listing 9.4: Example of loading and plotting faces from the dataset.
+```
+
 Running the example loads a total of 25 images from the directory, then summarizes the
 size of the returned array.
 Loaded: (25, 218, 178, 3)
 
-Listing 9.5: Example output from loading and summarizing the faces dataset.
+```
+
 Finally, the 25 images are plotted in a 5 × 5 square.
 
 ### 9.4. How to Prepare the CelebA Faces Dataset
 
 177
 
-Figure 9.3: Plot of a Sample of 25 Faces from the Celebrity Faces Dataset.
+![](../images/-.jpg)
+
 When working with a GAN, it is easier to model a dataset if all of the images are small
 and square in shape. Further, as we are only interested in the face in each photo, and not
 the background, we can perform face detection and extract only the face before resizing the
@@ -267,7 +275,8 @@ the implementation provided by Ivan de Paz Centeno in the ipazc/mtcnn project. T
 can be installed via pip as follows:
 sudo pip install mtcnn
 
-Listing 9.6: Example of installing the mtcnn library with pip.
+```
+
 We can confirm that the library was installed correctly by importing the library and printing
 the version; for example:
 # confirm mtcnn was installed correctly
@@ -275,7 +284,8 @@ import mtcnn
 # show version
 print(mtcnn.__version__)
 
-Listing 9.7: Example of checking that the mtcnn library is installed correctly.
+```
+
 
 ### 9.4. How to Prepare the CelebA Faces Dataset
 
@@ -284,7 +294,8 @@ Listing 9.7: Example of checking that the mtcnn library is installed correctly.
 Running the example prints the current version of the library.
 0.0.9
 
-Listing 9.8: Example output from checking that the mtcnn library is installed correctly.
+```
+
 The MTCNN model is very easy to use. First, an instance of the MTCNN model is created,
 then the detect faces() function can be called passing in the pixel data for one image. The
 result is a list of detected faces, with a bounding box defined in pixel offset values.
@@ -296,7 +307,8 @@ faces = model.detect_faces(pixels)
 # extract details of the face
 x1, y1, width, height = faces[0][✬box✬]
 
-Listing 9.9: Example of using a MTCNN model to extract a face from a photograph.
+```
+
 We can update our example to extract the face from each loaded photo and resize the
 extracted face pixels to a fixed size. In this case, we will use the square shape of 80 × 80 pixels.
 The extract face() function below implements this, taking the MTCNN model and pixel
@@ -323,7 +335,8 @@ image = image.resize(required_size)
 face_array = asarray(image)
 return face_array
 
-Listing 9.10: Example of a function for extracting a face from a loaded image.
+```
+
 We can now update the load faces() function to extract the face from the loaded photo
 and store that in the list of faces returned.
 # load images and extract faces for all images in a directory
@@ -352,7 +365,8 @@ if len(faces) >= n_faces:
 break
 return asarray(faces)
 
-Listing 9.11: Example of loading photographs and extracting faces for images in a directory.
+```
+
 Tying this together, the complete example is listed below. In this case, we increase the total
 number of loaded faces to 50,000 to provide a good training dataset for our GAN model.
 # example of extracting and resizing faces into a new dataset
@@ -423,7 +437,8 @@ print(✬Loaded: ✬, all_faces.shape)
 # save in compressed format
 savez_compressed(✬img_align_celeba.npz✬, all_faces)
 
-Listing 9.12: Example of preparing the celebrity faces dataset for modeling.
+```
+
 Running the example may take a few minutes given the large number of faces to be loaded.
 At the end of the run, the array of extracted and resized faces is saved as a compressed NumPy
 array with the filename img align celeba.npz. The prepared dataset can then be loaded any
@@ -435,12 +450,14 @@ data = load(✬img_align_celeba.npz✬)
 faces = data[✬arr_0✬]
 print(✬Loaded: ✬, faces.shape)
 
-Listing 9.13: Example of loading and summarizing the prepared and saved dataset.
+```
+
 Loading the dataset summarizes the shape of the array, showing 50K images with the size of
 80 × 80 pixels and three color channels.
 Loaded: (50000, 80, 80, 3)
 
-Listing 9.14: Example output from loading and summarizing the prepared and saved dataset.
+```
+
 We are now ready to develop a GAN model to generate faces using this dataset.
 
 ### 9.5. How to Develop a GAN for CelebA
@@ -488,7 +505,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 9.15: Example of a function for defining the discriminator model.
+```
+
 The generator model takes as input a point in the latent space and outputs a single 80 × 80
 color image. This is achieved by using a fully connected layer to interpret the point in the latent
 space and provide sufficient activations that can be reshaped into many different (in this case
@@ -529,7 +547,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(3, (5,5), activation=✬tanh✬, padding=✬same✬))
 return model
 
-Listing 9.16: Example of a function for defining the generator model.
+```
+
 Next, a GAN model can be defined that combines both the generator model and the
 discriminator model into one larger model. This larger model will be used to train the model
 weights in the generator, using the output and error calculated by the discriminator model. The
@@ -556,7 +575,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 9.17: Example of a function for defining the composite model.
+```
+
 
 ### 9.5. How to Develop a GAN for CelebA
 
@@ -579,7 +599,8 @@ X = X.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 9.18: Example of a function for loading and scaling the prepared celebrity faces dataset.
+```
+
 We will require one batch (or a half batch) of real images from the dataset each update to
 the GAN model. A simple way to achieve this is to select a random sample of images from the
 dataset each time. The generate real samples() function below implements this, taking the
@@ -596,7 +617,8 @@ X = dataset[ix]
 y = ones((n_samples, 1))
 return X, y
 
-Listing 9.19: Example of a function selecting a random sample of real images.
+```
+
 Next, we need inputs for the generator model. These are random points from the latent
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
@@ -609,7 +631,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 9.20: Example of a function for generating random points in the latent space.
+```
+
 Next, we need to use the points in the latent space as input to the generator in order to
 generate new images. The generate fake samples() function below implements this, taking
 
@@ -631,7 +654,8 @@ X = g_model.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 9.21: Example of a function for generating synthetic images.
+```
+
 We are now ready to fit the GAN models. The model is fit for 100 training epochs, which is
 arbitrary, as the model begins generating plausible faces after perhaps the first few epochs. A
 batch size of 128 samples is used, and each training epoch involves 50000
@@ -679,7 +703,8 @@ print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
 if (i+1) % 10 == 0:
 summarize_performance(i, g_model, d_model, dataset, latent_dim)
 
-Listing 9.22: Example of a function for training the GAN models.
+```
+
 You will note that every 10 training epochs, the summarize performance() function is
 called. There is currently no reliable way to automatically evaluate the quality of generated
 images. Therefore, we must generate images periodically during training and save the model at
@@ -724,7 +749,8 @@ save_plot(x_fake, epoch)
 filename = ✬generator_model_%03d.h5✬ % (epoch+1)
 g_model.save(filename)
 
-Listing 9.23: Example of functions for summarizing the performance of the GAN models.
+```
+
 We can then define the size of the latent space, define all three models, and train them on
 the loaded face dataset.
 
@@ -744,7 +770,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
 
-Listing 9.24: Example of configuring and running the GAN training process.
+```
+
 Tying all of this together, the complete example is listed below.
 # example of a gan for generating faces
 from numpy import load
@@ -949,7 +976,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
 
-Listing 9.25: Example training the GAN models on the prepared celebrity faces dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -993,7 +1021,8 @@ g=0.656
 g=0.656
 g=0.682
 
-Listing 9.26: Example output of loss from training the GAN models on the prepared celebrity
+```
+
 faces dataset.
 The discriminator loss may crash down to values of 0.0 for real and generated samples. If
 this happens, it is an example of a training failure from which the model is likely not likely to
@@ -1028,7 +1057,8 @@ d2=15.942 g=0.006
 d2=15.942 g=0.000
 d2=15.942 g=0.000
 
-Listing 9.27: Example output of loss indicating a possible failure mode.
+```
+
 Review the generated plots and select a model based on the best quality images. The model
 should begin to generate faces after about 30 training epochs. The faces are not completely
 clear, but it is obvious that they are faces, with all the right things (hair, eyes, nose, mouth) in
@@ -1038,7 +1068,8 @@ roughly the right places.
 
 191
 
-Figure 9.4: Example of Celebrity Faces Generated by a Generative Adversarial Network.
+![](../images/-.jpg)
+
 
 9.6
 
@@ -1092,7 +1123,8 @@ X = (X + 1) / 2.0
 # plot the result
 plot_generated(X, 5)
 
-Listing 9.28: Example loading the saved generator and generating multiple faces.
+```
+
 Running the example first loads the saved model. Then, 25 random points in the 100dimensional latent space are created and provided to the generator model to create 25 images
 of faces, which are then plotted in a 5 × 5 grid.
 
@@ -1100,7 +1132,8 @@ of faces, which are then plotted in a 5 × 5 grid.
 
 193
 
-Figure 9.5: Plot of Randomly Generated Faces Using the Loaded GAN Model.
+![](../images/-.jpg)
+
 
 9.6.2
 
@@ -1124,7 +1157,8 @@ v = (1.0 - ratio) * p1 + ratio * p2
 vectors.append(v)
 return asarray(vectors)
 
-Listing 9.29: Example of a function for interpolating between points in latent space.
+```
+
 
 ### 9.6. How to Explore the Latent Space for Generated Faces
 
@@ -1180,7 +1214,8 @@ X = (X + 1) / 2.0
 # plot the result
 plot_generated(X, len(interpolated))
 
-Listing 9.30: Example linearly interpolating between two points in latent space.
+```
+
 
 ### 9.6. How to Explore the Latent Space for Generated Faces
 
@@ -1190,7 +1225,8 @@ Running the example calculates the interpolation path between the two points in 
 space, generates images for each, and plots the result. You can see the clear linear progression
 in ten steps from the first face on the left to the final face on the right.
 
-Figure 9.6: Plot Showing the Linear Interpolation Between Two GAN Generated Faces.
+![](../images/-.jpg)
+
 We can update the example to repeat this process multiple times so we can see the transition
 between multiple generated faces on a single plot. The complete example is listed below.
 # example of interpolating between generated faces
@@ -1254,12 +1290,14 @@ results = vstack((results, X))
 # plot the result
 plot_generated(results, 10)
 
-Listing 9.31: Example of multiple cases of linearly interpolating between two points in latent
+```
+
 space.
 Running the example creates 10 different face starting points and 10 matching face endpoints,
 and the linear interpolation between each.
 
-Figure 9.7: Plot Showing Multiple Linear Interpolations Between Two GAN Generated Faces.
+![](../images/-.jpg)
+
 
 ### 9.6. How to Explore the Latent Space for Generated Faces
 
@@ -1282,7 +1320,8 @@ if so == 0:
 return (1.0-val) * low + val * high
 return sin((1.0-val)*omega) / so * low + sin(val*omega) / so * high
 
-Listing 9.32: Example of a function for performing spherical linear interpolation.
+```
+
 This function can be called from our interpolate points() function instead of performing
 the manual linear interpolation. The complete example with this change is listed below.
 # example of interpolating between generated faces
@@ -1362,7 +1401,8 @@ results = vstack((results, X))
 # plot the result
 plot_generated(results, 10)
 
-Listing 9.33: Example of multiple cases of using Slerp between two points in latent space.
+```
+
 The result is 10 more transitions between generated faces, this time using the correct Slerp
 interpolation method. The difference is subtle but somehow visually more correct.
 
@@ -1370,7 +1410,8 @@ interpolation method. The difference is subtle but somehow visually more correct
 
 199
 
-Figure 9.8: Plot Showing Multiple Spherically Linear Interpolations Between Two GAN Generated Faces.
+![](../images/-.jpg)
+
 
 9.6.3
 
@@ -1423,7 +1464,8 @@ X = (X + 1) / 2.0
 # save plot
 plot_generated(X, 10)
 
-Listing 9.34: Example of generating random faces for later use.
+```
+
 Running the example loads the model, generates faces, and saves the latent vectors and
 generated faces. The latent vectors are saved to a compressed NumPy array with the filename
 latent points.npz. The 100 generated faces are plotted in a 10 × 10 grid and saved in a file
@@ -1445,7 +1487,8 @@ In this case, we will use the following indexes in the image:
 
 201
 
-Figure 9.9: Plot of 100 Generated Faces Used as the Basis for Vector Arithmetic with Faces.
+![](../images/-.jpg)
+
 Now that we have latent vectors to work with and a target arithmetic, we can get started.
 First, we can specify our preferred images and load the saved NumPy array of latent points.
 # retrieve specific points
@@ -1456,7 +1499,8 @@ neutral_man_ix = [10, 30, 45]
 data = load(✬latent_points.npz✬)
 points = data[✬arr_0✬]
 
-Listing 9.35: Example of loading specific pre-generated latent points.
+```
+
 Next, we can retrieve each vector and calculate the average for each vector type (e.g. smiling
 woman). We could perform vector arithmetic with single images directly, but we will get a
 more robust result if we work with an average of a few faces with the desired property. The
@@ -1479,7 +1523,8 @@ avg_vector = mean(vectors, axis=0)
 all_vectors = vstack((vectors, avg_vector))
 return all_vectors
 
-Listing 9.36: Example of a function for averaging multiple pre-generated latent points.
+```
+
 We can now use this function to retrieve all of the required points in latent space and
 generate images.
 # average vectors
@@ -1494,7 +1539,8 @@ images = model.predict(all_vectors)
 images = (images + 1) / 2.0
 plot_generated(images, 3, 4)
 
-Listing 9.37: Example of generating faces for averaged latent points.
+```
+
 Finally, we can use the average vectors to perform vector arithmetic in latent space and plot
 the result.
 # smiling woman - neutral woman + neutral man = smiling man
@@ -1507,7 +1553,8 @@ result_image = (result_image + 1) / 2.0
 pyplot.imshow(result_image[0])
 pyplot.show()
 
-Listing 9.38: Example of performing arithmetic in vector space and generating a face from the
+```
+
 result.
 Tying this together, the complete example is listed below.
 # example of loading the generator model and generating images
@@ -1574,7 +1621,8 @@ result_image = (result_image + 1) / 2.0
 pyplot.imshow(result_image[0])
 pyplot.show()
 
-Listing 9.39: Example of performing vector arithmetic in vector space.
+```
+
 Running the example first loads the points in latent space for our specific images, calculates
 the average of the points, and generates the faces for the points. We can see that, indeed, our
 selected faces were retrieved correctly and that the average of the points in the vector space
@@ -1585,10 +1633,12 @@ etc.).
 
 204
 
-Figure 9.10: Plot of Selected Generated Faces and the Average Generated Face for Each Row.
+![](../images/-.jpg)
+
 Next, vector arithmetic is performed and the result is a smiling man, as we would expect.
 
-Figure 9.11: Plot of the Resulting Generated Face Based on Vector Arithmetic in Latent Space.
+![](../images/-.jpg)
+
 
 ### 9.7. Extensions
 

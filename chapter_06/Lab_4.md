@@ -83,7 +83,8 @@ the u-shaped function. We can define the function in Python as follows:
 def calculate(x):
 return x * x
 
-Listing 6.1: Example of defining a target function.
+```
+
 We can define the input domain as real values between -0.5 and 0.5 and calculate the output
 value for each input value in this linear range, then plot the results to get an idea of how inputs
 relate to outputs. The complete example is listed below.
@@ -100,7 +101,8 @@ outputs = [calculate(x) for x in inputs]
 pyplot.plot(inputs, outputs)
 pyplot.show()
 
-Listing 6.2: Example of plotting the domain for the target function.
+```
+
 
 ### 6.2. Select a One-Dimensional Function
 
@@ -111,7 +113,8 @@ of input vs. output values. We can see that values far from 0.0 result in larger
 whereas values close to zero result in smaller output values, and that this behavior is symmetrical
 around zero. This is the well-known u-shape plot of the X 2 one-dimensional function.
 
-Figure 6.1: Plot of inputs vs. outputs for X 2 function.
+![](../images/-.jpg)
+
 We can generate random samples or points from the function. This can be achieved by
 generating random values between -0.5 and 0.5 and calculating the associated output value.
 Repeating this many times will give a sample of points from the function, e.g. real samples.
@@ -151,11 +154,13 @@ data = generate_samples()
 pyplot.scatter(data[:, 0], data[:, 1])
 pyplot.show()
 
-Listing 6.3: Example of sampling the domain for the target function.
+```
+
 Running the example generates 100 random inputs and their calculated output and plots
 the sample as a scatter plot, showing the familiar u-shape.
 
-Figure 6.2: Plot of randomly generated sample of inputs vs. calculated outputs for X 2 function.
+![](../images/-.jpg)
+
 We can use this function as a starting point for generating real samples for our discriminator
 function. Specifically, a sample is comprised of a vector with two elements, one for the input
 and one for the output of our one-dimensional function. We can also imagine how a generator
@@ -196,7 +201,8 @@ model.add(Dense(1, activation=✬sigmoid✬))
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
 return model
 
-Listing 6.4: Example of a function for defining the discriminator model.
+```
+
 We can use this function to define the discriminator model and summarize it. The complete
 example is listed below.
 # define the discriminator model
@@ -224,7 +230,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 6.5: Example of defining and summarizing the discriminator model.
+```
+
 Running the example defines the discriminator model and summarizes it.
 _________________________________________________________________
 Layer (type)
@@ -244,14 +251,16 @@ Trainable params: 101
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 6.6: Example output from defining and summarizing the discriminator model.
+```
+
 A plot of the model is also created and we can see that the model expects two inputs and
 will predict a single output.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-Figure 6.3: Plot of the Discriminator Model in the GAN.
+![](../images/-.jpg)
+
 We could start training this model now with real examples with a class label of one and
 randomly generated samples with a class label of zero. There is no need to do this, but the
 elements we will develop will be useful later, and it helps to see that the discriminator is just a
@@ -277,7 +286,8 @@ X = hstack((X1, X2))
 y = ones((n, 1))
 return X, y
 
-Listing 6.7: Example of a function for creating random samples for the target function.
+```
+
 Next, we can create a copy of this function for creating fake examples. In this case, we will
 generate random values in the range -1 and 1 for both elements of a sample. The output class
 label for all of these examples is 0. This function will act as our fake generator model.
@@ -295,7 +305,8 @@ X = hstack((X1, X2))
 y = zeros((n, 1))
 return X, y
 
-Listing 6.8: Example of a function for creating random fake samples for the target function.
+```
+
 Next, we need a function to train and evaluate the discriminator model. This can be achieved
 by manually enumerating the training epochs and for each epoch generating a half batch of
 real examples and a half batch of fake examples, and updating the model on each, e.g. one
@@ -327,7 +338,8 @@ _, acc_real = model.evaluate(X_real, y_real, verbose=0)
 _, acc_fake = model.evaluate(X_fake, y_fake, verbose=0)
 print(i, acc_real, acc_fake)
 
-Listing 6.9: Example of a function for training the discriminator model.
+```
+
 We can tie all of this together and train the discriminator model on real and fake examples.
 The complete example is listed below.
 # define and fit a discriminator model
@@ -399,7 +411,8 @@ model = define_discriminator()
 # fit the model
 train_discriminator(model)
 
-Listing 6.10: Example of fitting the discriminator model.
+```
+
 Running the example generates real and fake examples and updates the model, then evaluates
 the model on the same examples and prints the classification accuracy.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -425,7 +438,8 @@ accuracy and is very good at identifying the fake examples with 80% to 90% accur
 0.9375
 0.8125
 
-Listing 6.11: Example output from fitting the discriminator model.
+```
+
 Training the discriminator model is straightforward. The goal is to train a generator model,
 not a discriminator model, and that is where the complexity of GANs truly lies.
 
@@ -473,7 +487,8 @@ input_dim=latent_dim))
 model.add(Dense(n_outputs, activation=✬linear✬))
 return model
 
-Listing 6.12: Example of a function for defining the generator model.
+```
+
 We can summarize the model to help better understand the input and output shapes. The
 complete example is listed below.
 # define the generator model
@@ -499,7 +514,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 6.13: Example of defining and summarizing the generator model.
+```
+
 Running the example defines the generator model and summarizes it.
 _________________________________________________________________
 Layer (type)
@@ -519,14 +535,16 @@ Trainable params: 122
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 6.14: Example output from defining and summarizing the generator model.
+```
+
 A plot of the model is also created and we can see that the model expects a five-element
 point from the latent space as input and will predict a two-element vector as output.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-Figure 6.4: Plot of the Generator Model in the GAN.
+![](../images/-.jpg)
+
 We can see that the model takes as input a random five-element vector from the latent space
 and outputs a two-element vector for our one-dimensional function. This model cannot do much
 
@@ -550,7 +568,8 @@ x_input = randn(latent_dim * n)
 x_input = x_input.reshape(n, latent_dim)
 return x_input
 
-Listing 6.15: Example of a function sampling the latent space.
+```
+
 Next, we can use the generated points as input the generator model to generate new samples,
 then plot the samples. The generate fake samples() function below implements this, where
 the defined generator and size of the latent space are passed as arguments, along with the
@@ -565,7 +584,8 @@ X = generator.predict(x_input)
 pyplot.scatter(X[:, 0], X[:, 1])
 pyplot.show()
 
-Listing 6.16: Example of a function for generating fake examples.
+```
+
 Tying this together, the complete example is listed below.
 # define and use the generator model
 from numpy.random import randn
@@ -607,7 +627,8 @@ model = define_generator(latent_dim)
 # generate and plot generated samples
 generate_fake_samples(model, latent_dim, 100)
 
-Listing 6.17: Example of defining and using the generator model.
+```
+
 Running the example generates 100 random points from the latent space, uses this as input
 to the generator and generates 100 fake samples from our one-dimensional function domain. As
 the generator has not been trained, the generated points are complete rubbish, as we expect,
@@ -618,7 +639,8 @@ target function and its u-shape.
 
 82
 
-Figure 6.5: Scatter plot of Fake Samples Predicted by the Generator Model.
+![](../images/-.jpg)
+
 We have now seen how to define and use the generator model. We will need to use the
 generator model in this way to create samples for the discriminator to classify. We have not
 seen how the generator model is trained; that is next.
@@ -682,7 +704,8 @@ model.add(discriminator)
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
 return model
 
-Listing 6.18: Example of a function for defining the composite model for training the generator.
+```
+
 Making the discriminator not trainable is a clever trick in the Keras API. The trainable
 property impacts the model when it is compiled. The discriminator model was compiled with
 trainable layers, therefore the model weights in those layers will be updated when the standalone
@@ -742,7 +765,8 @@ gan_model.summary()
 # plot gan model
 plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 6.19: Example of defining and summarizing the composite model for training the
+```
+
 generator.
 Running the example first creates a summary of the composite model. You might get a
 UserWarning about not calling the compile() function that you can safely ignore.
@@ -767,7 +791,8 @@ Trainable params: 122
 Non-trainable params: 101
 _________________________________________________________________
 
-Listing 6.20: Example output from defining and summarizing the composite model for training
+```
+
 the generator.
 A plot of the model is also created and we can see that the model expects a five-element
 point in latent space as input and will predict a single output classification label.
@@ -775,7 +800,8 @@ Note: Creating a plot of the model assumes that the pydot and graphviz libraries
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-Figure 6.6: Plot of the Composite Generator and Discriminator Model in the GAN.
+![](../images/-.jpg)
+
 Training the composite model involves generating a batch-worth of points in the latent space
 via the generate latent points() function in the previous section, and class = 1 labels and
 calling the train on batch() function. The train gan() function below demonstrates this,
@@ -797,7 +823,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the discriminator✬s error
 gan_model.train_on_batch(x_gan, y_gan)
 
-Listing 6.21: Example of a function for training the composite model.
+```
+
 Instead, what is required is that we first update the discriminator model with real and
 fake samples, then update the generator via the composite model. This requires combining
 elements from the train discriminator() function defined in the discriminator section and
@@ -825,7 +852,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the discriminator✬s error
 gan_model.train_on_batch(x_gan, y_gan)
 
-Listing 6.22: Example of a function for training the discriminator and generator models.
+```
+
 We almost have everything we need to develop a GAN for our one-dimensional function.
 One remaining aspect is the evaluation of the model.
 
@@ -861,7 +889,8 @@ X = hstack((X1, X2))
 y = ones((n, 1))
 return X, y
 
-Listing 6.23: Example of a function for generating real samples for training.
+```
+
 Next, we can use the generator model to generate the same number of fake samples. This requires first generating the same number of points in the latent space via the generate latent points()
 function developed in the generator section above. These can then be passed to the generator
 model and used to generate samples that can also be plotted on the same scatter plot.
@@ -873,7 +902,8 @@ x_input = randn(latent_dim * n)
 x_input = x_input.reshape(n, latent_dim)
 return x_input
 
-Listing 6.24: Example of a function for generating random points in latent space.
+```
+
 The generate fake samples() function below generates these fake samples and the associated class label of 0 which will be useful later.
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n):
@@ -885,7 +915,8 @@ X = generator.predict(x_input)
 y = zeros((n, 1))
 return X, y
 
-Listing 6.25: Example of a function for generating fake samples.
+```
+
 Having both samples plotted on the same graph allows them to be directly compared to see
 if the same input and output domain are covered and whether the expected shape of the target
 function has been appropriately captured, at least subjectively. The summarize performance()
@@ -907,7 +938,8 @@ pyplot.scatter(x_real[:, 0], x_real[:, 1], color=✬red✬)
 pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color=✬blue✬)
 pyplot.show()
 
-Listing 6.26: Example of a function for plotting generated points.
+```
+
 We may also be interested in the performance of the discriminator model at the same time.
 Specifically, we are interested to know how well the discriminator model can correctly identify
 real and fake samples. A good generator model should make the discriminator model confused,
@@ -935,7 +967,8 @@ filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 
-Listing 6.27: Example of a function for summarizing the performance of the generator model.
+```
+
 This function can then be called periodically during training. For example, if we choose to
 train the models for 10,000 iterations, it may be interesting to check-in on the performance
 of the model every 2,000 iterations. We can achieve this by parameterizing the frequency of
@@ -971,7 +1004,8 @@ gan_model.train_on_batch(x_gan, y_gan)
 if (i+1) % n_eval == 0:
 summarize_performance(i, g_model, d_model, latent_dim)
 
-Listing 6.28: Example of a function for training the GAN.
+```
+
 
 6.7
 
@@ -1108,7 +1142,8 @@ gan_model = define_gan(generator, discriminator)
 # train model
 train(generator, discriminator, gan_model, latent_dim)
 
-Listing 6.29: Complete example of training a GAN model on a one-dimensional target function.
+```
+
 Running the example reports model performance every 2,000 training iterations (batches)
 and creates a plot.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -1135,14 +1170,16 @@ examples, and performance on identifying fake examples varies.
 0.6 0.41
 0.15 0.93
 
-Listing 6.30: Example output from the complete example of training a GAN model on a
+```
+
 one-dimensional target function.
 We will omit providing the five created plots here for brevity; instead we will look at only
 two. The first plot is created after 2,000 iterations and shows real (red) vs. fake (blue) samples.
 The model performs poorly initially with a cluster of generated points only in the positive input
 domain, although with the right functional relationship.
 
-Figure 6.7: Scatter Plot of Real and Generated Examples for the Target Function After 2,000
+![](../images/-.jpg)
+
 Iterations.
 The second plot shows real (red) vs. fake (blue) after 10,000 iterations. Here we can see that
 the generator model does a reasonable job of generating plausible samples, with the input values
@@ -1153,7 +1190,8 @@ or close to it.
 
 93
 
-Figure 6.8: Scatter Plot of Real and Generated Examples for the Target Function After 10,000
+![](../images/-.jpg)
+
 Iterations.
 
 6.8

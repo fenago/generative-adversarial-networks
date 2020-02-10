@@ -84,21 +84,24 @@ from keras.datasets.cifar10 import load_data
 print(✬Train✬, trainX.shape, trainy.shape)
 print(✬Test✬, testX.shape, testy.shape)
 
-Listing 8.1: Example of loading and summarizing the CIFAR-10 dataset.
+```
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 50K examples in
 the training set and 10K in the test set and that each image is a square of 32 by 32 pixels.
 Train (50000, 32, 32, 3) (50000, 1)
 Test (10000, 32, 32, 3) (10000, 1)
 
-Listing 8.2: Example output from loading and summarizing the CIFAR-10 dataset.
+```
+
 The images are color with the object centered in the middle of the frame. We can plot some
 of the images from the training dataset with the Matplotlib library using the imshow() function.
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i])
 
-Listing 8.3: Example of plotting a single image.
+```
+
 
 ### 8.2. CIFAR-10 Small Object Photograph Dataset
 
@@ -120,12 +123,15 @@ pyplot.axis(✬off✬)
 pyplot.imshow(trainX[i])
 pyplot.show()
 
-Listing 8.4: Example of plotting images from the CIFAR-10 dataset.
-Running the example creates a figure with a plot of 49 images from the CIFAR-10 training
+```
+
+Running the example creates a ![](../images/-.jpg)
+
 dataset, arranged in a 7 × 7 square. In the plot, you can see small photographs of planes, trucks,
 horses, cars, frogs, and so on.
 
-Figure 8.1: Plot of the First 49 Small Object Photographs From the CIFAR-10 Dataset.
+![](../images/-.jpg)
+
 We will use the images in the training dataset as the basis for training a Generative
 
 ### 8.3. How to Define and Train the Discriminator Model
@@ -179,7 +185,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 8.5: Example of a function for defining the discriminator model.
+```
+
 We can use this function to define the discriminator model and summarize it. The complete
 example is listed below.
 
@@ -226,7 +233,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 8.6: Example of defining and summarizing the discriminator model.
+```
+
 Running the example first summarizes the model architecture, showing the output shape for
 each layer. We can see that the aggressive 2 × 2 stride acts to downsample the input image, first
 from 32 × 32 to 16 × 16, then to 8 × 8 and more before the model makes an output prediction.
@@ -288,7 +296,8 @@ Trainable params: 522,497
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 8.7: Example output from defining and summarizing the discriminator model.
+```
+
 A plot of the model is also created and we can see that the model expects two inputs and
 will predict a single output.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -299,7 +308,8 @@ for plot model().
 
 138
 
-Figure 8.2: Plot of the Discriminator Model in the CIFAR-10 Generative Adversarial Network.
+![](../images/-.jpg)
+
 
 ### 8.3. How to Define and Train the Discriminator Model
 
@@ -315,7 +325,8 @@ input part of the training dataset as the real images.
 # load cifar10 dataset
 (trainX, _), (_, _) = load_data()
 
-Listing 8.8: Example of loading the CIFAR-10 training dataset.
+```
+
 We must scale the pixel values from the range of unsigned integers in [0,255] to the normalized
 range of [-1,1]. The generator model will generate images with pixel values in the range [-1,1] as
 it will use the Tanh activation function, a best practice. It is also a good practice for the real
@@ -326,7 +337,8 @@ X = trainX.astype(✬float32✬)
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 
-Listing 8.9: Example of scaling the pixel values of the loaded dataset.
+```
+
 The load real samples() function below implements the loading and scaling of real CIFAR10 photographs.
 # load and prepare cifar10 training images
 def load_real_samples():
@@ -338,7 +350,8 @@ X = trainX.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 8.10: Example of a function for loading and scaling the pixel values of the CIFAR-10
+```
+
 training dataset.
 The discriminator model will be updated in batches, specifically with a collection of real
 samples and a collection of generated samples. On training, an epoch is defined as one pass
@@ -364,7 +377,8 @@ X = dataset[ix]
 y = ones((n_samples, 1))
 return X, y
 
-Listing 8.11: Example of a function for sampling images in the loaded dataset.
+```
+
 Now, we need a source of fake images. We don’t have a generator model yet, so instead, we can
 generate images comprised of random pixel values, specifically random pixel values in the range
 [0,1], then scaled to the range [-1, 1] like our scaled real images. The generate fake samples()
@@ -382,7 +396,8 @@ X = X.reshape((n_samples, 32, 32, 3))
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 8.12: Example of a function for generating images with random pixel values.
+```
+
 Finally, we need to train the discriminator model. This involves repeatedly retrieving samples
 of real images and samples of generated images and updating the model for a fixed number of
 iterations. We will ignore the idea of epochs for now (e.g. complete passes through the training
@@ -413,7 +428,8 @@ print(✬>%d real=%.0f%% fake=%.0f%%✬ % (i+1, real_acc*100, fake_acc*100))
 
 141
 
-Listing 8.13: Example of a function for training the discriminator model.
+```
+
 Tying all of this together, the complete example of training an instance of the discriminator
 model on real and randomly generated (fake) images is listed below.
 # example of training the discriminator model on real and random cifar10 images
@@ -508,7 +524,8 @@ dataset = load_real_samples()
 # fit the model
 train_discriminator(model, dataset)
 
-Listing 8.14: Example of defining and training the discriminator model.
+```
+
 Running the example first defines the model, loads the CIFAR-10 dataset, then trains the
 discriminator model.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -531,7 +548,8 @@ real=98% fake=100%
 real=100% fake=100%
 real=100% fake=100%
 
-Listing 8.15: Example output from defining and training the discriminator model.
+```
+
 Now that we know how to define and train the discriminator model, we need to look at
 developing the generator model.
 
@@ -580,13 +598,15 @@ model.add(Dense(n_nodes, input_dim=latent_dim))
 
 model.add(LeakyReLU(alpha=0.2))
 
-Listing 8.16: Example of defining the foundation activations for the generator model.
+```
+
 The activations from these nodes can then be reshaped into something image-like to pass
 into a convolutional layer, such as 256 different 4 × 4 feature maps.
 ...
 model.add(Reshape((4, 4, 256)))
 
-Listing 8.17: Example of reshaping the foundation activations for the generator model.
+```
+
 The next major architectural innovation involves upsampling the low-resolution image to
 a higher resolution version of the image. There are two common ways to do this upsampling
 process, sometimes called deconvolution. One way is to use an UpSampling2D layer (like a
@@ -601,7 +621,8 @@ and height dimensions). It is also good practice to use a kernel size that is a 
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
 model.add(LeakyReLU(alpha=0.2))
 
-Listing 8.18: Example of adding a transpose convolutional layer to the generator.
+```
+
 This can be repeated two more times to arrive at our required 32 × 32 output image. Again,
 we will use the LeakyReLU with a default slope of 0.2, reported as a best practice when training
 GAN models. The output layer of the model is a Conv2D with three filters for the three required
@@ -637,7 +658,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(3, (3,3), activation=✬tanh✬, padding=✬same✬))
 return model
 
-Listing 8.19: Example of a function for defining the generator model.
+```
+
 We can summarize the model to help better understand the input and output shapes. The
 complete example is listed below.
 # example of defining the generator model
@@ -677,7 +699,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 8.20: Example of defining and summarizing the generator model.
+```
+
 Running the example summarizes the layers of the model and their output shape. We can
 see that, as designed, the first hidden layer has 4,096 parameters or 256 × 4 × 4, the activations
 of which are reshaped into 256 4 × 4 feature maps. The feature maps are then upscaled via the
@@ -729,7 +752,8 @@ Trainable params: 1,466,115
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 8.21: Example output from defining and summarizing the generator model.
+```
+
 A plot of the model is also created and we can see that the model expects a 100-element
 point from the latent space as input and will predict a two-element vector as output.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -740,7 +764,8 @@ for plot model().
 
 147
 
-Figure 8.3: Plot of the Generator Model in the CIFAR-10 Generative Adversarial Network.
+![](../images/-.jpg)
+
 This model cannot do much at the moment. Nevertheless, we can demonstrate how to use
 it to generate samples. This is a helpful demonstration to understand the generator as just
 another model, and some of these elements will be useful later. The first step is to generate
@@ -762,7 +787,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 8.22: Example of a function for generating random points in the latent space.
+```
+
 Next, we can use the generated points as input to the generator model to generate new
 samples, then plot the samples. We can update the generate fake samples() function from
 the previous section to take the generator model as an argument and use it to generate
@@ -780,7 +806,8 @@ X = g_model.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 8.23: Example of a function for creating images with the generator.
+```
+
 We can then plot the generated samples as we did the real CIFAR-10 examples in the first
 section by calling the imshow() function. The complete example of generating new CIFAR-10
 images with the untrained generator model is listed below.
@@ -852,7 +879,8 @@ pyplot.imshow(X[i])
 # show the figure
 pyplot.show()
 
-Listing 8.24: Example of using the untrained generator model.
+```
+
 
 149
 
@@ -865,7 +893,8 @@ a single plot of 7 by 7 images. As the model is not trained, the generated image
 random pixel values in [-1, 1], rescaled to [0, 1]. As we might expect, the images look like a
 mess of gray.
 
-Figure 8.4: Example of 49 CIFAR-10 Images Output by the Untrained Generator Model.
+![](../images/-.jpg)
+
 Now that we know how to define and use the generator model, the next step is to train the
 model.
 
@@ -931,7 +960,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 8.25: Example of a function for defining the composite model for training the generator
+```
+
 via the discriminator.
 
 ### 8.5. How to Train the Generator Model
@@ -1033,7 +1063,8 @@ gan_model.summary()
 # plot gan model
 plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 8.26: Example of defining and summarizing the composite model.
+```
+
 Running the example first creates a summary of the composite model, which is pretty
 uninteresting. We can see that the model expects CIFAR-10 images as input and predicts a
 single value as output.
@@ -1058,14 +1089,16 @@ Non-trainable params: 522,497
 
 _________________________________________________________________
 
-Listing 8.27: Example output from defining and summarizing the composite model.
+```
+
 A plot of the model is also created and we can see that the model expects a 100-element
 point in latent space as input and will predict a single output classification label.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-Figure 8.5: Plot of the Composite Generator and Discriminator Model in the CIFAR-10
+![](../images/-.jpg)
+
 Generative Adversarial Network.
 Training the composite model involves generating a batch worth of points in the latent
 space via the generate latent points() function in the previous section, and class = 1 labels
@@ -1083,7 +1116,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the discriminator✬s error
 gan_model.train_on_batch(x_gan, y_gan)
 
-Listing 8.28: Example of a function for training the generator model via the discriminator
+```
+
 model.
 Instead, what is required is that we first update the discriminator model with real and fake
 samples, then update the generator via the composite model. This requires combining elements
@@ -1137,7 +1171,8 @@ g_loss = gan_model.train_on_batch(X_gan, y_gan)
 print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 
-Listing 8.29: Example of a function for training the GAN.
+```
+
 We almost have everything we need to develop a GAN for the CIFAR-10 photographs of
 objects dataset. One remaining aspect is the evaluation of the model.
 
@@ -1186,7 +1221,8 @@ _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
 print(✬>Accuracy real: %.0f%%, fake: %.0f%%✬ % (acc_real*100, acc_fake*100))
 
-Listing 8.30: Example of a function for summarizing the model’s performance.
+```
+
 This function can be called from the train() function based on the current epoch number,
 such as every 10 epochs.
 # train the generator and discriminator
@@ -1200,7 +1236,8 @@ for i in range(n_epochs):
 if (i+1) % 10 == 0:
 summarize_performance(i, g_model, d_model, dataset, latent_dim)
 
-Listing 8.31: Example of a summarizing the model’s performance from the train function.
+```
+
 
 ### 8.6. How to Evaluate GAN Model Performance
 
@@ -1215,7 +1252,8 @@ epoch number.
 filename = ✬generator_model_%03d.h5✬ % (epoch+1)
 g_model.save(filename)
 
-Listing 8.32: Example of saving the generator model to file.
+```
+
 We can develop a function to create a plot of the generated samples. As we are evaluating
 the discriminator on 100 generated CIFAR-10 images, we can plot about half, or 49, as a 7 by 7
 grid. The save plot() function below implements this, again saving the resulting plot with a
@@ -1237,7 +1275,8 @@ filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 
-Listing 8.33: Example of a function for saving a plot of generated images and the generator
+```
+
 model.
 The updated summarize performance() function with these additions is listed below.
 # evaluate the discriminator, plot generated images, save generator model
@@ -1262,7 +1301,8 @@ g_model.save(filename)
 
 158
 
-Listing 8.34: Example of the updated function for summarizing the model’s performance.
+```
+
 
 8.7
 
@@ -1464,7 +1504,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
 
-Listing 8.35: Complete example of training a GAN on the CIFAR-10 training dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1492,7 +1533,8 @@ the discriminator sits around 1.5 for much of the training process.
 >200, 389/390, d1=0.579, d2=0.288 g=1.555
 >200, 390/390, d1=0.620, d2=0.453 g=1.466
 
-Listing 8.36: Example output of loss from training a GAN on the CIFAR-10 training dataset.
+```
+
 The generator is evaluated every 10 epochs, resulting in 20 evaluations, 20 plots of generated
 images, and 20 saved models. In this case, we can see that the accuracy fluctuates over training.
 When viewing the discriminator model’s accuracy score in concert with generated images, we
@@ -1530,7 +1572,8 @@ fake:
 79%
 87%
 
-Listing 8.37: Example output of accuracy from training a GAN on the CIFAR-10 training
+```
+
 dataset.
 More training, beyond some point, does not mean better quality generated images. In this
 case, the results after 10 epochs are low quality, although we can see some difference between
@@ -1540,14 +1583,16 @@ background and foreground with a blob in the middle of each image.
 
 163
 
-Figure 8.6: Plot of 49 GAN Generated CIFAR-10 Photographs After 10 Epochs.
+![](../images/-.jpg)
+
 After 90 or 100 epochs, we are starting to see plausible photographs with blobs that look
 like birds, dogs, cats, and horses. The objects are familiar and CIFAR-10-like, but many of
 them are not clearly one of the 10 specified classes.
 
 ### 8.7. Complete Example of GAN for CIFAR-10
 
-Figure 8.7: Plot of 49 GAN Generated CIFAR-10 Photographs After 90 Epochs.
+![](../images/-.jpg)
+
 
 164
 
@@ -1555,7 +1600,8 @@ Figure 8.7: Plot of 49 GAN Generated CIFAR-10 Photographs After 90 Epochs.
 
 165
 
-Figure 8.8: Plot of 49 GAN Generated CIFAR-10 Photographs After 100 Epochs.
+![](../images/-.jpg)
+
 The model remains stable over the next 100 epochs, with little improvement in the generated
 images. The small photos remain vaguely CIFAR-10 like and focused on animals like dogs, cats,
 and birds.
@@ -1564,7 +1610,8 @@ and birds.
 
 166
 
-Figure 8.9: Plot of 49 GAN Generated CIFAR-10 Photographs After 200 Epochs.
+![](../images/-.jpg)
+
 
 8.8
 
@@ -1614,7 +1661,8 @@ X = (X + 1) / 2.0
 # plot the result
 save_plot(X, 10)
 
-Listing 8.38: Example of loading the saved generator model and outputting synthetic images.
+```
+
 Running the example first loads the model, samples 100 random points in the latent space,
 generates 100 images, then plots the results as a single image. We can see that most of the
 images are plausible, or plausible pieces of small objects. I can see dogs, cats, horses, birds,
@@ -1624,7 +1672,8 @@ frogs, and perhaps planes.
 
 168
 
-Figure 8.10: Example of 100 GAN Generated CIFAR-10 Small Object Photographs.
+![](../images/-.jpg)
+
 The latent space now defines a compressed representation of CIFAR-10 photos. You can
 experiment with generating different points in this space and see what types of images they
 generate. The example below generates a single image using a vector of all 0.75 values.
@@ -1644,7 +1693,8 @@ X = (X + 1) / 2.0
 pyplot.imshow(X[0, :, :])
 pyplot.show()
 
-Listing 8.39: Example of loading the saved generator model and outputting a single image.
+```
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
@@ -1655,7 +1705,8 @@ Consider running the example a few times and compare the average performance.
 In this case, a vector of all 0.75 results in a deer or perhaps deer-horse-looking animal in a
 green field.
 
-Figure 8.11: Example of a GAN Generated CIFAR Small Object Photo for a Specific Point in
+![](../images/-.jpg)
+
 the Latent Space.
 
 8.9

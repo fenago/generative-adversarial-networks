@@ -83,14 +83,16 @@ from keras.datasets.mnist import load_data
 print(✬Train✬, trainX.shape, trainy.shape)
 print(✬Test✬, testX.shape, testy.shape)
 
-Listing 7.1: Example of loading and summarizing the MNIST dataset.
+```
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 60K examples in
 the training set and 10K in the test set and that each image is a square of 28 by 28 pixels.
 Train (60000, 28, 28) (60000,)
 Test (10000, 28, 28) (10000,)
 
-Listing 7.2: Example output from loading and summarizing the MNIST dataset.
+```
+
 The images are grayscale with a black background (0 pixel value) and the handwritten digits
 in white (pixel values near 255). This means if the images were plotted, they would be mostly
 black with a white digit in the middle. We can plot some of the images from the training dataset
@@ -105,7 +107,8 @@ cmap argument as ‘gray’ to show the pixel values correctly.
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray✬)
 
-Listing 7.3: Example of plotting a single image using the gray color map.
+```
+
 Alternately, the images are easier to review when we reverse the colors and plot the
 background as white and the handwritten digits in black. They are easier to view as most of
 the image is now white with the area of interest in black. This can be achieved using a reverse
@@ -114,7 +117,8 @@ grayscale color map, as follows:
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray_r✬)
 
-Listing 7.4: Example of plotting a single image using the reverse gray color map.
+```
+
 The example below plots the first 25 images from the training dataset in a 5 by 5 square.
 # example of loading the mnist dataset
 from keras.datasets.mnist import load_data
@@ -131,7 +135,8 @@ pyplot.axis(✬off✬)
 pyplot.imshow(trainX[i], cmap=✬gray_r✬)
 pyplot.show()
 
-Listing 7.5: Example of plotting images from the MNIST dataset.
+```
+
 Running the example creates a plot of 25 images from the MNIST training dataset, arranged
 in a 5 × 5 square.
 
@@ -139,7 +144,8 @@ in a 5 × 5 square.
 
 98
 
-Figure 7.1: Plot of the First 25 Handwritten Digits From the MNIST Dataset.
+![](../images/-.jpg)
+
 We will use the images in the training dataset as the basis for training a Generative Adversarial
 Network. Specifically, the generator model will learn how to generate new plausible handwritten
 digits between 0 and 9, using a discriminator that will try to distinguish between real images
@@ -187,7 +193,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 7.6: Example of a function for defining the discriminator model.
+```
+
 We can use this function to define the discriminator model and summarize it. The complete
 example is listed below.
 # example of defining the discriminator model
@@ -226,7 +233,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 7.7: Example of defining and summarizing the discriminator model.
+```
+
 Running the example first summarizes the model architecture, showing the input and output
 from each layer. We can see that the aggressive 2 × 2 stride acts to downsample the input
 image, first from 28 × 28 to 14 × 14, then to 7 × 7, before the model makes an output prediction.
@@ -273,7 +281,8 @@ Trainable params: 40,705
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 7.8: Example output from defining and summarizing the discriminator model.
+```
+
 A plot of the model is also created and we can see that the model expects two inputs and
 will predict a single output.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -284,7 +293,8 @@ for plot model().
 
 101
 
-Figure 7.2: Plot of the Discriminator Model in the MNIST GAN.
+![](../images/-.jpg)
+
 We could start training this model now with real examples with a class label of one, and
 randomly generated samples with a class label of zero. The development of these elements will
 be useful later, and it helps to see that the discriminator is just a normal neural network model
@@ -295,7 +305,8 @@ part of the training dataset as the real images.
 # load mnist dataset
 (trainX, _), (_, _) = load_data()
 
-Listing 7.9: Example of loading the MNIST training dataset.
+```
+
 
 ### 7.3. How to Define and Train the Discriminator Model
 
@@ -309,7 +320,8 @@ NumPy function and specify the final dimension for the channels-last image forma
 # expand to 3d, e.g. add channels dimension
 X = expand_dims(trainX, axis=-1)
 
-Listing 7.10: Example of adding a channels dimension to the dataset.
+```
+
 Finally, we must scale the pixel values from the range of unsigned integers in [0,255] to the
 normalized range of [0,1]. It is best practice to use the range [-1,1], but in this case the range
 [0,1] works just fine.
@@ -323,7 +335,8 @@ convert from unsigned ints to floats
 scale from [0,255] to [0,1]
 = X / 255.0
 
-Listing 7.11: Example of normalizing pixel values.
+```
+
 The load real samples() function below implements this.
 # load and prepare mnist training images
 def load_real_samples():
@@ -337,7 +350,8 @@ X = X.astype(✬float32✬)
 X = X / 255.0
 return X
 
-Listing 7.12: Example of a function for loading and preparing the MNIST training dataset.
+```
+
 The model will be updated in batches, specifically with a collection of real samples and a
 collection of generated samples. On training, an epoch is defined as one pass through the entire
 training dataset. We could systematically enumerate all samples in the training dataset, and
@@ -360,7 +374,8 @@ return X, y
 
 103
 
-Listing 7.13: Example of a function for selecting a sample of real images.
+```
+
 Now, we need a source of fake images. We don’t have a generator model yet, so instead,
 we can generate images comprised of random pixel values, specifically random pixel values
 in the range [0,1] like our scaled real images. The generate fake samples() function below
@@ -376,7 +391,8 @@ X = X.reshape((n_samples, 28, 28, 1))
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 7.14: Example of a function for generating random fake images.
+```
+
 Finally, we need to train the discriminator model. This involves repeatedly retrieving samples
 of real images and samples of generated images and updating the model for a fixed number of
 iterations. We will ignore the idea of epochs for now (e.g. complete passes through the training
@@ -403,7 +419,8 @@ _, fake_acc = model.train_on_batch(X_fake, y_fake)
 # summarize performance
 print(✬>%d real=%.0f%% fake=%.0f%%✬ % (i+1, real_acc*100, fake_acc*100))
 
-Listing 7.15: Example of a function for training the discriminator model.
+```
+
 Tying all of this together, the complete example of training an instance of the discriminator
 model on real and generated (fake) images is listed below.
 # example of training the discriminator model on real and random mnist images
@@ -509,7 +526,8 @@ dataset = load_real_samples()
 # fit the model
 train_discriminator(model, dataset)
 
-Listing 7.16: Example of defining and training the discriminator model.
+```
+
 Running the example first defines the model, loads the MNIST dataset, then trains the
 discriminator model.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -523,7 +541,8 @@ MNIST images very quickly, in about 50 batches.
 >99 real=100% fake=100%
 >100 real=100% fake=100%
 
-Listing 7.17: Example output from defining and training the discriminator model.
+```
+
 Now that we know how to define and train the discriminator model, we need to look at
 developing the generator model.
 
@@ -569,13 +588,15 @@ output image, such as 128.
 # foundation for 7x7 image
 model.add(Dense(128 * 7 * 7, input_dim=100))
 
-Listing 7.18: Example of defining the base activations in the generator model.
+```
+
 The activations from these nodes can then be reshaped into something image-like to pass
 into a convolutional layer, such as 128 different 7 × 7 feature maps.
 ...
 model.add(Reshape((7, 7, 128)))
 
-Listing 7.19: Example of reshaping the activations into a suitable shape for a Conv2D layer.
+```
+
 The next major architectural innovation involves upsampling the low-resolution image to
 a higher resolution version of the image. There are two common ways to do this upsampling
 process, sometimes called deconvolution. One way is to use an UpSampling2D layer (like a
@@ -595,7 +616,8 @@ pattern that can be observed when upsampling (for more on upsampling layers, see
 # upsample to 14x14
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
 
-Listing 7.20: Example of defining an upsampling layer.
+```
+
 This can be repeated to arrive at our 28×28 output image. Again, we will use the LeakyReLU
 activation with a default slope of 0.2, reported as a best practice when training GAN models.
 The output layer of the model is a Conv2D with one filter and a kernel size of 7 × 7 and ‘same’
@@ -622,7 +644,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(1, (7,7), activation=✬sigmoid✬, padding=✬same✬))
 return model
 
-Listing 7.21: Example of a function for defining the generator model.
+```
+
 We can summarize the model to help better understand the input and output shapes. The
 complete example is listed below.
 # example of defining the generator model
@@ -663,7 +686,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 7.22: Example of defining and summarizing the generator model.
+```
+
 Running the example summarizes the layers of the model and their output shape. We can
 see that, as designed, the first hidden layer has 6,272 parameters or 128 × 7 × 7, the activations
 of which are reshaped into 128 7 × 7 feature maps. The feature maps are then upscaled via
@@ -704,7 +728,8 @@ Trainable params: 1,164,289
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 7.23: Example output from defining and summarizing the generator model.
+```
+
 
 ### 7.4. How to Define and Use the Generator Model
 
@@ -716,7 +741,8 @@ Note: Creating a plot of the model assumes that the pydot and graphviz libraries
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-Figure 7.3: Plot of the Generator Model in the MNIST GAN.
+![](../images/-.jpg)
+
 This model cannot do much at the moment. Nevertheless, we can demonstrate how to use
 it to generate samples. This is a helpful demonstration to understand the generator as just
 another model, and some of these elements will be useful later. The first step is to draw new
@@ -738,7 +764,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 7.24: Example of a function for generating random points in the latent space.
+```
+
 Next, we can use the generated points as input to the generator model to generate new
 samples, then plot the samples. We can update the generate fake samples() function from
 the previous section to take the generator model as an argument and use it to generate
@@ -756,7 +783,8 @@ X = g_model.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 7.25: Example of a function for generating synthetic images using the generator model.
+```
+
 We can then plot the generated samples as we did the real MNIST examples in the first
 section by calling the imshow() function with the reversed grayscale color map. The complete
 example of generating new MNIST images with the untrained generator model is listed below.
@@ -825,7 +853,8 @@ pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
 # show the figure
 pyplot.show()
 
-Listing 7.26: Example of using the untrained generator to output random images.
+```
+
 Running the example generates 25 examples of fake MNIST images and visualizes them on
 a single plot of 5 by 5 images. As the model is not trained, the generated images are completely
 random pixel values in [0, 1].
@@ -834,7 +863,8 @@ random pixel values in [0, 1].
 
 112
 
-Figure 7.4: Example of 25 MNIST Images Output by the Untrained Generator Model.
+![](../images/-.jpg)
+
 Now that we know how to define and use the generator model, the next step is to train the
 model.
 
@@ -898,7 +928,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 7.27: Example of a function for defining the composite model to update the generator
+```
+
 model via the discriminator model.
 Making the discriminator not trainable is a clever trick in the Keras API. The trainable
 property impacts the model after it is compiled. The discriminator model was compiled with
@@ -988,7 +1019,8 @@ gan_model.summary()
 # plot gan model
 plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 7.28: Example of defining and summarizing the composite model.
+```
+
 Running the example first creates a summary of the composite model. We can see that the
 model expects MNIST images as input and predicts a single value as output.
 _________________________________________________________________
@@ -1007,7 +1039,8 @@ Trainable params: 1,164,289
 Non-trainable params: 40,705
 _________________________________________________________________
 
-Listing 7.29: Example output from defining and summarizing the composite model.
+```
+
 A plot of the model is also created and we can see that the model expects a 100-element
 point in latent space as input and will predict a single output classification label.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -1018,7 +1051,8 @@ for plot model().
 
 116
 
-Figure 7.5: Plot of the Composite Generator and Discriminator Model in the MNIST GAN.
+![](../images/-.jpg)
+
 Training the composite model involves generating a batch worth of points in the latent
 space via the generate latent points() function in the previous section, and class = 1 labels
 and calling the train on batch() function. The train gan() function below demonstrates
@@ -1035,7 +1069,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the discriminator✬s error
 gan_model.train_on_batch(x_gan, y_gan)
 
-Listing 7.30: Example of a function for training the composite model.
+```
+
 Instead, what is required is that we first update the discriminator model with real and fake
 samples, then update the generator via the composite model. This requires combining elements
 from the train discriminator() function defined in the discriminator section above and the
@@ -1089,7 +1124,8 @@ g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
 print(✬>%d, %d/%d, d=%.3f, g=%.3f✬ % (i+1, j+1, bat_per_epo, d_loss, g_loss))
 
-Listing 7.31: Example of a function for training the GAN models.
+```
+
 We almost have everything we need to develop a GAN for the MNIST handwritten digits
 dataset. One remaining aspect is the evaluation of the model.
 
@@ -1139,7 +1175,8 @@ _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
 print(✬>Accuracy real: %.0f%%, fake: %.0f%%✬ % (acc_real*100, acc_fake*100))
 
-Listing 7.32: Example of a function for summarizing the performance of the models.
+```
+
 This function can be called from the train() function based on the current epoch number,
 such as every 10 epochs.
 # train the generator and discriminator
@@ -1153,7 +1190,8 @@ for i in range(n_epochs):
 if (i+1) % 10 == 0:
 summarize_performance(i, g_model, d_model, dataset, latent_dim)
 
-Listing 7.33: Example of how model performance can be summarized from the train function.
+```
+
 Next, we can update the summarize performance() function to both save the model and
 to create and save a plot generated examples. The generator model can be saved by calling the
 save() function on the generator model and providing a unique filename based on the training
@@ -1163,7 +1201,8 @@ epoch number.
 filename = ✬generator_model_%03d.h5✬ % (epoch + 1)
 g_model.save(filename)
 
-Listing 7.34: Example of saving the generator model.
+```
+
 
 ### 7.7. Complete Example of GAN for MNIST
 
@@ -1188,7 +1227,8 @@ filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 
-Listing 7.35: Example of a function for saving a plot of generated images and the generator
+```
+
 model.
 The updated summarize performance() function with these additions is listed below.
 # evaluate the discriminator, plot generated images, save generator model
@@ -1209,7 +1249,8 @@ save_plot(x_fake, epoch)
 filename = ✬generator_model_%03d.h5✬ % (epoch + 1)
 g_model.save(filename)
 
-Listing 7.36: Example of an updated function for summarizing the performance of the GAN.
+```
+
 
 7.7
 
@@ -1419,7 +1460,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
 
-Listing 7.37: Complete example of training a GAN to generate grayscale handwritten digits.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1441,7 +1483,8 @@ In this case, the loss remains stable over the course of training.
 >100, 233/234, d=0.697, g=0.688
 >100, 234/234, d=0.693, g=0.698
 
-Listing 7.38: Example output of loss from training a GAN to generate grayscale handwritten
+```
+
 digits.
 The generator is evaluated every 10 epochs, resulting in 10 evaluations, 10 plots of generated
 images, and 10 saved models. In this case, we can see that the accuracy fluctuates over training.
@@ -1483,14 +1526,16 @@ real:
 >Accuracy real: 18%, fake: 97%
 >Accuracy real: 28%, fake: 89%
 
-Listing 7.39: Example output of accuracy from training a GAN to generate grayscale handwritten
+```
+
 digits.
 More training, beyond some point, does not mean better quality generated images. In this
 case, the results after 10 epochs are low quality, although we can see that the generator has
 learned to generate centered figures in white on a black background (recall we have inverted the
 grayscale in the plot).
 
-Figure 7.6: Plot of 100 GAN Generated MNIST Figures After 10 Epochs.
+![](../images/-.jpg)
+
 After 20 or 30 more epochs, the model begins to generate very plausible MNIST figures,
 suggesting that 100 epochs are probably not required for the chosen model configurations.
 
@@ -1498,7 +1543,8 @@ suggesting that 100 epochs are probably not required for the chosen model config
 
 125
 
-Figure 7.7: Plot of 100 GAN Generated MNIST Figures After 40 Epochs.
+![](../images/-.jpg)
+
 The generated images after 100 epochs are not greatly different, but I believe I can detect
 less blocky-ness in the curves.
 
@@ -1506,7 +1552,8 @@ less blocky-ness in the curves.
 
 126
 
-Figure 7.8: Plot of 100 GAN Generated MNIST Figures After 100 Epochs.
+![](../images/-.jpg)
+
 
 7.8
 
@@ -1554,7 +1601,8 @@ X = model.predict(latent_points)
 # plot the result
 save_plot(X, 5)
 
-Listing 7.40: Complete example of loading and using the saved generator model.
+```
+
 Running the example first loads the model, samples 25 random points in the latent space,
 generates 25 images, then plots the results as a single image.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -1566,7 +1614,8 @@ handwritten digits.
 
 128
 
-Figure 7.9: Example of 25 GAN Generated MNIST Handwritten Images.
+![](../images/-.jpg)
+
 The latent space now defines a compressed representation of MNIST handwritten digits.
 You can experiment with generating different points in this space and see what types of numbers
 they generate. The example below generates a single handwritten digit using a vector of all 0.0
@@ -1585,7 +1634,8 @@ X = model.predict(vector)
 pyplot.imshow(X[0, :, :, 0], cmap=✬gray_r✬)
 pyplot.show()
 
-Listing 7.41: Complete example of using the saved model to generate a single image.
+```
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
@@ -1597,7 +1647,8 @@ In this case, a vector of all zeros results in a handwritten 9 or maybe an 8. Yo
 navigating the space and see if you can generate a range of similar, but different handwritten
 digits.
 
-Figure 7.10: Example of a GAN Generated MNIST Handwritten Digit for a Vector of Zeros.
+![](../images/-.jpg)
+
 
 7.9
 

@@ -110,7 +110,8 @@ Output = 1,
 4
 4
 
-Listing 3.1: Example input and output using an upsampling layer.
+```
+
 
 3.3.1
 
@@ -129,7 +130,8 @@ in the output. For example:
 model = Sequential()
 model.add(UpSampling2D())
 
-Listing 3.2: Example of adding an UpSampling2D to a model.
+```
+
 We can demonstrate the behavior of this layer with a simple contrived example. First, we
 can define a contrived input image that is 2 × 2 pixels. We can use specific values for each pixel
 so that after upsampling, we can see exactly what effect the operation had on the input.
@@ -140,7 +142,8 @@ X = asarray([[1, 2],
 # show input data for context
 print(X)
 
-Listing 3.3: Example of defining a small input matrix.
+```
+
 Once the image is defined, we must add a channel dimension (e.g. grayscale) and also a
 sample dimension (e.g. we have 1 sample) so that we can pass it as input to the model. The
 data dimensions in order are: samples, rows, columns, and channels.
@@ -148,7 +151,8 @@ data dimensions in order are: samples, rows, columns, and channels.
 # reshape input data into one sample with one channel
 X = X.reshape((1, 2, 2, 1))
 
-Listing 3.4: Example of reshaping a matrix to be input to a CNN.
+```
+
 We can now define our model. The model has only the UpSampling2D layer which takes
 2 × 2 grayscale images as input directly and outputs the result of the upsampling operation.
 ...
@@ -158,13 +162,15 @@ model.add(UpSampling2D(input_shape=(2, 2, 1)))
 # summarize the model
 model.summary()
 
-Listing 3.5: Example of defining a small upsampling CNN.
+```
+
 We can then use the model to make a prediction, that is upsample a provided input image.
 ...
 # make a prediction with the model
 yhat = model.predict(X)
 
-Listing 3.6: Example of making a prediction with the defined model.
+```
+
 The output will have four dimensions, like the input, therefore, we can convert it back to a
 2 × 2 array to make it easier to review the result.
 ...
@@ -177,7 +183,8 @@ print(yhat)
 
 33
 
-Listing 3.7: Example of interpreting the model prediction.
+```
+
 Tying all of this together, the complete example of using the UpSampling2D layer in Keras
 is provided below.
 # example of using the upsampling layer
@@ -203,7 +210,8 @@ yhat = yhat.reshape((4, 4))
 # summarize output
 print(yhat)
 
-Listing 3.8: Example of demonstrating a model with an UpSampling2D layer.
+```
+
 Running the example first creates and summarizes our 2 × 2 input data. Next, the model is
 summarized. We can see that it will output a 4 × 4 result as we expect, and importantly, the
 layer has no parameters or model weights. This is because it is not learning anything; it is just
@@ -248,7 +256,8 @@ _________________________________________________________________
 
 34
 
-Listing 3.9: Example output from demonstrating a model with an UpSampling2D layer.
+```
+
 By default, the UpSampling2D will double each input dimension. This is defined by the
 size argument that is set to the tuple (2,2). You may want to use different factors on each
 dimension, such as double the width and triple the height. This could be achieved by setting
@@ -258,7 +267,8 @@ a 4 × 6 output image (e.g. 2 × 2 and 2 × 3). For example:
 # example of using different scale factors for each dimension
 model.add(UpSampling2D(size=(2, 3)))
 
-Listing 3.10: Example of defining the shape of the upsampling operation.
+```
+
 Additionally, by default, the UpSampling2D layer will use a nearest neighbor algorithm to
 fill in the new rows and columns. This has the effect of simply doubling rows and columns, as
 described and is specified by the interpolation argument set to ‘nearest’. Alternately, a
@@ -268,7 +278,8 @@ can be specified via setting the interpolation argument to ‘bilinear’. For e
 # example of using bilinear interpolation when upsampling
 model.add(UpSampling2D(interpolation=✬bilinear✬))
 
-Listing 3.11: Example of defining the interpolation model for the upsampling.
+```
+
 
 3.3.2
 
@@ -292,7 +303,8 @@ model.add(Dense(128 * 5 * 5, input_dim=100))
 # reshape vector of activations into 128 feature maps with 5x5
 model.add(Reshape((5, 5, 128)))
 
-Listing 3.12: Example of defining the input activations for the generator model.
+```
+
 Next, the 5 × 5 feature maps can be upsampled to a 10 × 10 feature map.
 
 ### 3.3. How to Use the Upsampling Layer
@@ -303,7 +315,8 @@ Next, the 5 × 5 feature maps can be upsampled to a 10 × 10 feature map.
 # quadruple input from 128 5x5 to 1 10x10 feature map
 model.add(UpSampling2D())
 
-Listing 3.13: Example of adding a UpSampling2D layer to the model.
+```
+
 Finally, the upsampled feature maps can be interpreted and filled in with hopefully useful
 detail by a Conv2D layer. The Conv2D has a single feature map as output to create the single
 image we require.
@@ -311,7 +324,8 @@ image we require.
 # fill in detail in the upsampled feature maps
 model.add(Conv2D(1, (3,3), padding=✬same✬))
 
-Listing 3.14: Example of adding a Conv2D layer to the model.
+```
+
 Tying this together, the complete example is listed below.
 # example of using upsampling in a simple generator model
 from keras.models import Sequential
@@ -332,7 +346,8 @@ model.add(Conv2D(1, (3,3), padding=✬same✬))
 # summarize model
 model.summary()
 
-Listing 3.15: Example of defining a simple generator model using the UpSampling2D layer.
+```
+
 Running the example creates the model and summarizes the output shape of each layer. We
 can see that the Dense layer outputs 3,200 activations that are then reshaped into 128 feature
 maps with the shape 5 × 5. The widths and heights are doubled to 10 × 10 by the UpSampling2D
@@ -367,7 +382,8 @@ Trainable params: 324,353
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 3.16: Example output from defining a simple generator model using the UpSampling2D
+```
+
 layer.
 
 3.4
@@ -439,7 +455,8 @@ follows:
 1, 2
 Input = 3, 4
 
-Listing 3.17: Example of an input matrix.
+```
+
 Assuming a single filter with a 1 × 1 kernel and model weights that result in no changes to
 the inputs when output (e.g. a model weight of 1.0 and a bias of 0.0), a transpose convolutional
 operation with an output stride of 1 × 1 will reproduce the output as-is:
@@ -451,7 +468,8 @@ operation with an output stride of 1 × 1 will reproduce the output as-is:
 1, 2
 Output = 3, 4
 
-Listing 3.18: Example of an output matrix with a 1 × 1 stride.
+```
+
 With an output stride of (2,2), the 1 × 1 convolution requires the insertion of additional
 rows and columns into the input image so that the reads of the operation can be performed.
 Therefore, the input looks as follows:
@@ -475,7 +493,8 @@ Input = 0,
 0
 0
 
-Listing 3.19: Example of an input matrix with a 2 × 2 stride.
+```
+
 The model can then read across this input using an output stride of (2,2) and will output a
 4 × 4 image, in this case with no change as our model weights have no effect by design:
 1,
@@ -498,7 +517,8 @@ Output = 0,
 0
 0
 
-Listing 3.20: Example of an output matrix with a 2 × 2 stride.
+```
+
 
 3.4.1
 
@@ -511,7 +531,8 @@ added to your model directly; for example:
 model = Sequential()
 model.add(Conv2DTranspose(...))
 
-Listing 3.21: Example of defining a model with a Conv2DTranspose layer.
+```
+
 We can demonstrate the behavior of this layer with a simple contrived example. First, we
 can define a contrived input image that is 2 × 2 pixels, as we did in the previous section. We
 can use specific values for each pixel so that after the transpose convolutional operation, we can
@@ -523,7 +544,8 @@ X = asarray([[1, 2],
 # show input data for context
 print(X)
 
-Listing 3.22: Example of defining an input matrix for the model.
+```
+
 Once the image is defined, we must add a channel dimension (e.g. grayscale) and also a
 sample dimension (e.g. we have 1 sample) so that we can pass it as input to the model.
 
@@ -535,7 +557,8 @@ sample dimension (e.g. we have 1 sample) so that we can pass it as input to the 
 # reshape input data into one sample a sample with a channel
 X = X.reshape((1, 2, 2, 1))
 
-Listing 3.23: Example of reshaping the input matrix as an image input.
+```
+
 We can now define our model. The model has only the Conv2DTranspose layer, which
 takes 2 × 2 grayscale images as input directly and outputs the result of the operation. The
 Conv2DTranspose both upsamples and performs a convolution. As such, we must specify both
@@ -552,7 +575,8 @@ model.add(Conv2DTranspose(1, (1,1), strides=(2,2), input_shape=(2, 2, 1)))
 # summarize the model
 model.summary()
 
-Listing 3.24: Example of defining a model with a Conv2DTranspose layer.
+```
+
 To make it clear what the Conv2DTranspose layer is doing, we will fix the single weight in
 the single filter to the value of 1.0 and use a bias value of 0.0. These weights, along with a
 kernel size of (1,1) will mean that values in the input will be multiplied by 1 and output as-is,
@@ -564,13 +588,15 @@ weights = [asarray([[[[1]]]]), asarray([0])]
 # store the weights in the model
 model.set_weights(weights)
 
-Listing 3.25: Example of fixing the model weights.
+```
+
 We can then use the model to make a prediction, that is upsample a provided input image.
 ...
 # make a prediction with the model
 yhat = model.predict(X)
 
-Listing 3.26: Example of making a prediction with the model.
+```
+
 The output will have four dimensions, like the input, therefore, we can convert it back to a
 2 × 2 array to make it easier to review the result.
 ...
@@ -579,7 +605,8 @@ yhat = yhat.reshape((4, 4))
 # summarize output
 print(yhat)
 
-Listing 3.27: Example of interpreting the prediction from the model.
+```
+
 
 ### 3.4. How to Use the Transpose Convolutional Layer
 
@@ -614,7 +641,8 @@ yhat = yhat.reshape((4, 4))
 # summarize output
 print(yhat)
 
-Listing 3.28: Example of defining a simple model using the Conv2DTranspose layer.
+```
+
 Running the example first creates and summarizes our 2 × 2 input data. Next, the model is
 summarized. We can see that it will output a 4 × 4 result as we expect, and importantly, the
 layer two parameters or model weights. One for the single 1 × 1 filter and one for the bias. Unlike
@@ -663,7 +691,8 @@ _________________________________________________________________
 0.]
 0.]]
 
-Listing 3.29: Example output from defining a simple model using the Conv2DTranspose layer.
+```
+
 Recall that this is a contrived case where we artificially specified the model weights so that
 we could see the effect of the transpose convolutional operation. In practice, we will use a
 large number of filters (e.g. 64 or 128), a larger kernel (e.g. 3 × 3, 5 × 5, etc.), and the layer
@@ -676,7 +705,8 @@ output shape; for example:
 # example of using padding to ensure that the output are only doubled
 model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬, input_shape=(2, 2, 1)))
 
-Listing 3.30: Example of defining the Conv2DTranspose layer with same padding.
+```
+
 
 3.4.2
 
@@ -701,7 +731,8 @@ model.add(Dense(128 * 5 * 5, input_dim=100))
 # reshape vector of activations into 128 feature maps with 5x5
 model.add(Reshape((5, 5, 128)))
 
-Listing 3.31: Example of defining the base activations for a generator model.
+```
+
 Next, the 5 × 5 feature maps can be upsampled to a 10 × 10 feature map. We will use a
 3 × 3 kernel size for the single filter, which will result in a slightly larger than doubled width
 and height in the output feature map (11 × 11). Therefore, we will set the padding argument
@@ -715,7 +746,8 @@ to ‘same’ to ensure the output dimensions are 10 × 10 as required.
 # double input from 128 5x5 to 1 10x10 feature map
 model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))
 
-Listing 3.32: Example of adding the Conv2DTranspose layer with same padding.
+```
+
 Tying this together, the complete example is listed below.
 # example of using transpose conv in a simple generator model
 from keras.models import Sequential
@@ -733,7 +765,8 @@ model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))
 # summarize model
 model.summary()
 
-Listing 3.33: Example of defining a generator model using the Conv2DTranspose layer.
+```
+
 Running the example creates the model and summarizes the output shape of each layer.
 We can see that the Dense layer outputs 3,200 activations that are then reshaped into 128
 feature maps with the shape 5 × 5. The widths and heights are doubled to 10 × 10 by the
@@ -759,7 +792,8 @@ Trainable params: 324,353
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 3.34: Example output from defining a generator model using the Conv2DTranspose
+```
+
 layer.
 
 3.5

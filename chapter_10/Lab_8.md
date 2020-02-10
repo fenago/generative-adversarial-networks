@@ -97,7 +97,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 10.1: Example of a function for defining the discriminator model.
+```
+
 The generator model takes as input a point in the latent space and outputs a single 28 × 28
 grayscale image. This is achieved by using a fully connected layer to interpret the point in the
 latent space and provide sufficient activations that can be reshaped into many copies (in this case,
@@ -139,7 +140,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬, kernel_initializer=init))
 return model
 
-Listing 10.2: Example of a function for defining the generator model.
+```
+
 Next, a GAN model can be defined that combines both the generator model and the
 discriminator model into one larger model. This larger model will be used to train the model
 weights in the generator, using the output and error calculated by the discriminator model. The
@@ -171,7 +173,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 10.3: Example of a function for defining composite model for training the generator.
+```
+
 Now that we have defined the GAN model, we need to train it. But, before we can train
 the model, we require input data. The first step is to load and scale the MNIST dataset. The
 whole dataset is loaded via a call to the load data() Keras function, then a subset of the
@@ -194,7 +197,8 @@ X = X.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 10.4: Example of a function for loading and preparing the MNIST training dataset.
+```
+
 We will require one (or a half) batch of real images from the dataset each update to the
 GAN model. A simple way to achieve this is to select a random sample of images from the
 dataset each time. The generate real samples() function below implements this, taking the
@@ -211,7 +215,8 @@ X = dataset[ix]
 y = ones((n_samples, 1))
 return X, y
 
-Listing 10.5: Example of a function for selecting a random sample of real images.
+```
+
 Next, we need inputs for the generator model. These are random points from the latent
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
@@ -229,7 +234,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 10.6: Example of a function for generating random points in latent space.
+```
+
 Next, we need to use the points in the latent space as input to the generator in order to
 generate new images. The generate fake samples() function below implements this, taking
 the generator model and size of the latent space as arguments, then generating points in the
@@ -246,7 +252,8 @@ X = generator.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 10.7: Example of a function for generating fake of synthesized images.
+```
+
 We need to record the performance of the model. Perhaps the most reliable way to evaluate
 the performance of a GAN is to use the generator to generate images, and then review and
 subjectively evaluate them. The summarize performance() function below takes the generator
@@ -277,7 +284,8 @@ g_model.save(✬results_baseline/model_%03d.h5✬ % (step+1))
 
 212
 
-Listing 10.8: Example of a function for summarizing model performance.
+```
+
 In addition to image quality, it is a good idea to keep track of the loss and accuracy of the
 model over time. The loss and classification accuracy for the discriminator for real and fake
 samples can be tracked for each model update, as can the loss for the generator for each update.
@@ -300,7 +308,8 @@ pyplot.legend()
 pyplot.savefig(✬results_baseline/plot_line_plot_loss.png✬)
 pyplot.close()
 
-Listing 10.9: Example of a function for creating and saving a plot of model loss.
+```
+
 We are now ready to fit the GAN model. The model is fit for 10 training epochs, which is
 arbitrary, as the model begins generating plausible number-8 digits after perhaps the first few
 epochs. A batch size of 128 samples is used, and each training epoch involves 5851
@@ -363,7 +372,8 @@ if (i+1) % bat_per_epo == 0:
 summarize_performance(i, g_model, latent_dim)
 plot_history(d1_hist, d2_hist, g_hist, a1_hist, a2_hist)
 
-Listing 10.10: Example of a function for training the GAN models.
+```
+
 Now that all of the functions have been defined, we can create the directory where images
 and models will be stored (in this case results baseline), create the models, load the dataset,
 and begin the training process.
@@ -384,7 +394,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 10.11: Example of a configuring and running the training process.
+```
+
 Tying all of this together, the complete example is listed below.
 
 ### 10.2. How To Train a Stable GAN
@@ -613,7 +624,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 10.12: Example of fitting a GAN model on part of the MNIST handwritten digit dataset.
+```
+
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU.
 
@@ -643,7 +655,8 @@ stable equilibrium.
 >449, d1=0.641, d2=0.533 g=1.381, a1=60, a2=85
 >450, d1=0.550, d2=0.731 g=1.100, a1=76, a2=42
 
-Listing 10.13: Example output from fitting a GAN model on part of the MNIST handwritten
+```
+
 digit dataset.
 Line plots for loss and accuracy are created and saved at the end of the run. The figure
 contains two subplots. The top subplot shows line plots for the discriminator loss for real images
@@ -667,10 +680,13 @@ a good baseline for what to expect when training a stable GAN model.
 
 219
 
-Figure 10.1: Line Plots of Loss and Accuracy for a Stable Generative Adversarial Network.
+![](../images/-.jpg)
+
 Finally, we can review samples of generated images. We are generating images using a
-reverse grayscale color map, meaning that the normal white figure on a background is inverted
-to a black figure on a white background. This was done to make the generated figures easier to
+reverse grayscale color map, meaning that the normal white ![](../images/-.jpg)
+
+to a black ![](../images/-.jpg)
+
 review. As we might expect, samples of images generated before epoch 100 are relatively poor
 in quality.
 
@@ -678,7 +694,8 @@ in quality.
 
 220
 
-Figure 10.2: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 45 From a
+![](../images/-.jpg)
+
 Stable GAN.
 Samples of images generated between epochs 100 and 300 are plausible, and perhaps the
 best quality.
@@ -687,7 +704,8 @@ best quality.
 
 221
 
-Figure 10.3: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 180 From a
+![](../images/-.jpg)
+
 Stable GAN.
 And samples of generated images after epoch 300 remain plausible, although perhaps have
 more noise, e.g. background noise.
@@ -696,7 +714,8 @@ more noise, e.g. background noise.
 
 222
 
-Figure 10.4: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 450 From a
+![](../images/-.jpg)
+
 Stable GAN.
 These results are important, as it highlights that the quality generated can and does vary
 across the run, even after the training process becomes stable. More training iterations, beyond
@@ -745,8 +764,10 @@ latent dim variable can be changed from 100 to 1, and the experiment re-run.
 latent_dim = 1
 ...
 
-Listing 10.14: Example of reducing the size of the latent space.
-The full code listing is provided below for completeness.
+```
+
+The full code ```
+
 # example of training an unstable gan for generating a handwritten digit
 from os import makedirs
 from numpy import expand_dims
@@ -973,7 +994,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 10.15: Example of fitting a GAN model with a mode collapse.
+```
+
 Running the example will report the loss and accuracy each step of training, as before.
 In this case, the loss for the discriminator sits in a sensible range, although the loss for the
 generator jumps up and down. The accuracy for the discriminator also shows higher values,
@@ -991,8 +1013,10 @@ fake examples, a bad sign for image quality or diversity.
 >449, d1=0.351, d2=0.467 g=1.184, a1=92, a2=81
 >450, d1=0.492, d2=0.388 g=1.351, a1=76, a2=100
 
-Listing 10.16: Example output from fitting a GAN model with a mode collapse.
-The figure with learning curve and accuracy line plots is created and saved. In the top
+```
+
+The ![](../images/-.jpg)
+
 subplot, we can see the loss for the generator (green) oscillating from sensible to high values
 over time, with a period of about 25 model updates (batches). We can also see some small
 
@@ -1006,7 +1030,8 @@ images remains high throughout the run. This suggests that the generator is poor
 examples in some consistent way that makes it easy for the discriminator to identify the fake
 images.
 
-Figure 10.5: Line Plots of Loss and Accuracy for a Generative Adversarial Network With Mode
+![](../images/-.jpg)
+
 Collapse.
 Reviewing generated images shows the expected feature of mode collapse, namely many
 nearly identical generated examples, regardless of the input point in the latent space. It just so
@@ -1020,7 +1045,8 @@ in the image below to make this clearer.
 
 229
 
-Figure 10.6: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 315 From a
+![](../images/-.jpg)
+
 GAN That Has Suffered Mode Collapse.
 A mode collapse is less common during training given the findings from the DCGAN model
 architecture and training configuration. In summary, you can identify a mode collapse as follows:
@@ -1057,7 +1083,8 @@ the discriminator. This simple change will cause the model to fail to converge. 
 as simple as using the vstack() NumPy function to combine the real and fake samples and
 then calling the train on batch() function to update the discriminator model. The result is
 also a single loss and accuracy scores, meaning that the reporting of model performance, must
-also be updated. The full code listing with these changes is provided below for completeness.
+also be updated. The full code ```
+
 # example of training an unstable gan for generating a handwritten digit
 from os import makedirs
 from numpy import expand_dims
@@ -1280,7 +1307,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 10.17: Example of fitting a GAN model with a convergence failure.
+```
+
 Running the example reports loss and accuracy for each model update. A clear sign of this
 type of failure is the rapid drop of the discriminator loss towards zero, where it remains. This is
 what we see in this case.
@@ -1301,7 +1329,8 @@ what we see in this case.
 >449, d=0.000, g=0.001, a=100
 >450, d=0.000, g=0.001, a=100
 
-Listing 10.18: Example output from fitting a GAN model with a convergence failure.
+```
+
 Line plots of learning curves and classification accuracy are created. The top subplot shows
 the loss for the discriminator (blue) and generator (orange) and clearly shows the drop of both
 values down towards zero over the first 20 to 30 iterations, where it remains for the rest of the
@@ -1314,17 +1343,20 @@ identify.
 
 235
 
-Figure 10.7: Line Plots of Loss and Accuracy for a Generative Adversarial Network With a
+![](../images/-.jpg)
+
 Convergence Failure.
 Finally, reviewing samples of generated images makes it clear why the discriminator is so
 successful. Samples of images generated at each epoch are all very low quality, showing static,
-perhaps with a faint figure eight in the background.
+perhaps with a faint ![](../images/-.jpg)
+
 
 ### 10.4. How To Identify Convergence Failure
 
 236
 
-Figure 10.8: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 450 From a
+![](../images/-.jpg)
+
 GAN That Has a Convergence Failure via Combined Updates to the Discriminator.
 It is useful to see another example of this type of failure. In this case, the configuration of
 the Adam optimization algorithm can be modified to use the defaults, which in turn makes the
@@ -1335,16 +1367,19 @@ as follows:
 # compile model
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
 
-Listing 10.19: Example of using an aggressive configuration for stochastic gradient descent in
+```
+
 the discriminator.
 And the composite GAN model can be compiled as follows:
 ...
 # compile model
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
 
-Listing 10.20: Example of using an aggressive configuration for stochastic gradient descent in
+```
+
 the composite model.
-The full code listing is provided below for completeness.
+The full code ```
+
 
 ### 10.4. How To Identify Convergence Failure
 
@@ -1569,7 +1604,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 10.21: Example of fitting a GAN model with a different type of convergence failure.
+```
+
 Running the example reports the loss and accuracy for each step during training, as before.
 As we expected, the loss for the discriminator rapidly falls to a value close to zero, where it
 remains, and classification accuracy for the discriminator on real and fake examples remains at
@@ -1591,14 +1627,16 @@ remains, and classification accuracy for the discriminator on real and fake exam
 >449, d1=0.000, d2=0.000 g=10.424, a1=100, a2=100
 >450, d1=0.000, d2=0.000 g=10.427, a1=100, a2=100
 
-Listing 10.22: Example output from fitting a GAN model with a different type of convergence
+```
+
 failure.
 A plot of the learning curves and accuracy from training the model with this single change
 is created. The plot shows that this change causes the loss for the discriminator to crash down
 to a value close to zero and remain there. An important difference for this case is that the loss
 for the generator rises quickly and continues to rise for the duration of training.
 
-Figure 10.9: Sample of 100 Generated Images of a Handwritten Number 8 at Epoch 450 From a
+![](../images/-.jpg)
+
 GAN That Has a Convergence Failure via Aggressive Optimization.
 We can review the properties of a convergence failure as follows:
 
