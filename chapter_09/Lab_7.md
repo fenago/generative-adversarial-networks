@@ -301,6 +301,8 @@ Running the example prints the current version of the library.
 The MTCNN model is very easy to use. First, an instance of the MTCNN model is created,
 then the detect faces() function can be called passing in the pixel data for one image. The
 result is a list of detected faces, with a bounding box defined in pixel offset values.
+
+```
 ...
 # prepare model
 model = MTCNN()
@@ -760,6 +762,8 @@ the loaded face dataset.
 
 ### 9.5. How to Develop a GAN for CelebA
 
+
+```
 ...
 # size of the latent space
 latent_dim = 100
@@ -1001,6 +1005,8 @@ Consider running the example a few times and compare the average performance.
 >1,
 >1,
 >1,
+
+```
 ...
 
 1/390,
@@ -1033,6 +1039,8 @@ faces dataset.
 The discriminator loss may crash down to values of 0.0 for real and generated samples. If
 this happens, it is an example of a training failure from which the model is likely not likely to
 recover and you should restart the training process.
+
+```
 ...
 >34,
 >34,
@@ -1040,6 +1048,8 @@ recover and you should restart the training process.
 >34,
 >34,
 >34,
+
+```
 ...
 
 130/390,

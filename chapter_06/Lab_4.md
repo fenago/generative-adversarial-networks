@@ -193,7 +193,7 @@ ReLU activation function and an appropriate weight initialization method called 
 initialization. The output layer will have one node for the binary classification using the sigmoid
 activation function. The model will minimize the binary cross-entropy loss function, and the
 Adam version of stochastic gradient descent will be used because it is very effective. The
-define discriminator() function below defines and returns the discriminator model. The
+define discriminator() function below defines and returns the discriminator model.               The
 function parameterizes the number of inputs to expect, which defaults to two.
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
@@ -427,6 +427,8 @@ Note: Your specific results may vary given the stochastic nature of the learning
 Consider running the example a few times and compare the average performance.
 In this case, the model rapidly learns to correctly identify the real examples with perfect
 accuracy and is very good at identifying the fake examples with 80% to 90% accuracy.
+
+```
 ...
 995
 996

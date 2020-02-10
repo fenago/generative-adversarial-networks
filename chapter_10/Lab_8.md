@@ -377,6 +377,8 @@ plot_history(d1_hist, d2_hist, g_hist, a1_hist, a2_hist)
 Now that all of the functions have been defined, we can create the directory where images
 and models will be stored (in this case results baseline), create the models, load the dataset,
 and begin the training process.
+
+```
 ...
 # make folder for results
 makedirs(✬results_baseline✬, exist_ok=True)
@@ -650,6 +652,8 @@ stable equilibrium.
 >3, d1=0.094, d2=1.467 g=0.597, a1=100, a2=4
 >4, d1=0.097, d2=1.315 g=0.686, a1=100, a2=9
 >5, d1=0.100, d2=1.241 g=0.714, a1=100, a2=9
+
+```
 ...
 >446, d1=0.593, d2=0.546 g=1.330, a1=76, a2=82
 >447, d1=0.551, d2=0.739 g=0.981, a1=82, a2=39
@@ -761,9 +765,13 @@ another model that has different loss. We can impair our stable GAN to suffer mo
 a number of ways. Perhaps the most reliable is to restrict the size of the latent dimension
 directly, forcing the model to only generate a small subset of plausible outputs. Specifically, the
 latent dim variable can be changed from 100 to 1, and the experiment re-run.
+
+```
 ...
 # size of the latent space
 latent_dim = 1
+
+```
 ...
 
 ```
@@ -1008,6 +1016,8 @@ fake examples, a bad sign for image quality or diversity.
 >3, d1=0.088, d2=4.861 g=0.065, a1=100, a2=0
 >4, d1=0.077, d2=4.202 g=0.090, a1=100, a2=0
 >5, d1=0.062, d2=3.533 g=0.128, a1=100, a2=0
+
+```
 ...
 >446, d1=0.277, d2=0.261 g=0.684, a1=95, a2=100
 >447, d1=0.201, d2=0.247 g=0.713, a1=96, a2=100
@@ -1324,6 +1334,8 @@ what we see in this case.
 >8, d=0.075, g=0.159, a=100
 >9, d=0.071, g=0.167, a=100
 >10, d=0.102, g=0.127, a=100
+
+```
 ...
 >446, d=0.000, g=0.001, a=100
 >447, d=0.000, g=0.001, a=100
@@ -1365,6 +1377,8 @@ the Adam optimization algorithm can be modified to use the defaults, which in tu
 updates to the models aggressive and causes a failure for the training process to find a point of
 equilibrium between training the two models. For example, the discriminator can be compiled
 as follows:
+
+```
 ...
 # compile model
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
@@ -1373,6 +1387,8 @@ model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬
 
 the discriminator.
 And the composite GAN model can be compiled as follows:
+
+```
 ...
 # compile model
 model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
@@ -1622,6 +1638,8 @@ remains, and classification accuracy for the discriminator on real and fake exam
 >3, d1=0.000, d2=0.486 g=0.542, a1=100, a2=76
 >4, d1=0.000, d2=0.446 g=0.733, a1=100, a2=82
 >5, d1=0.002, d2=0.855 g=0.649, a1=100, a2=46
+
+```
 ...
 >446, d1=0.000, d2=0.000 g=10.410, a1=100, a2=100
 >447, d1=0.000, d2=0.000 g=10.414, a1=100, a2=100

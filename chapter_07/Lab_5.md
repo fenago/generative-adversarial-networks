@@ -103,6 +103,8 @@ cmap argument as ‘gray’ to show the pixel values correctly.
 
 97
 
+
+```
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray✬)
@@ -113,6 +115,8 @@ Alternately, the images are easier to review when we reverse the colors and plot
 background as white and the handwritten digits in black. They are easier to view as most of
 the image is now white with the area of interest in black. This can be achieved using a reverse
 grayscale color map, as follows:
+
+```
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray_r✬)
@@ -303,6 +307,8 @@ be useful later, and it helps to see that the discriminator is just a normal neu
 for binary classification. First, we need a function to load and prepare the dataset of real images.
 We will use the mnist.load data() function to load the MNIST dataset and just use the input
 part of the training dataset as the real images.
+
+```
 ...
 # load mnist dataset
 (trainX, _), (_, _) = load_data()
@@ -318,6 +324,8 @@ The images are 2D arrays of pixels and convolutional neural networks expect 3D a
 images as input, where each image has one or more channels We must update the images to have
 an additional dimension for the grayscale channel. We can do this using the expand dims()
 NumPy function and specify the final dimension for the channels-last image format.
+
+```
 ...
 # expand to 3d, e.g. add channels dimension
 X = expand_dims(trainX, axis=-1)
@@ -538,6 +546,8 @@ Note: Your specific results may vary given the stochastic nature of the learning
 Consider running the example a few times and compare the average performance.
 In this case, the discriminator model learns to tell the difference between real and generated
 MNIST images very quickly, in about 50 batches.
+
+```
 ...
 >96 real=100% fake=100%
 >97 real=100% fake=100%
@@ -588,6 +598,8 @@ versions of our output with different learned features that can be collapsed in 
 into a final image. The model needs space to invent, create, or generate. Therefore, the first
 hidden layer, the Dense layer needs enough nodes for multiple low-resolution versions of our
 output image, such as 128.
+
+```
 ...
 # foundation for 7x7 image
 model.add(Dense(128 * 7 * 7, input_dim=100))
@@ -596,6 +608,8 @@ model.add(Dense(128 * 7 * 7, input_dim=100))
 
 The activations from these nodes can then be reshaped into something image-like to pass
 into a convolutional layer, such as 128 different 7 × 7 feature maps.
+
+```
 ...
 model.add(Reshape((7, 7, 128)))
 
@@ -616,6 +630,8 @@ The Conv2DTranspose layer can be configured with a stride of (2 × 2) that will 
 the area of the input feature maps (double their width and height dimensions). It is also good
 practice to use a kernel size that is a factor of the stride (e.g. double) to avoid a checkerboard
 pattern that can be observed when upsampling (for more on upsampling layers, see Chapter 3).
+
+```
 ...
 # upsample to 14x14
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
@@ -1197,6 +1213,8 @@ bat_per_epo = int(dataset.shape[0] / n_batch)
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_epochs):
+
+```
 ...
 # evaluate the model performance, sometimes
 if (i+1) % 10 == 0:
@@ -1208,6 +1226,8 @@ Next, we can update the summarize performance() function to both save the model 
 to create and save a plot generated examples. The generator model can be saved by calling the
 save() function on the generator model and providing a unique filename based on the training
 epoch number.
+
+```
 ...
 # save the generator model tile file
 filename = ✬generator_model_%03d.h5✬ % (epoch + 1)
@@ -1492,6 +1512,8 @@ In this case, the loss remains stable over the course of training.
 >1, 4/234, d=0.684, g=0.740
 >1, 5/234, d=0.679, g=0.757
 >1, 6/234, d=0.668, g=0.777
+
+```
 ...
 >100, 230/234, d=0.690, g=0.710
 >100, 231/234, d=0.692, g=0.705

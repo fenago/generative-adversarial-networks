@@ -125,6 +125,8 @@ in the output. For example:
 
 32
 
+
+```
 ...
 # define model
 model = Sequential()
@@ -135,6 +137,8 @@ model.add(UpSampling2D())
 We can demonstrate the behavior of this layer with a simple contrived example. First, we
 can define a contrived input image that is 2 × 2 pixels. We can use specific values for each pixel
 so that after upsampling, we can see exactly what effect the operation had on the input.
+
+```
 ...
 # define input data
 X = asarray([[1, 2],
@@ -147,6 +151,8 @@ print(X)
 Once the image is defined, we must add a channel dimension (e.g. grayscale) and also a
 sample dimension (e.g. we have 1 sample) so that we can pass it as input to the model. The
 data dimensions in order are: samples, rows, columns, and channels.
+
+```
 ...
 # reshape input data into one sample with one channel
 X = X.reshape((1, 2, 2, 1))
@@ -155,6 +161,8 @@ X = X.reshape((1, 2, 2, 1))
 
 We can now define our model. The model has only the UpSampling2D layer which takes
 2 × 2 grayscale images as input directly and outputs the result of the upsampling operation.
+
+```
 ...
 # define model
 model = Sequential()
@@ -165,6 +173,8 @@ model.summary()
 ```
 
 We can then use the model to make a prediction, that is upsample a provided input image.
+
+```
 ...
 # make a prediction with the model
 yhat = model.predict(X)
@@ -173,20 +183,20 @@ yhat = model.predict(X)
 
 The output will have four dimensions, like the input, therefore, we can convert it back to a
 2 × 2 array to make it easier to review the result.
+
+```
 ...
 # reshape output to remove sample and channel to make printing easier
 yhat = yhat.reshape((4, 4))
 # summarize output
 print(yhat)
 
-### 3.3. How to Use the Upsampling Layer
-
-33
-
 ```
 
 Tying all of this together, the complete example of using the UpSampling2D layer in Keras
 is provided below.
+
+```
 # example of using the upsampling layer
 from numpy import asarray
 from keras.models import Sequential
@@ -263,6 +273,8 @@ size argument that is set to the tuple (2,2). You may want to use different fact
 dimension, such as double the width and triple the height. This could be achieved by setting
 the size argument to (2, 3). The result of applying this operation to a 2 × 2 image would be
 a 4 × 6 output image (e.g. 2 × 2 and 2 × 3). For example:
+
+```
 ...
 # example of using different scale factors for each dimension
 model.add(UpSampling2D(size=(2, 3)))
@@ -274,6 +286,8 @@ fill in the new rows and columns. This has the effect of simply doubling rows an
 described and is specified by the interpolation argument set to ‘nearest’. Alternately, a
 bilinear interpolation method can be used which draws upon multiple surrounding points. This
 can be specified via setting the interpolation argument to ‘bilinear’. For example:
+
+```
 ...
 # example of using bilinear interpolation when upsampling
 model.add(UpSampling2D(interpolation=✬bilinear✬))
@@ -295,6 +309,8 @@ and take a 100 element vector of random numbers from the latent space as input. 
 fully connected layer can be used to interpret the input vector and create a sufficient number of
 activations (outputs) that can be reshaped into a low-resolution version of our output image, in
 this case, 128 versions of a 5 × 5 image.
+
+```
 ...
 # define model
 model = Sequential()
@@ -311,6 +327,8 @@ Next, the 5 × 5 feature maps can be upsampled to a 10 × 10 feature map.
 
 35
 
+
+```
 ...
 # quadruple input from 128 5x5 to 1 10x10 feature map
 model.add(UpSampling2D())
@@ -320,6 +338,8 @@ model.add(UpSampling2D())
 Finally, the upsampled feature maps can be interpreted and filled in with hopefully useful
 detail by a Conv2D layer. The Conv2D has a single feature map as output to create the single
 image we require.
+
+```
 ...
 # fill in detail in the upsampled feature maps
 model.add(Conv2D(1, (3,3), padding=✬same✬))
@@ -423,7 +443,9 @@ layer does not technically perform a convolutional operation, it performs a cros
 37
 
 The deconvolution layer, to which people commonly refer, first appears in Zeiler’s
-paper as part of the deconvolutional network but does not have a specific name. [...]
+paper as part of the deconvolutional network but does not have a specific name. [
+```
+...]
 It also has many names including (but not limited to) subpixel or fractional convolutional layer, transposed convolutional layer, inverse, up or backward convolutional
 layer.
 — Is The Deconvolution Layer The Same As A Convolutional Layer?, 2016.
@@ -450,7 +472,9 @@ One way that this effect can be achieved with a normal convolutional layer is by
 new rows and columns of 0.0 values in the input data.
 Finally note that it is always possible to emulate a transposed convolution with
 a direct convolution. The disadvantage is that it usually involves adding many
-columns and rows of zeros to the input ...
+columns and rows of zeros to the input 
+```
+...
 — A Guide To Convolution Arithmetic For Deep Learning, 2016.
 Let’s make this concrete with an example. Consider an input image with the size 2 × 2 as
 follows:
@@ -528,10 +552,14 @@ Worked Example Using the Conv2DTranspose Layer
 
 Keras provides the transpose convolution capability via the Conv2DTranspose layer. It can be
 added to your model directly; for example:
+
+```
 ...
 # define model
 model = Sequential()
-model.add(Conv2DTranspose(...))
+model.add(Conv2DTranspose(
+```
+...))
 
 ```
 
@@ -539,6 +567,8 @@ We can demonstrate the behavior of this layer with a simple contrived example. F
 can define a contrived input image that is 2 × 2 pixels, as we did in the previous section. We
 can use specific values for each pixel so that after the transpose convolutional operation, we can
 see exactly what effect the operation had on the input.
+
+```
 ...
 # define input data
 X = asarray([[1, 2],
@@ -555,6 +585,8 @@ sample dimension (e.g. we have 1 sample) so that we can pass it as input to the 
 
 39
 
+
+```
 ...
 # reshape input data into one sample a sample with a channel
 X = X.reshape((1, 2, 2, 1))
@@ -570,6 +602,8 @@ convolution on the input. Specifying a stride of (2,2) has the effect of spacing
 Specifically, rows and columns of 0.0 values are inserted to achieve the desired stride. In this
 example, we will use one filter, with a 1 × 1 kernel and a stride of 2 × 2 so that the 2 × 2 input
 image is upsampled to 4 × 4.
+
+```
 ...
 # define model
 model = Sequential()
@@ -584,6 +618,8 @@ the single filter to the value of 1.0 and use a bias value of 0.0. These weights
 kernel size of (1,1) will mean that values in the input will be multiplied by 1 and output as-is,
 and the 0 values in the new rows and columns added via the stride of 2 × 2 will be output as 0
 (e.g. 1 × 0 in each case).
+
+```
 ...
 # define weights that do nothing
 weights = [asarray([[[[1]]]]), asarray([0])]
@@ -593,6 +629,8 @@ model.set_weights(weights)
 ```
 
 We can then use the model to make a prediction, that is upsample a provided input image.
+
+```
 ...
 # make a prediction with the model
 yhat = model.predict(X)
@@ -601,6 +639,8 @@ yhat = model.predict(X)
 
 The output will have four dimensions, like the input, therefore, we can convert it back to a
 2 × 2 array to make it easier to review the result.
+
+```
 ...
 # reshape output to remove channel to make printing easier
 yhat = yhat.reshape((4, 4))
@@ -616,6 +656,8 @@ print(yhat)
 
 Tying all of this together, the complete example of using the Conv2DTranspose layer in
 Keras is provided below.
+
+```
 # example of using the transpose convolutional layer
 from numpy import asarray
 from keras.models import Sequential
@@ -703,6 +745,8 @@ during training. In fact, you might imagine how different sized kernels will res
 sized outputs, more than doubling the width and height of the input. In this case, the padding
 argument of the layer can be set to ‘same’ to force the output to have the desired (doubled)
 output shape; for example:
+
+```
 ...
 # example of using padding to ensure that the output are only doubled
 model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬, input_shape=(2, 2, 1)))
@@ -725,6 +769,8 @@ In this case, our little GAN generator model must produce a 10 × 10 image and t
 First, a Dense fully connected layer can be used to interpret the input vector and create a
 sufficient number of activations (outputs) that can be reshaped into a low-resolution version of
 our output image, in this case, 128 versions of a 5 × 5 image.
+
+```
 ...
 # define model
 model = Sequential()
@@ -744,6 +790,8 @@ to ‘same’ to ensure the output dimensions are 10 × 10 as required.
 
 42
 
+
+```
 ...
 # double input from 128 5x5 to 1 10x10 feature map
 model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))

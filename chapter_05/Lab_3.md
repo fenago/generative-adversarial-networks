@@ -15,10 +15,8 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
+## How to Implement GAN Hacks to Train Stable Models
 
-### Chapter 5
-How to Implement GAN Hacks to
-Train Stable Models
 Generative Adversarial Networks, or GANs, are challenging to train. This is because the
 architecture involves both a generator and a discriminator model that compete in a zero-sum
 game. It means that improvements to one model come at the cost of a degrading of performance
@@ -28,6 +26,7 @@ such, there are a number of heuristics or best practices (called GAN hacks) that
 when configuring and training your GAN models. These heuristics have been hard won by
 practitioners testing and evaluating hundreds or thousands of combinations of configuration
 operations on a range of problems over many years.
+
 Some of these heuristics can be challenging to implement, especially for beginners. Further,
 some or all of them may be required for a given project, although it may not be clear which
 subset of heuristics should be adopted, requiring experimentation. This means a practitioner
@@ -43,7 +42,6 @@ presentation and list.
 
 Let’s get started.
 
-5.1
 
 Tutorial Overview
 
@@ -68,7 +66,9 @@ model and the discriminator model are trained simultaneously in a game. This mea
 improvements to one model come at the expense of the other model. The goal of training two
 models involves finding a point of equilibrium between the two competing concerns.
 Training GANs consists in finding a Nash equilibrium to a two-player non-cooperative
-game. [...] Unfortunately, finding Nash equilibria is a very difficult problem. Algorithms exist for specialized cases, but we are not aware of any that are feasible to
+game. [
+```
+...] Unfortunately, finding Nash equilibria is a very difficult problem. Algorithms exist for specialized cases, but we are not aware of any that are feasible to
 apply to the GAN game, where the cost functions are non-convex, the parameters
 are continuous, and the parameter space is extremely high-dimensional
 — Improved Techniques for Training GANs, 2016.
@@ -87,7 +87,9 @@ of non-convergence.
 Instead of converging, GANs may suffer from one of a small number of failure modes. A
 common failure mode is that instead of finding a point of equilibrium, the generator oscillates
 between generating specific examples in the domain.
-In practice, GANs often seem to oscillate, [...] meaning that they progress from
+In practice, GANs often seem to oscillate, [
+```
+...] meaning that they progress from
 generating one kind of sample to generating another kind of sample without eventually
 reaching an equilibrium.
 — NIPS 2016 Tutorial: Generative Adversarial Networks, 2016.
@@ -138,19 +140,23 @@ standard.
 Stabilization of GAN learning remains an open problem. Fortunately, GAN learning
 performs well when the model architecture and hyperparameters are carefully selected.
 Radford et al. (2015) crafted a deep convolutional GAN (DCGAN) that performs
-very well for image synthesis tasks ...
+very well for image synthesis tasks 
+```
+...
 
 ### 5.4. Deep Convolutional GANs (DCGANs)
 
 56
 — Page 701, Deep Learning, 2016.
 
-![](../images/-.jpg)
+![](../images/73-16.jpg)
 
 The findings in this paper were hard earned, developed after extensive empirical trial and
 error with different model architectures, configurations, and training schemes. Their approach
 remains highly recommended as a starting point when developing new GANs, at least for
 image-synthesis-based tasks.
+
+```
 ... after extensive model exploration we identified a family of architectures that
 resulted in stable training across a range of datasets and allowed for training higher
 resolution and deeper generative models.
@@ -542,13 +548,19 @@ code when training your discriminator model.
 
 63
 
+
+```
 ...
 # get randomly selected ✬real✬ samples
-X_real, y_real = ...
+X_real, y_real = 
+```
+...
 # update discriminator model weights
 discriminator.train_on_batch(X_real, y_real)
 # generate ✬fake✬ examples
-X_fake, y_fake = ...
+X_fake, y_fake = 
+```
+...
 # update discriminator model weights
 discriminator.train_on_batch(X_fake, y_fake)
 

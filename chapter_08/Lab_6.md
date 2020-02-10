@@ -96,6 +96,8 @@ Test (10000, 32, 32, 3) (10000, 1)
 
 The images are color with the object centered in the middle of the frame. We can plot some
 of the images from the training dataset with the Matplotlib library using the imshow() function.
+
+```
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i])
@@ -323,6 +325,8 @@ useful later, and it helps to see that the discriminator is just a normal neural
 binary classification. First, we need a function to load and prepare the dataset of real images.
 We will use the cifar.load data() function to load the CIFAR-10 dataset and just use the
 input part of the training dataset as the real images.
+
+```
 ...
 # load cifar10 dataset
 (trainX, _), (_, _) = load_data()
@@ -333,6 +337,8 @@ We must scale the pixel values from the range of unsigned integers in [0,255] to
 range of [-1,1]. The generator model will generate images with pixel values in the range [-1,1] as
 it will use the Tanh activation function, a best practice. It is also a good practice for the real
 images to be scaled to the same range.
+
+```
 ...
 # convert from unsigned ints to floats
 X = trainX.astype(✬float32✬)
@@ -536,6 +542,8 @@ Note: Your specific results may vary given the stochastic nature of the learning
 Consider running the example a few times and compare the average performance.
 In this case, the discriminator model learns to tell the difference between real and randomly
 generated CIFAR-10 images very quickly, in about 20 batches.
+
+```
 ...
 >16 real=100% fake=100%
 
@@ -591,6 +599,8 @@ We want the same thing in reverse: many parallel versions of our output with dif
 features that can be collapsed in the output layer into a final image. The model needs space
 to invent, create, or generate. Therefore, the first hidden layer, the Dense layer, needs enough
 nodes for multiple versions of our output image, such as 256.
+
+```
 ...
 # foundation for 4x4 image
 n_nodes = 256 * 4 * 4
@@ -606,6 +616,8 @@ model.add(LeakyReLU(alpha=0.2))
 
 The activations from these nodes can then be reshaped into something image-like to pass
 into a convolutional layer, such as 256 different 4 × 4 feature maps.
+
+```
 ...
 model.add(Reshape((4, 4, 256)))
 
@@ -620,6 +632,8 @@ use this latter approach for our generator. The Conv2DTranspose layer can be con
 a stride of (2 × 2) that will quadruple the area of the input feature maps (double their width
 and height dimensions). It is also good practice to use a kernel size that is a factor of the stride
 (e.g. double) to avoid a checkerboard pattern that can sometimes be observed when upsampling.
+
+```
 ...
 # upsample to 8x8
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
@@ -1243,6 +1257,8 @@ bat_per_epo = int(dataset.shape[0] / n_batch)
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_epochs):
+
+```
 ...
 # evaluate the model performance, sometimes
 if (i+1) % 10 == 0:
@@ -1259,6 +1275,8 @@ Next, we can update the summarize performance() function to both save the model 
 to create and save a plot generated examples. The generator model can be saved by calling the
 save() function on the generator model and providing a unique filename based on the training
 epoch number.
+
+```
 ...
 # save the generator model tile file
 filename = ✬generator_model_%03d.h5✬ % (epoch+1)
@@ -1542,6 +1560,8 @@ the discriminator sits around 1.5 for much of the training process.
 
 >1, 4/390, d1=0.522, d2=0.709 g=0.680
 >1, 5/390, d1=0.417, d2=0.731 g=0.662
+
+```
 ...
 >200, 386/390, d1=0.499, d2=0.401 g=1.565
 >200, 387/390, d1=0.459, d2=0.623 g=1.481
@@ -1562,6 +1582,8 @@ of GAN performance, along with loss.
 >Accuracy
 >Accuracy
 >Accuracy
+
+```
 ...
 
 real:
