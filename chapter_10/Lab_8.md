@@ -398,6 +398,8 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 Tying all of this together, the complete example is listed below.
 
+```
+
 ### 10.2. How To Train a Stable GAN
 
 # example of training a stable gan for generating a handwritten digit

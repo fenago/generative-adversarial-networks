@@ -198,6 +198,8 @@ pyplot.show()
 ```
 
 Tying this together, the complete example is listed below.
+
+```
 # load and plot faces
 from os import listdir
 from numpy import asarray
@@ -367,7 +369,9 @@ return asarray(faces)
 
 ```
 
-Tying this together, the complete example is listed below. In this case, we increase the total
+Tying this together, the complete example is listed below.
+
+``` In this case, we increase the total
 number of loaded faces to 50,000 to provide a good training dataset for our GAN model.
 # example of extracting and resizing faces into a new dataset
 from os import listdir
@@ -773,6 +777,8 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 ```
 
 Tying all of this together, the complete example is listed below.
+
+```
 # example of a gan for generating faces
 from numpy import load
 from numpy import zeros
@@ -1085,6 +1091,8 @@ The first step is to load the saved model and confirm that it can generate plaus
 model can be loaded using the load model() function in the Keras API. We can then generate
 a number of random points in the latent space and use them as input to the loaded model to
 generate new faces. The faces can then be plotted. The complete example is listed below.
+
+```
 # example of loading the generator model and generating images
 from numpy.random import randn
 from keras.models import load_model
@@ -1229,6 +1237,8 @@ in ten steps from the first face on the left to the final face on the right.
 
 We can update the example to repeat this process multiple times so we can see the transition
 between multiple generated faces on a single plot. The complete example is listed below.
+
+```
 # example of interpolating between generated faces
 from numpy import asarray
 from numpy import vstack
@@ -1310,7 +1320,9 @@ spherical linear interpolation function, or Slerp, that should be used when inte
 space to ensure the curvature of the space is taken into account. For more details, I recommend
 reading the Issue on Linear Interpolation in Soumith Chintala’s dcgan.torch project2 . In that
 project, an implementation of the Slerp function for Python is provided that we can use as the
-basis for our own Slerp function, provided below:
+basis for our own Slerp function, provided listed below.
+
+```
 # spherical linear interpolation (slerp)
 def slerp(val, low, high):
 omega = arccos(clip(dot(low/norm(low), high/norm(high)), -1, 1))
@@ -1324,6 +1336,8 @@ return sin((1.0-val)*omega) / so * low + sin(val*omega) / so * high
 
 This function can be called from our interpolate points() function instead of performing
 the manual linear interpolation. The complete example with this change is listed below.
+
+```
 # example of interpolating between generated faces
 from numpy import asarray
 from numpy import vstack
@@ -1557,6 +1571,8 @@ pyplot.show()
 
 result.
 Tying this together, the complete example is listed below.
+
+```
 # example of loading the generator model and generating images
 from keras.models import load_model
 from matplotlib import pyplot

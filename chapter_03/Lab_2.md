@@ -327,6 +327,8 @@ model.add(Conv2D(1, (3,3), padding=✬same✬))
 ```
 
 Tying this together, the complete example is listed below.
+
+```
 # example of using upsampling in a simple generator model
 from keras.models import Sequential
 from keras.layers import Dense
@@ -749,6 +751,8 @@ model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))
 ```
 
 Tying this together, the complete example is listed below.
+
+```
 # example of using transpose conv in a simple generator model
 from keras.models import Sequential
 from keras.layers import Dense

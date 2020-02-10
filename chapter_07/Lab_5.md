@@ -197,6 +197,8 @@ return model
 
 We can use this function to define the discriminator model and summarize it. The complete
 example is listed below.
+
+```
 # example of defining the discriminator model
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -423,6 +425,8 @@ print(✬>%d real=%.0f%% fake=%.0f%%✬ % (i+1, real_acc*100, fake_acc*100))
 
 Tying all of this together, the complete example of training an instance of the discriminator
 model on real and generated (fake) images is listed below.
+
+```
 # example of training the discriminator model on real and random mnist images
 from numpy import expand_dims
 
@@ -648,6 +652,8 @@ return model
 
 We can summarize the model to help better understand the input and output shapes. The
 complete example is listed below.
+
+```
 # example of defining the generator model
 from keras.models import Sequential
 from keras.layers import Dense
@@ -788,6 +794,8 @@ return X, y
 We can then plot the generated samples as we did the real MNIST examples in the first
 section by calling the imshow() function with the reversed grayscale color map. The complete
 example of generating new MNIST images with the untrained generator model is listed below.
+
+```
 # example of defining and using the generator model
 from numpy import zeros
 from numpy.random import randn
@@ -941,6 +949,8 @@ model is updated via calls to the train on batch() function. This change in the 
 property does not impact the training of standalone discriminator model. The complete example
 of creating the discriminator, generator, and composite model is listed below.
 
+```
+
 ### 7.5. How to Train the Generator Model
 
 # demonstrate creating the three models in the gan
@@ -1076,7 +1086,9 @@ samples, then update the generator via the composite model. This requires combin
 from the train discriminator() function defined in the discriminator section above and the
 train gan() function defined above. It also requires that we enumerate over both epochs and
 batches within in an epoch. The complete train function for updating the discriminator model
-and the generator (via the composite model) is listed below. There are a few things to note
+and the generator (via the composite model) is listed below.
+
+``` There are a few things to note
 in this model training function. First, the number of batches within an epoch is defined by
 how many times the batch size divides into the training dataset. We have a dataset size of
 60K samples and a batch size of 256, so with rounding down, there are 60000
@@ -1231,6 +1243,8 @@ pyplot.close()
 
 model.
 The updated summarize performance() function with these additions is listed below.
+
+```
 # evaluate the discriminator, plot generated images, save generator model
 def summarize_performance(epoch, g_model, d_model, dataset, latent_dim, n_samples=100):
 # prepare real samples
@@ -1258,6 +1272,8 @@ Complete Example of GAN for MNIST
 
 We now have everything we need to train and evaluate a GAN on the MNIST handwritten digit
 dataset. The complete example is listed below.
+
+```
 # example of training a gan on mnist
 from numpy import expand_dims
 from numpy import zeros
@@ -1562,7 +1578,9 @@ How to Use the Final Generator Model
 Once a final generator model is selected, it can be used in a standalone manner for your
 application. This involves first loading the model from file, then using it to generate images. The
 generation of each image requires a point in the latent space as input. The complete example of
-loading the saved model and generating images is listed below. In this case, we will use the
+loading the saved model and generating images is listed below.
+
+``` In this case, we will use the
 model saved after 100 training epochs, but the model saved after 40 or 50 epochs would work
 just as well.
 # example of loading the generator model and generating images

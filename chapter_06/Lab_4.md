@@ -88,6 +88,8 @@ return x * x
 We can define the input domain as real values between -0.5 and 0.5 and calculate the output
 value for each input value in this linear range, then plot the results to get an idea of how inputs
 relate to outputs. The complete example is listed below.
+
+```
 # demonstrate simple x^2 function
 from matplotlib import pyplot
 # simple function
@@ -119,7 +121,9 @@ We can generate random samples or points from the function. This can be achieved
 generating random values between -0.5 and 0.5 and calculating the associated output value.
 Repeating this many times will give a sample of points from the function, e.g. real samples.
 Plotting these samples using a scatter plot will show the same u-shape plot, although comprised
-of the individual random samples. The complete example is listed below. First, we generate
+of the individual random samples. The complete example is listed below.
+
+``` First, we generate
 uniformly random values between 0 and 1, then shift them to the range -0.5 and 0.5. We then
 calculate the output value for each randomly generated input value and combine the arrays into
 a single NumPy array with n rows (100) and two columns.
@@ -205,6 +209,8 @@ return model
 
 We can use this function to define the discriminator model and summarize it. The complete
 example is listed below.
+
+```
 # define the discriminator model
 from keras.models import Sequential
 from keras.layers import Dense
@@ -342,6 +348,8 @@ print(i, acc_real, acc_fake)
 
 We can tie all of this together and train the discriminator model on real and fake examples.
 The complete example is listed below.
+
+```
 # define and fit a discriminator model
 from numpy import zeros
 from numpy import ones
@@ -491,6 +499,8 @@ return model
 
 We can summarize the model to help better understand the input and output shapes. The
 complete example is listed below.
+
+```
 # define the generator model
 from keras.models import Sequential
 from keras.layers import Dense
@@ -587,6 +597,8 @@ pyplot.show()
 ```
 
 Tying this together, the complete example is listed below.
+
+```
 # define and use the generator model
 from numpy.random import randn
 from keras.models import Sequential
@@ -715,6 +727,8 @@ discriminator model are not trainable and cannot be changed when the GAN model i
 via calls to train on batch(). The complete example of creating the discriminator, generator,
 and composite model is listed below.
 
+```
+
 ### 6.5. Training the Generator Model
 
 84
@@ -832,6 +846,8 @@ the train gan() function defined above. It also requires that the generate fake 
 function use the generator model to generate fake samples instead of generating random numbers.
 The complete train function for updating the discriminator model and the generator (via the
 composite model) is listed below.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, latent_dim, n_epochs=10000, n_batch=128):
 # determine half the size of one batch, for updating the discriminator
@@ -975,6 +991,8 @@ of the model every 2,000 iterations. We can achieve this by parameterizing the f
 the check-in via n eval argument, and calling the summarize performance() function from
 the train() function after the appropriate number of iterations. The updated version of the
 train() function with this change is listed below.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, latent_dim, n_epochs=10000, n_batch=128,
 n_eval=2000):
@@ -1013,6 +1031,8 @@ Complete Example of Training the GAN
 
 We now have everything we need to train and evaluate a GAN on our chosen one-dimensional
 function. The complete example is listed below.
+
+```
 # train a generative adversarial network on a one-dimensional function
 from numpy import hstack
 from numpy import zeros
