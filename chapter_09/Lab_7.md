@@ -1049,7 +1049,6 @@ recover and you should restart the training process.
 >34,
 >34,
 
-```
 ...
 
 130/390,

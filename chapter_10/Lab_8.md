@@ -770,13 +770,13 @@ latent dim variable can be changed from 100 to 1, and the experiment re-run.
 ...
 # size of the latent space
 latent_dim = 1
-
-```
 ...
 
 ```
 
-The full code ```
+The full code listing is provided below for completeness.
+
+```
 
 # example of training an unstable gan for generating a handwritten digit
 from os import makedirs
@@ -1095,7 +1095,9 @@ the discriminator. This simple change will cause the model to fail to converge. 
 as simple as using the vstack() NumPy function to combine the real and fake samples and
 then calling the train on batch() function to update the discriminator model. The result is
 also a single loss and accuracy scores, meaning that the reporting of model performance, must
-also be updated. The full code ```
+also be updated. The full code listing is provided below for completeness.
+
+```
 
 # example of training an unstable gan for generating a handwritten digit
 from os import makedirs
@@ -1396,7 +1398,9 @@ model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
 ```
 
 the composite model.
-The full code ```
+The full code listing is provided below for completeness.
+
+```
 
 
 ### 10.4. How To Identify Convergence Failure
