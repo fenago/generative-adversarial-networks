@@ -106,7 +106,8 @@ Their approach is demonstrated in the MNIST handwritten digit dataset where the 
 are one hot encoded and concatenated with the input to both the generator and discriminator
 models. The image below provides a summary of the model architecture.
 
-Figure 17.1: Example of a Conditional Generator and a Conditional Discriminator in a Conditional Generative Adversarial Network. Taken from Conditional Generative Adversarial Nets,
+![](../images/-.jpg)
+
 2014.
 There have been many advancements in the design and training of GAN models, most notably
 the deep convolutional GAN, or DCGAN for short, that outlines the model configuration and
@@ -224,7 +225,8 @@ dataset, arranged in a 10 × 10 square.
 
 338
 
-Figure 17.2: Plot of the First 100 Items of Clothing From the Fashion-MNIST Dataset.
+![](../images/-.jpg)
+
 We will use the images in the training dataset as the basis for training a Generative
 Adversarial Network. Specifically, the generator model will learn how to generate new plausible
 items of clothing using a discriminator that will try to distinguish between real images from
@@ -735,7 +737,8 @@ Most items look quite plausible and could have come from the Fashion-MNIST datas
 are not perfect, however, as there are some sweaters with a single sleeve and shoes that look
 like a mess.
 
-Figure 17.3: Example of 100 Generated items of Clothing using an Unconditional GAN.
+![](../images/-.jpg)
+
 
 17.5
 
@@ -809,7 +812,8 @@ The rest of the model is the same as the discriminator designed in the previous 
 
 349
 
-Figure 17.4: Plot of the Discriminator Model in the Conditional Generative Adversarial Network.
+![](../images/-.jpg)
+
 
 ### 17.5. Conditional GAN for Fashion-MNIST
 
@@ -869,7 +873,8 @@ the same as the unconditional case.
 
 351
 
-Figure 17.5: Plot of the Generator Model in the Conditional Generative Adversarial Network.
+![](../images/-.jpg)
+
 Finally, the composite GAN model requires updating. The new GAN model will take a point
 in latent space as input and a class label and generate a prediction of whether input was real or
 fake, as before. Using the functional API to design the model, it is important that we explicitly
@@ -911,7 +916,8 @@ at the bottom of the plot) and the output of a single class label classification
 
 353
 
-Figure 17.6: Plot of the Composite Generator and Discriminator Model in the Conditional
+![](../images/-.jpg)
+
 Generative Adversarial Network.
 The hard part of the conversion from unconditional to conditional GAN is done, namely
 
@@ -1299,7 +1305,8 @@ items of clothing. The clothing is organized in columns. From left to right, the
 trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, and ankle boot. We can see not only are
 the randomly generated items of clothing plausible, but they also match their expected category.
 
-Figure 17.7: Example of 100 Generated items of Clothing using a Conditional GAN.
+![](../images/-.jpg)
+
 
 17.7
 

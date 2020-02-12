@@ -109,7 +109,8 @@ http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/maps.tar.gz
 
 486
 
-Figure 23.1: Sample Image From the Maps Dataset Including Both Satellite and Google Maps
+![](../images/-.jpg)
+
 Image.
 We can prepare this dataset for training a Pix2Pix GAN model in Keras. We will just work
 with the images in the training dataset. Each image will be loaded, rescaled, and split into
@@ -222,7 +223,8 @@ Google Maps images on the bottom. We can see that satellite images are quite com
 that although the Google Maps images are much simpler, they have color codings for things like
 major roads, water, and parks.
 
-Figure 23.2: Plot of Three Image Pairs Showing Satellite Images (top) and Google Maps Images
+![](../images/-.jpg)
+
 (bottom).
 Now that we have prepared the dataset for image translation, we can develop our Pix2Pix
 GAN model.
@@ -893,7 +895,8 @@ blurring. Nevertheless, large structures are in the right places with mostly the
 
 501
 
-Figure 23.3: Plot of Satellite to Google Maps Translated Images Using Pix2Pix After 10 Training
+![](../images/-.jpg)
+
 Epochs.
 Generated images after about 50 training epochs begin to look very realistic, and the quality
 appears to remain good for the remainder of the training process. The first generated image
@@ -904,7 +907,8 @@ image.
 
 502
 
-Figure 23.4: Plot of Satellite to Google Maps Translated Images Using Pix2Pix After 100
+![](../images/-.jpg)
+
 Training Epochs.
 Now that we have developed and trained the Pix2Pix model, we can explore how they can
 be used in a standalone manner.
@@ -1067,7 +1071,8 @@ In this case, we can see that the generated image captures large roads with oran
 yellow as well as green park areas. The generated image is not perfect but is very close to the
 expected image.
 
-Figure 23.5: Plot of Satellite to Google Maps Image Translation With Final Pix2Pix GAN
+![](../images/-.jpg)
+
 Model.
 
 ### 23.5. How to Translate Images With a Pix2Pix Model
@@ -1079,11 +1084,13 @@ an image from the validation dataset under maps/val/ and crop the satellite elem
 image. This can then be saved and used as input to the model. In this case, we will use
 maps/val/1.jpg.
 
-Figure 23.6: Example Image From the Validation Part of the Maps Dataset.
+![](../images/-.jpg)
+
 We can use an image program to create a rough crop of the satellite element of this image
 to use as input and save the file as satellite.jpg in the current working directory.
 
-Figure 23.7: Example of a Cropped Satellite Image to Use as Input to the Pix2Pix Model.
+![](../images/-.jpg)
+
 We must load the image as a NumPy array of pixels with the size of 256 × 256, rescale the
 
 ### 23.5. How to Translate Images With a Pix2Pix Model
@@ -1185,7 +1192,8 @@ with further training or choice of a different model, higher-quality images coul
 
 509
 
-Figure 23.8: Plot of Satellite Image Translated to Google Maps With Final Pix2Pix GAN
+![](../images/-.jpg)
+
 Model.
 
 23.6
@@ -1250,7 +1258,8 @@ are generated after just 10 epochs.
 
 511
 
-Figure 23.9: Plot of Google Maps to Satellite Translated Images Using Pix2Pix After 10 Training
+![](../images/-.jpg)
+
 Epochs.
 As before, image quality will improve and will continue to vary over the training process. A
 final model can be chosen based on generated image quality, not total training epochs. The
@@ -1260,7 +1269,8 @@ model appears to have little difficulty in generating reasonable water, parks, r
 
 512
 
-Figure 23.10: Plot of Google Maps to Satellite Translated Images Using Pix2Pix After 90
+![](../images/-.jpg)
+
 Training Epochs.
 
 23.7

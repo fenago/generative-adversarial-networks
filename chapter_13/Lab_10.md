@@ -102,7 +102,8 @@ a higher score indicates a lower-quality image and the relationship may be linea
 of the score show that lower FID scores correlate with better-quality images when systematic
 distortions were applied such as the addition of random noise and blur.
 
-Figure 13.1: Example of How Increased Distortion of an Image Correlates with High FID Score.
+![](../images/-.jpg)
+
 Taken from: GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash
 Equilibrium.
 

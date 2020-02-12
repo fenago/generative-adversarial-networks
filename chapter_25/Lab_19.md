@@ -376,7 +376,8 @@ _________________________________________________________________
 A plot of the model architecture is also created to help get an idea of the inputs, outputs,
 and transitions of the image data through the model.
 
-Figure 25.1: Plot of the PatchGAN Discriminator Model for the CycleGAN.
+![](../images/-.jpg)
+
 
 25.4
 

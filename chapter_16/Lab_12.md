@@ -204,7 +204,8 @@ requires a few minor changes to the standard Deep Convolutional GAN, or DCGAN. T
 below provides a summary of the main training loop for training a WGAN, taken from the
 paper. Take note of the listing of recommended hyperparameters used in the model.
 
-Figure 16.1: Algorithm for the Wasserstein Generative Adversarial Networks. Taken from:
+![](../images/-.jpg)
+
 Wasserstein GAN.
 The differences in implementation for the WGAN are as follows:
 1. Use a linear activation function in the output layer of the critic model (instead of sigmoid).
@@ -1087,7 +1088,8 @@ for generated images as reported by the critic (orange line). This sign of this 
 by the target label (e.g. the target label is 1.0), therefore, a well-performing WGAN should
 show this line trending down as the image quality of the generated model is increased.
 
-Figure 16.2: Line Plots of Loss and Accuracy for a Wasserstein Generative Adversarial Network.
+![](../images/-.jpg)
+
 
 ### 16.5. How to Train a Wasserstein GAN Model
 
@@ -1097,7 +1099,8 @@ In this case, more training seems to result in better quality generated images, 
 hurdle occurring around epoch 200-300 after which quality remains pretty good for the model.
 Before and around this hurdle, image quality is poor; for example:
 
-Figure 16.3: Sample of 100 Generated Images of a Handwritten Number 7 at Epoch 97 from a
+![](../images/-.jpg)
+
 Wasserstein GAN.
 After this epoch, the WGAN begins to generate plausible handwritten digits.
 
@@ -1105,7 +1108,8 @@ After this epoch, the WGAN begins to generate plausible handwritten digits.
 
 327
 
-Figure 16.4: Sample of 100 Generated Images of a Handwritten Number 7 at Epoch 970 from a
+![](../images/-.jpg)
+
 Wasserstein GAN.
 
 16.6
@@ -1158,7 +1162,8 @@ images.
 Running the example generates a plot of 5 × 5, or 25, new and plausible handwritten number
 seven digits.
 
-Figure 16.5: Plot of 25 WGAN Generated Plausible Handwritten Number Seven Digits.
+![](../images/-.jpg)
+
 
 ### 16.7. Further Reading
 

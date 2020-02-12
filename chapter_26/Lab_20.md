@@ -187,7 +187,8 @@ Loaded: (1187, 256, 256, 3) (1474, 256, 256, 3)
 A plot is created showing a row of three images from the horse photo dataset (dataA) and a
 row of three images from the zebra dataset (dataB).
 
-Figure 26.1: Plot of Photographs from the Horses2Zeba Dataset.
+![](../images/-.jpg)
+
 Now that we have prepared the dataset for modeling, we can develop the CycleGAN generator
 models that can translate photos from one category to the other, and the reverse.
 
@@ -1007,7 +1008,8 @@ The plots of generated images can be used to choose a model and more training it
 may not necessarily mean better quality generated images. Horses to Zebras translation starts
 to become reliable after about 50 epochs.
 
-Figure 26.2: Plot of Source Photographs of Horses (top row) and Translated Photographs of
+![](../images/-.jpg)
+
 Zebras (bottom row) After 53,415 Training Iterations.
 The translation from Zebras to Horses appears to be more challenging for the model to learn,
 although somewhat plausible translations also begin to be generated after 50 to 60 epochs. I
@@ -1019,7 +1021,8 @@ works through each dataset rather than randomly sampling.
 
 568
 
-Figure 26.3: Plot of Source Photographs of Zebras (top row) and Translated Photographs of
+![](../images/-.jpg)
+
 Horses (bottom row) After 90,212 Training Iterations.
 Now that we have fit our CycleGAN generators, we can use them to translate photographs
 in an ad hoc manner.
@@ -1198,7 +1201,8 @@ reconstruct the original photo.
 
 572
 
-Figure 26.4: Plot of a Real Photo of a Horse, Translation to Zebra, and Reconstructed Photo of
+![](../images/-.jpg)
+
 a Horse Using CycleGAN.
 Then a similar process is performed in reverse, selecting a random photo of a zebra, translating
 it to a horse, then reconstructing the original photo of the zebra.
@@ -1207,7 +1211,8 @@ it to a horse, then reconstructing the original photo of the zebra.
 
 573
 
-Figure 26.5: Plot of a Real Photo of a Zebra, Translation to Horse, and Reconstructed Photo of
+![](../images/-.jpg)
+
 a Zebra Using CycleGAN.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
@@ -1223,7 +1228,8 @@ dataset. In this case, we will use horse2zebra/trainA/n02381460 541.jpg.
 
 574
 
-Figure 26.6: Photograph of a Horse.
+![](../images/-.jpg)
+
 We can develop a function to load this image and scale it to the preferred size of 256 × 256,
 scale pixel values to the range [-1,1], and convert the array of pixels to a single sample. The
 load image() function below implements this.
@@ -1309,7 +1315,8 @@ photograph of a horse to a zebra, and plots the results.
 
 576
 
-Figure 26.7: Photograph of a Horse Translated to a Photograph of a Zebra using CycleGAN.
+![](../images/-.jpg)
+
 
 26.6
 

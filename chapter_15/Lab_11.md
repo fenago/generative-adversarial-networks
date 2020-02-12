@@ -99,7 +99,8 @@ boundary (pink) given a gradient that moves them closer to the boundary.
 
 290
 
-Figure 15.1: Plot of the Sigmoid Decision Boundary vs. the Least Squared Decision Boundary
+![](../images/-.jpg)
+
 for Updating the Generator. Taken from: Least Squares Generative Adversarial Networks.
 In addition to avoiding loss saturation, the LSGAN also results in a more stable training
 process and the generation of higher quality and larger images than the traditional deep
@@ -114,7 +115,8 @@ authors propose a generator and discriminator model architecture, inspired by th
 architecture, and use interleaving upsampling and normal convolutional layers in the generator
 model, seen on the left in the image below.
 
-Figure 15.2: Summary of the Generator (left) and Discriminator (right) Model Architectures
+![](../images/-.jpg)
+
 used in LSGAN Experiments. Taken from: Least Squares Generative Adversarial Networks.
 
 ### 15.3. How to Develop an LSGAN for MNIST
@@ -649,7 +651,8 @@ the beginning of the run are rough.
 
 300
 
-Figure 15.3: Example of 100 LSGAN Generated Handwritten Digits after 1 Training Epoch.
+![](../images/-.jpg)
+
 After a handful of training epochs, the generated images begin to look crisp and realistic.
 Recall that more training epochs may or may not correspond to a generator that outputs higher
 quality images. Review the generated plots and choose a final model with the best quality
@@ -659,7 +662,8 @@ images.
 
 301
 
-Figure 15.4: Example of 100 LSGAN Generated Handwritten Digits After 20 Training Epochs.
+![](../images/-.jpg)
+
 At the end of the training run, a plot of learning curves is created for the discriminator and
 generator. In this case, we can see that training remains somewhat stable throughout the run,
 with some very large peaks observed, which wash out the scale of the plot.
@@ -668,7 +672,8 @@ with some very large peaks observed, which wash out the scale of the plot.
 
 302
 
-Figure 15.5: Plot of Learning Curves for the Generator and Discriminator in the LSGAN During
+![](../images/-.jpg)
+
 Training.
 
 15.4
@@ -726,7 +731,8 @@ digits.
 
 ### 15.5. Further Reading
 
-Figure 15.6: Plot of 100 LSGAN Generated Plausible Handwritten Digits.
+![](../images/-.jpg)
+
 
 15.5
 

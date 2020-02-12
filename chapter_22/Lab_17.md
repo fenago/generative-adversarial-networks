@@ -305,7 +305,8 @@ target is compared to a matrix of target values, 0 for fake and 1 for real.
 
 470
 
-Figure 22.1: Plot of the PatchGAN Model Used in the Pix2Pix GAN Architecture.
+![](../images/-.jpg)
+
 Now that we know how to implement the PatchGAN discriminator model, we can now look
 at implementing the U-Net generator model.
 
@@ -328,7 +329,8 @@ output image size.
 a bottleneck layer, at which point the process is reversed.
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
 
-Figure 22.2: Architecture of the U-Net Generator Model. Taken from Image-to-Image Translation
+![](../images/-.jpg)
+
 With Conditional Adversarial Networks.
 Skip connections are added between the layers with the same sized feature maps so that the
 first downsampling layer is connected with the last upsampling layer, the second downsampling
@@ -778,7 +780,8 @@ for plot model().
 
 480
 
-Figure 22.3: Plot of the Composite GAN Model Used to Train the Generator in the Pix2Pix
+![](../images/-.jpg)
+
 GAN Architecture.
 
 22.6
