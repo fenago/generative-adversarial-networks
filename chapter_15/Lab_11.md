@@ -157,7 +157,8 @@ model.add(Dense(1, activation=✬linear✬, kernel_initializer=init))
 model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 
-Listing 15.1: Example of a function for defining the discriminator model.
+```
+
 The generator model takes a point in latent space as input and outputs a grayscale image
 with the shape 28 × 28 pixels, where pixel values are in the range [-1,1] via the Tanh activation
 function on the output layer. The define generator() function below defines the generator
@@ -194,7 +195,8 @@ model.add(Conv2D(1, (7,7), padding=✬same✬, kernel_initializer=init))
 model.add(Activation(✬tanh✬))
 return model
 
-Listing 15.2: Example of a function for defining the generator model.
+```
+
 The generator model is updated via the discriminator model. This is achieved by creating
 a composite model that stacks the generator on top of the discriminator so that error signals
 can flow back through the discriminator to the generator. The weights of the discriminator are
@@ -219,7 +221,8 @@ model.add(discriminator)
 model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 
-Listing 15.3: Example of a function for defining the composite model for training the generator.
+```
+
 Next, we can define a function to load the MNIST handwritten digit dataset and scale the
 pixel values to the range [-1,1] to match the images output by the generator model. Only the
 training part of the MNIST dataset is used, which contains 60,000 centered grayscale images of
@@ -241,7 +244,8 @@ X = X.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 15.4: Example of a function for loading and preparing the MNIST dataset.
+```
+
 We can then define a function to retrieve a batch of randomly selected images from the training
 dataset. The real images are returned with corresponding target values for the discriminator
 model, e.g. y=1.0, to indicate they are real.
@@ -255,7 +259,8 @@ X = dataset[ix]
 y = ones((n_samples, 1))
 return X, y
 
-Listing 15.5: Example of a function for selecting a random sample of real images.
+```
+
 Next, we can develop the corresponding functions for the generator. First, a function for
 generating random points in the latent space to use as input for generating images via the
 generator model.
@@ -267,7 +272,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 15.6: Example of a function for generating random points in latent space.
+```
+
 Next, a function that will use the generator model to generate a batch of fake images for
 updating the discriminator model, along with the target value (y=0) to indicate the images are
 fake.
@@ -281,7 +287,8 @@ X = generator.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 15.7: Example of a function for generating synthetic images.
+```
+
 We need to use the generator periodically during training to generate images that we
 can subjectively inspect and use as the basis for choosing a final generator model. The
 summarize performance() function below can be called during training to generate and save a
@@ -315,7 +322,8 @@ filename2 = ✬model_%06d.h5✬ % (step+1)
 g_model.save(filename2)
 print(✬Saved %s and %s✬ % (filename1, filename2))
 
-Listing 15.8: Example of a function for evaluating the generator model.
+```
+
 We are also interested in the behavior of loss during training. As such, we can record loss in
 lists across each training iteration, then create and save a line plot of the learning dynamics of the
 models. Creating and saving the plot of learning curves is implemented in the plot history()
@@ -331,7 +339,8 @@ pyplot.savefig(filename)
 pyplot.close()
 print(✬Saved %s✬ % (filename))
 
-Listing 15.9: Example of a function for creating and saving plots of learning curves.
+```
+
 Finally, we can define the main training loop via the train() function. The function takes
 the defined models and dataset as arguments and parameterizes the number of training epochs
 and batch size as default function arguments. Each training loop involves first generating a
@@ -379,7 +388,8 @@ summarize_performance(i, g_model, latent_dim)
 # create line plot of training history
 plot_history(d1_hist, d2_hist, g_hist)
 
-Listing 15.10: Example of a function for training the GAN models.
+```
+
 Tying all of this together, the complete code example of training an LSGAN on the MNIST
 handwritten digit dataset is listed below.
 # example of lsgan for mnist
@@ -593,7 +603,8 @@ print(dataset.shape)
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 15.11: Example of training the LSGAN on the MNIST training dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -629,7 +640,8 @@ g=2.215
 g=1.846
 g=1.619
 
-Listing 15.12: Example output from training the LSGAN on the MNIST training dataset.
+```
+
 Plots of generated images are created at the end of every epoch. The generated images at
 the beginning of the run are rough.
 
@@ -706,7 +718,8 @@ X = model.predict(latent_points)
 # plot the result
 plot_generated(X, 10)
 
-Listing 15.13: Example of loading the saved LSGAN generator model and using it to generate
+```
+
 images.
 Running the example generates a plot of 10 × 10, or 100, new and plausible handwritten
 digits.

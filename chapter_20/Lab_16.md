@@ -179,7 +179,8 @@ model = define_discriminator()
 # plot the model
 plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 20.1: Example of defining and summarizing the discriminator model.
+```
+
 Running the example creates a plot of the discriminator model, clearly showing the 28×28×1
 
 ### 20.3. How to Implement the Semi-Supervised Discriminator
@@ -268,7 +269,8 @@ show_layer_names=True)
 plot_model(c_model, to_file=✬discriminator2_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 20.2: Example of defining and summarizing two separate discriminator models.
+```
+
 Running the example creates and plots both models. The plot for the first model is the
 same as before. The plot of the second model shows the same expected input shape and same
 feature extraction layers, with a new 10 class classification output layer.
@@ -348,7 +350,8 @@ model = define_discriminator()
 plot_model(model, to_file=✬multioutput_discriminator_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 20.3: Example of defining and summarizing the multiple-output discriminator.
+```
+
 Running the example creates and plots the single multi-output model. The plot clearly
 shows the shared layers and the separate unsupervised and supervised output layers.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -411,7 +414,8 @@ print(custom_activation(output))
 output = np.asarray([10.0, 10.0, 10.0])
 print(custom_activation(output))
 
-Listing 20.4: Example of demonstrating the custom activation function.
+```
+
 Remember, the output of the unsupervised model prior to the softmax activation function
 will be the activations of the nodes directly. They will be small positive or negative values, but
 not normalized, as this would be performed by the softmax activation. The custom activation
@@ -429,7 +433,8 @@ when we run the example.
 0.890768227426964
 0.9999848669190928
 
-Listing 20.5: Example output from demonstrating the custom activation function.
+```
+
 This means that the model is encouraged to output a strong class prediction for real examples,
 and a small class prediction or low activation for fake examples. It’s a clever trick and allows
 the re-use of the same output nodes from the supervised model in both models. The activation
@@ -503,7 +508,8 @@ show_layer_names=True)
 plot_model(c_model, to_file=✬stacked_discriminator2_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 20.6: Example of defining and summarizing the discriminator models with the custom
+```
+
 activation function.
 Running the example creates and plots the two models, which look much the same as the
 two models in the first example. Stacked version of the unsupervised discriminator model:
@@ -563,7 +569,8 @@ out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
 model = Model(in_lat, out_layer)
 return model
 
-Listing 20.7: Example of a function for defining the generator model.
+```
+
 The generator model will be fit via the unsupervised discriminator model. We will use the
 composite model architecture, common to training the generator model when implemented
 in Keras. Specifically, weight sharing is used where the output of the generator model is
@@ -584,7 +591,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 20.8: Example of a function for defining the composite model for updating the generator.
+```
+
 We can load the training dataset and scale the pixels to the range [-1, 1] to match the output
 values of the generator model.
 # load the images
@@ -605,7 +613,8 @@ X = (X - 127.5) / 127.5
 print(X.shape, trainy.shape)
 return [X, trainy]
 
-Listing 20.9: Example of a function for loading and preparing the MNIST dataset.
+```
+
 We can also define a function to select a subset of the training dataset in which we keep the labels and train the supervised version of the discriminator model. The select supervised samples()
 function below implements this and is careful to ensure that the selection of examples is random
 and that the classes are balanced. The number of labeled examples is parameterized and set at
@@ -625,7 +634,8 @@ ix = randint(0, len(X_with_class), n_per_class)
 [y_list.append(i) for j in ix]
 return asarray(X_list), asarray(y_list)
 
-Listing 20.10: Example of a function for selecting supervised samples of real images.
+```
+
 Next, we can define a function for retrieving a batch of real training examples. A sample
 of images and labels is selected, with replacement. This same function can be used to retrieve
 examples from the labeled and unlabeled dataset, later when we train the models. In the case
@@ -642,7 +652,8 @@ X, labels = images[ix], labels[ix]
 y = ones((n_samples, 1))
 return [X, labels], y
 
-Listing 20.11: Example of a function for selecting unsupervised samples of real images.
+```
+
 
 ### 20.4. How to Develop a Semi-Supervised GAN for MNIST
 
@@ -670,7 +681,8 @@ images = generator.predict(z_input)
 y = zeros((n_samples, 1))
 return images, y
 
-Listing 20.12: Example of functions for sampling the latent space and generating synthetic
+```
+
 images.
 Next, we can define a function to be called when we want to evaluate the performance of the
 model. This function will generate and plot 100 images using the current state of the generator
@@ -715,7 +727,8 @@ filename3 = ✬c_model_%04d.h5✬ % (step+1)
 c_model.save(filename3)
 print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
 
-Listing 20.13: Example of a function for summarizing model performance and saving models to
+```
+
 file.
 Next, we can define a function to train the models. The defined models and loaded training
 dataset are provided as arguments, and the number of training epochs and batch size are
@@ -773,7 +786,8 @@ d_loss2, g_loss))
 if (i+1) % (bat_per_epo * 1) == 0:
 summarize_performance(i, g_model, c_model, latent_dim, dataset)
 
-Listing 20.14: Example of a function for training the GAN models.
+```
+
 Finally, we can define the models and call the function to train and save the models.
 ...
 # size of the latent space
@@ -789,7 +803,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 
-Listing 20.15: Example of configuring and starting the training process.
+```
+
 Tying all of this together, the complete example of training a semi-supervised GAN on the
 MNIST handwritten digit image classification task is listed below.
 # example of semi-supervised gan for mnist
@@ -1027,7 +1042,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 
-Listing 20.16: Example of training the SGAN model on the MNIST dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1056,7 +1072,8 @@ n_epochs=20, n_batch=100, 1/2=50, b/e=600, steps=12000
 >5, c[2.254,18], d[0.077,2.407], g[0.095]
 ...
 
-Listing 20.17: Example output of loss from training the SGAN model on the MNIST dataset.
+```
+
 The supervised classification model is evaluated on the entire training dataset at the end of
 every training epoch, in this case after every 600 training updates. At this time, the performance
 of the model is summarized, showing that it rapidly achieves good skill. This is surprising given
@@ -1080,7 +1097,8 @@ Accuracy:
 92.525%
 92.180%
 
-Listing 20.18: Example output of accuracy from training the SGAN model on the MNIST
+```
+
 dataset.
 The models are also saved at the end of each training epoch and plots of generated images
 are also created. The quality of the generated images is good given the relatively small number
@@ -1108,7 +1126,8 @@ Keras function.
 # load the model
 model = load_model(✬c_model_7200.h5✬)
 
-Listing 20.19: Example of loading a saved supervised model.
+```
+
 Once loaded, we can evaluate it on the entire training dataset again to confirm the finding,
 then evaluate it on the holdout test dataset. Recall, the feature extraction layers expect the
 input images to have the pixel values scaled to the range [-1,1], therefore, this must be performed
@@ -1142,7 +1161,8 @@ print(✬Train Accuracy: %.3f%%✬ % (train_acc * 100))
 _, test_acc = model.evaluate(testX, testy, verbose=0)
 print(✬Test Accuracy: %.3f%%✬ % (test_acc * 100))
 
-Listing 20.20: Example of loading the saved supervised model for classification.
+```
+
 Running the example loads the model and evaluates it on the MNIST dataset.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
@@ -1153,7 +1173,8 @@ shows that the learned classifier has good generalization.
 Train Accuracy: 95.432%
 Test Accuracy: 95.920%
 
-Listing 20.21: Example output from loading the saved supervised model for classification.
+```
+
 We have successfully demonstrated the training and evaluation of a semi-supervised classifier
 model fit via the GAN architecture.
 

@@ -189,13 +189,15 @@ be installed via pip as follows:
 
 sudo pip install git+https://www.github.com/keras-team/keras-contrib.git
 
-Listing 25.1: Example of installing keras-contrib with pip.
+```
+
 Or, if you are using an Anaconda virtual environment, such as on EC2:
 git clone https://www.github.com/keras-team/keras-contrib.git
 cd keras-contrib
 sudo ~/anaconda3/envs/tensorflow_p36/bin/python setup.py install
 
-Listing 25.2: Example of installing keras-contrib with Anaconda.
+```
+
 The new InstanceNormalization layer can then be used as follows:
 ...
 from keras_contrib.layers.normalization.instancenormalization import InstanceNormalization
@@ -203,7 +205,8 @@ from keras_contrib.layers.normalization.instancenormalization import InstanceNor
 layer = InstanceNormalization(axis=-1)
 ...
 
-Listing 25.3: Example of using the InstanceNormalization layer.
+```
+
 The axis argument is set to -1 to ensure that features are normalized per feature map. The
 network weights are initialized to Gaussian random numbers with a standard deviation of 0.02,
 as is described for DCGANs more generally.
@@ -295,7 +298,8 @@ https://github.com/junyanz/CycleGAN/blob/master/models/architectures.lua#L338
 plot_model(model, to_file=✬discriminator_model_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 25.4: Example of defining and summarizing the PatchGAN discriminator.
+```
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
@@ -362,7 +366,8 @@ Trainable params: 6,962,369
 Non-trainable params: 0
 _________________________________________________________________
 
-Listing 25.5: Example output from defining and summarizing the PatchGAN discriminator.
+```
+
 
 ### 25.4. How to Implement the CycleGAN Generator Model
 
@@ -416,7 +421,8 @@ g = InstanceNormalization(axis=-1)(g)
 g = Concatenate()([g, input_layer])
 return g
 
-Listing 25.6: Example of a function for defining a ResNet block.
+```
+
 Next, we can define a function that will create the 9-resnet block version for 256 × 256
 input images. This can easily be changed to the 6-resnet block version by setting image shape
 argument to (128 × 128 × 3) and n resnet function argument to 6. Importantly, the model
@@ -464,7 +470,8 @@ out_image = Activation(✬tanh✬)(g)
 model = Model(in_image, out_image)
 return model
 
-Listing 25.7: Example of a function for defining the encoder-decoder generator.
+```
+
 The generator model is not compiled as it is trained via a composite model, seen in the next
 section. Tying this together, the complete example is listed below.
 # example of an encoder-decoder generator for the cyclegan
@@ -540,7 +547,8 @@ model.summary()
 plot_model(model, to_file=✬generator_model_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 25.8: Example of defining and summarizing the Encoder-Decoder generator.
+```
+
 Running the example first summarizes the model. A plot of the generator model is also
 created, showing the skip connections in the ResNet blocks. The output of the model summary
 and the plot are omitted here for brevity.
@@ -577,7 +585,8 @@ d_model_A = define_discriminator(image_shape)
 # discriminator: B -> [real/fake]
 d_model_B = define_discriminator(image_shape)
 
-Listing 25.9: Example of defining the four required models.
+```
+
 A composite model is required for each generator model that is responsible for only updating
 the weights of that generator model, although it is required to share the weights with the related
 discriminator model and the other generator model. This can be achieved by marking the
@@ -591,7 +600,8 @@ d_model.trainable = False
 # mark other generator model as not trainable
 g_model_2.trainable = False
 
-Listing 25.10: Example of marking discriminator models as not trainable.
+```
+
 The model can be constructed piecewise using the Keras functional API. The first step is to
 define the input of the real image from the source domain, pass it through our generator model,
 then connect the output of the generator to the discriminator and classify it as real or fake.
@@ -606,7 +616,8 @@ input_gen = Input(shape=image_shape)
 gen1_out = g_model_1(input_gen)
 output_d = d_model(gen1_out)
 
-Listing 25.11: Example of defining the input from the source domain.
+```
+
 Next, we can connect the identity mapping element with a new input for the real image from
 the target domain, pass it through our generator model, and output the (hopefully) untranslated
 image directly.
@@ -615,7 +626,8 @@ image directly.
 input_id = Input(shape=image_shape)
 output_id = g_model_1(input_id)
 
-Listing 25.12: Example of defining the input for the identity mapping.
+```
+
 So far, we have a composite model with two real image inputs and a discriminator classification
 and identity image output. Next, we need to add the forward and backward cycles. The forward
 cycle can be achieved by connecting the output of our generator to the other generator, the
@@ -624,7 +636,8 @@ output of which can be compared to the input to our generator and should be iden
 # forward cycle
 output_f = g_model_2(gen1_out)
 
-Listing 25.13: Example of defining the output for the forward cycle.
+```
+
 The backward cycle is more complex and involves the input for the real image from the
 target domain passing through the other generator, then passing through our generator, which
 should match the real image from the target domain.
@@ -633,7 +646,8 @@ should match the real image from the target domain.
 gen2_out = g_model_2(input_id)
 output_b = g_model_1(gen2_out)
 
-Listing 25.14: Example of defining the output for the backward cycle.
+```
+
 That’s it. We can then define this composite model with two inputs: one real image for the
 source and the target domain, and four outputs, one for the discriminator, one for the generator
 for the identity mapping, one for the other generator for the forward cycle, and one from our
@@ -642,7 +656,8 @@ generator for the backward cycle.
 # define model graph
 model = Model([input_gen, input_id], [output_d, output_id, output_f, output_b])
 
-Listing 25.15: Example of defining the input and output layers for the composite model.
+```
+
 The adversarial loss for the discriminator output uses least squares loss which is implemented
 as L2 or mean squared error. The outputs from the generators are compared to images and
 are optimized using L1 loss implemented as mean absolute error. The generator is updated as
@@ -659,7 +674,8 @@ fraction of the lambda parameter and is set to 0.5 × 10 or 5 in the official To
 # compile model with weighting of least squares loss and L1 loss
 model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10], optimizer=opt)
 
-Listing 25.16: Example of compiling the composite model.
+```
+
 We can tie all of this together and define the function define composite model() for
 creating a composite model for training a given generator model.
 # define a composite model for updating generators by adversarial and cycle loss
@@ -691,7 +707,8 @@ model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1
 optimizer=opt)
 return model
 
-Listing 25.17: Example of a function for defining the composite model for training the generator.
+```
+
 This function can then be called to prepare a composite model for training both the
 g model AtoB generator model and the g model BtoA model; for example:
 ...
@@ -705,7 +722,8 @@ define_composite_model(g_model_AtoB, d_model_B, g_model_BtoA, image_shape)
 A -> [real/fake, B]
 define_composite_model(g_model_BtoA, d_model_A, g_model_AtoB, image_shape)
 
-Listing 25.18: Example of defining both composite models.
+```
+
 Summarizing and plotting the composite model is a bit of a mess as it does not help to see
 the inputs and outputs of the model clearly. We can summarize the inputs and outputs for each
 
@@ -884,7 +902,8 @@ c_model_AtoB = define_composite_model(g_model_AtoB, d_model_B, g_model_BtoA, ima
 # composite: B -> A -> [real/fake, B]
 c_model_BtoA = define_composite_model(g_model_BtoA, d_model_A, g_model_AtoB, image_shape)
 
-Listing 25.19: Example of defining and summarizing the composite models for training the
+```
+
 generators.
 
 25.6
@@ -903,7 +922,8 @@ X = dataset[ix]
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return X, y
 
-Listing 25.20: Example of a function for selecting a sample of real images.
+```
+
 Similarly, we need a function to generate a batch of fake images and the associated target
 (0.0).
 # generate a batch of images, returns images and targets
@@ -914,7 +934,8 @@ X = g_model.predict(dataset)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
-Listing 25.21: Example of a function for creating a sample of synthetic images with the generator.
+```
+
 Now, we can define the steps of a single training iteration. We will model the order of updates
 based on the implementation in the official Torch implementation in the OptimizeParameters()
 function3 (the official code uses a more confusing inverted naming convention).
@@ -939,7 +960,8 @@ be 16.
 X_realA, y_realA = generate_real_samples(trainA, n_batch, n_patch)
 X_realB, y_realB = generate_real_samples(trainB, n_batch, n_patch)
 
-Listing 25.22: Example of selecting samples of real images.
+```
+
 Next, we can use the batches of selected real images to generate corresponding batches of
 generated or fake images.
 ...
@@ -947,7 +969,8 @@ generated or fake images.
 X_fakeA, y_fakeA = generate_fake_samples(g_model_BtoA, X_realB, n_patch)
 X_fakeB, y_fakeB = generate_fake_samples(g_model_AtoB, X_realA, n_patch)
 
-Listing 25.23: Example of generating samples of synthetic images.
+```
+
 The paper describes using a pool of previously generated images from which examples are
 randomly selected and used to update the discriminator model, where the pool size was set to
 50 images.
@@ -983,7 +1006,8 @@ https://github.com/junyanz/CycleGAN/blob/master/util/image_pool.lua
 
 return asarray(selected)
 
-Listing 25.24: Example of a function for maintaining a pool of generated images.
+```
+
 We can then update our image pool with generated fake images, the results of which can be
 used to train the discriminator models.
 ...
@@ -991,7 +1015,8 @@ used to train the discriminator models.
 X_fakeA = update_image_pool(poolA, X_fakeA)
 X_fakeB = update_image_pool(poolB, X_fakeB)
 
-Listing 25.25: Example of using the pool of generated images.
+```
+
 Next, we can update Generator-A. The train on batch() function will return a value for
 each of the four loss functions, one for each output, as well as the weighted sum (first value)
 used to update the model weights which we are interested in.
@@ -1000,7 +1025,8 @@ used to update the model weights which we are interested in.
 g_loss2, _, _, _, _ = c_model_BtoA.train_on_batch([X_realB, X_realA], [y_realA, X_realA,
 X_realB, X_realA])
 
-Listing 25.26: Example of updating the first generator model.
+```
+
 We can then update the discriminator model using the fake images that may or may not
 have come from the image pool.
 ...
@@ -1008,7 +1034,8 @@ have come from the image pool.
 dA_loss1 = d_model_A.train_on_batch(X_realA, y_realA)
 dA_loss2 = d_model_A.train_on_batch(X_fakeA, y_fakeA)
 
-Listing 25.27: Example of updating the first discriminator model.
+```
+
 We can then do the same for the other generator and discriminator models.
 ...
 # update generator A->B via adversarial and cycle loss
@@ -1018,7 +1045,8 @@ X_realA, X_realB])
 dB_loss1 = d_model_B.train_on_batch(X_realB, y_realB)
 dB_loss2 = d_model_B.train_on_batch(X_fakeB, y_fakeB)
 
-Listing 25.28: Example of updating the second generator and discriminator models.
+```
+
 At the end of the training run, we can then report the current loss for the discriminator
 models on real and fake images and of each generator model.
 ...
@@ -1026,7 +1054,8 @@ models on real and fake images and of each generator model.
 print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 
-Listing 25.29: Example of reporting the loss for each model update.
+```
+
 Tying this all together, we can define a function named train() that takes an instance
 of each of the defined models and a loaded dataset (list of two NumPy arrays, one for each
 
@@ -1078,7 +1107,8 @@ dB_loss2 = d_model_B.train_on_batch(X_fakeB, y_fakeB)
 print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 
-Listing 25.30: Example of a function for training the CycleGAN models.
+```
+
 The train function can then be called directly with our defined models and loaded dataset.
 ...
 # load a dataset as a list of two arrays
@@ -1086,7 +1116,8 @@ dataset = ...
 # train models
 train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_BtoA, dataset)
 
-Listing 25.31: Example of calling the train function for the CycleGAN.
+```
+
 
 ### 25.7. Further Reading
 

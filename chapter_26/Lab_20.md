@@ -85,7 +85,8 @@ testB
 trainA
 trainB
 
-Listing 26.1: Example directory structure for the horse2zebra dataset.
+```
+
 The A category refers to horse and B category refers to zebra, and the dataset is comprised
 of train and test elements. We will load all photographs and use them as a training dataset.
 The photographs are square with the shape 256 × 256 and have filenames like n02381460 2.jpg.
@@ -136,7 +137,8 @@ filename = ✬horse2zebra_256.npz✬
 savez_compressed(filename, dataA, dataB)
 print(✬Saved dataset: ✬, filename)
 
-Listing 26.2: Example of preparing and saving the dataset ready for modeling.
+```
+
 Running the example first loads all images into memory, showing that there are 1,187 photos
 in category A (horses) and 1,474 in category B (zebras). The arrays are then saved in compressed
 NumPy format with the filename horse2zebra 256.npz. This data file is about 570 megabytes,
@@ -145,7 +147,8 @@ Loaded dataA: (1187, 256, 256, 3)
 Loaded dataB: (1474, 256, 256, 3)
 Saved dataset: horse2zebra_256.npz
 
-Listing 26.3: Example output from preparing and saving the horse2zebra dataset.
+```
+
 We can then load the dataset and plot some of the photos to confirm that we are handling
 the image data correctly. The complete example is listed below.
 # load and plot the prepared dataset
@@ -173,12 +176,14 @@ pyplot.axis(✬off✬)
 pyplot.imshow(dataB[i].astype(✬uint8✬))
 pyplot.show()
 
-Listing 26.4: Example of loading and plotting the prepared dataset.
+```
+
 Running the example first loads the dataset, confirming the number of examples and shape
 of the color images match our expectations.
 Loaded: (1187, 256, 256, 3) (1474, 256, 256, 3)
 
-Listing 26.5: Example output from loading and plotting the prepared dataset.
+```
+
 A plot is created showing a row of three images from the horse photo dataset (dataA) and a
 row of three images from the zebra dataset (dataB).
 
@@ -267,7 +272,8 @@ model = Model(in_image, patch_out)
 model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
 return model
 
-Listing 26.6: Example of a function for defining the PatchGAN discriminator.
+```
+
 The generator model is more complex than the discriminator model. The generator is an
 encoder-decoder model architecture. The model takes a source image (e.g. horse photo) and
 generates a target image (e.g. zebra photo). It does this by first downsampling or encoding
@@ -299,7 +305,8 @@ return g
 
 555
 
-Listing 26.7: Example of a function for defining a ResNet block.
+```
+
 Next, we can define a function that will create the 9-resnet block version for 256 × 256 input
 images. This can easily be changed to the 6-resnet block version by setting the image shape
 argument to (128 × 128 × 3) and n resnet function argument to 6. Importantly, the model
@@ -342,7 +349,8 @@ out_image = Activation(✬tanh✬)(g)
 model = Model(in_image, out_image)
 return model
 
-Listing 26.8: Example of a function for defining the encoder-decoder generator.
+```
+
 The discriminator models are trained directly on real and generated images, whereas the
 generator models are not. Instead, the generator models are trained via their related discriminator
 models. Specifically, they are updated to minimize the loss predicted by the discriminator
@@ -420,7 +428,8 @@ model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1
 optimizer=opt)
 return model
 
-Listing 26.9: Example of a function for defining the composite model for training the generator.
+```
+
 We need to create a composite model for each generator model, e.g. the Generator-A (BtoA)
 for zebra to horse translation, and the Generator-B (AtoB) for horse to zebra translation. All
 of this forward and backward across two domains gets confusing. Below is a complete listing
@@ -442,7 +451,8 @@ X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
 return [X1, X2]
 
-Listing 26.10: Example of a function for loading the prepared dataset.
+```
+
 Each training iteration we will require a sample of real images from each domain as input to
 the discriminator and composite generator models. This can be achieved by selecting a random
 batch of samples. The generate real samples() function below implements this, taking a
@@ -466,7 +476,8 @@ X = dataset[ix]
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return X, y
 
-Listing 26.11: Example of a function for selecting samples of real images.
+```
+
 Similarly, a sample of generated images is required to update each discriminator model in
 each training iteration. The generate fake samples() function below generates this sample
 given a generator model and the sample of real images from the source domain. Again, target
@@ -480,7 +491,8 @@ X = g_model.predict(dataset)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
-Listing 26.12: Example of a function for creating samples of synthetic images with the generator.
+```
+
 Typically, GAN models do not converge; instead, an equilibrium is found between the
 generator and discriminator models. As such, we cannot easily judge whether training should
 stop. Therefore, we can save the model and use it to generate sample image-to-image translations
@@ -498,7 +510,8 @@ filename2 = ✬g_model_BtoA_%06d.h5✬ % (step+1)
 g_model_BtoA.save(filename2)
 print(✬>Saved: %s and %s✬ % (filename1, filename2))
 
-Listing 26.13: Example of a function for saving the generator models to file.
+```
+
 The summarize performance() function below uses a given generator model to generate
 translated versions of a few randomly selected source photographs and saves the plot to file.
 The source images are plotted on the first row and the generated images are plotted on the
@@ -532,7 +545,8 @@ filename1 = ✬%s_generated_plot_%06d.png✬ % (name, (step+1))
 pyplot.savefig(filename1)
 pyplot.close()
 
-Listing 26.14: Example of a function for summarizing and saving model performance.
+```
+
 We are nearly ready to define the training of the models. The discriminator models are
 updated directly on real and generated images, although in an effort to further manage how
 quickly the discriminator models learn, a pool of fake images is maintained. The paper defines
@@ -558,7 +572,8 @@ selected.append(pool[ix])
 pool[ix] = image
 return asarray(selected)
 
-Listing 26.15: Example of a function for managing the generated image pool.
+```
+
 We can now define the training of each of the generator models. The train() function
 below takes all six models (two discriminator, two generator, and two composite models) as
 arguments along with the dataset and trains the models. The batch size is fixed at one image
@@ -635,7 +650,8 @@ if (i+1) % (bat_per_epo * 5) == 0:
 # save the models
 save_models(i, g_model_AtoB, g_model_BtoA)
 
-Listing 26.16: Example of a function for training the CycleGAN models.
+```
+
 Tying all of this together, the complete example of training a CycleGAN model to translate
 photos of horses to zebras and zebras to horses is listed below.
 # example of training a cyclegan on the horse2zebra dataset
@@ -934,7 +950,8 @@ c_model_BtoA = define_composite_model(g_model_BtoA, d_model_A, g_model_AtoB, ima
 # train models
 train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_BtoA, dataset)
 
-Listing 26.17: Example of training the CycleGAN on the prepared horses2zebra dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -958,7 +975,8 @@ Consider running the example a few times and compare the average performance.
 >118700, dA[0.002,0.008] dB[0.000,0.004] g[2.487,2.169]
 >Saved: g_model_AtoB_118700.h5 and g_model_BtoA_118700.h5
 
-Listing 26.18: Example output from training the CycleGAN on the prepared horses2zebra
+```
+
 dataset.
 Plots of generated images are saved at the end of every epoch or after every 1,187 training
 iterations and the iteration number is used in the filename.
@@ -968,7 +986,8 @@ AtoB_generated_plot_002374.png
 BtoA_generated_plot_001187.png
 BtoA_generated_plot_002374.png
 
-Listing 26.19: Example output of saved plots of generated images.
+```
+
 
 ### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 
@@ -982,7 +1001,8 @@ g_model_AtoB_059350.h5
 g_model_BtoA_053415.h5
 g_model_BtoA_059350.h5
 
-Listing 26.20: Example output of saved generator models.
+```
+
 The plots of generated images can be used to choose a model and more training iterations
 may not necessarily mean better quality generated images. Horses to Zebras translation starts
 to become reliable after about 50 epochs.
@@ -1016,7 +1036,8 @@ the previous section.
 A_data, B_data = load_real_samples(✬horse2zebra_256.npz✬)
 print(✬Loaded✬, A_data.shape, B_data.shape)
 
-Listing 26.21: Example of loading the prepared dataset.
+```
+
 Review the plots of generated images and select a pair of models that we can use for image
 generation. In this case, we will use the model saved around epoch 89 (training iteration 89,025).
 Our generator models used a custom layer from the keras contrib library, specifically the
@@ -1034,7 +1055,8 @@ cust = {✬InstanceNormalization✬: InstanceNormalization}
 model_AtoB = load_model(✬g_model_AtoB_089025.h5✬, cust)
 model_BtoA = load_model(✬g_model_BtoA_089025.h5✬, cust)
 
-Listing 26.22: Example of loading the saved generator models.
+```
+
 We can use the select sample() function that we developed in the previous section to
 select a random photo from the dataset.
 # select a random sample of images from the dataset
@@ -1045,7 +1067,8 @@ ix = randint(0, dataset.shape[0], n_samples)
 X = dataset[ix]
 return X
 
-Listing 26.23: Example of a function for selecting a random sample of images from the dataset.
+```
+
 Next, we can use the Generator-AtoB model, first by selecting a random image from DomainA (horses) as input, using Generator-AtoB to translate it to Domain-B (zebras), then use the
 Generator-BtoA model to reconstruct the original image (horse).
 ...
@@ -1054,7 +1077,8 @@ A_real = select_sample(A_data, 1)
 B_generated = model_AtoB.predict(A_real)
 A_reconstructed = model_BtoA.predict(B_generated)
 
-Listing 26.24: Example of using a generator model to translate images.
+```
+
 We can then plot the three photos side by side as the original or real photo, the translated
 photo, and the reconstruction of the original photo. The show plot() function below implements
 this.
@@ -1080,12 +1104,14 @@ pyplot.show()
 
 570
 
-Listing 26.25: Example of a function for plotting generated images.
+```
+
 We can then call this function to plot our real and generated photos.
 ...
 show_plot(A_real, B_generated, A_reconstructed)
 
-Listing 26.26: Example of plotting generated images.
+```
+
 This is a good test of both models, however, we can also perform the same operation in
 reverse. Specifically, a real photo from Domain-B (zebra) translated to Domain-A (horse), then
 reconstructed as Domain-B (zebra).
@@ -1096,7 +1122,8 @@ A_generated = model_BtoA.predict(B_real)
 B_reconstructed = model_AtoB.predict(A_generated)
 show_plot(B_real, A_generated, B_reconstructed)
 
-Listing 26.27: Example of generating and plotting images using the other generator model.
+```
+
 Tying all of this together, the complete example is listed below.
 # example of using saved cyclegan models for image translation
 from keras.models import load_model
@@ -1162,7 +1189,8 @@ A_generated = model_BtoA.predict(B_real)
 B_reconstructed = model_AtoB.predict(A_generated)
 show_plot(B_real, A_generated, B_reconstructed)
 
-Listing 26.28: Example of loading the saved generator models and performing image translation.
+```
+
 Running the example first selects a random photo of a horse, translates it, and then tries to
 reconstruct the original photo.
 
@@ -1210,7 +1238,8 @@ pixels = expand_dims(pixels, 0)
 pixels = (pixels - 127.5) / 127.5
 return pixels
 
-Listing 26.29: Example of a function for loading and preparing an image for translation.
+```
+
 We can then load our selected image as well as the AtoB generator model, as we did before.
 ...
 # load the image
@@ -1219,7 +1248,8 @@ image_src = load_image(✬horse2zebra/trainA/n02381460_541.jpg✬)
 cust = {✬InstanceNormalization✬: InstanceNormalization}
 model_AtoB = load_model(✬g_model_AtoB_089025.h5✬, cust)
 
-Listing 26.30: Example of loading the image and the generator model.
+```
+
 We can then translate the loaded image, scale the pixel values back to the expected range,
 and plot the result.
 ...
@@ -1236,7 +1266,8 @@ image_tar = (image_tar + 1) / 2.0
 pyplot.imshow(image_tar[0])
 pyplot.show()
 
-Listing 26.31: Example of translating the image and plotting the result.
+```
+
 Tying this all together, the complete example is listed below.
 # example of using saved cyclegan models for image translation
 from numpy import expand_dims
@@ -1269,7 +1300,8 @@ image_tar = (image_tar + 1) / 2.0
 pyplot.imshow(image_tar[0])
 pyplot.show()
 
-Listing 26.32: Example of loading and translating a single photograph.
+```
+
 Running the example loads the selected image, loads the generator model, translates the
 photograph of a horse to a zebra, and plots the results.
 

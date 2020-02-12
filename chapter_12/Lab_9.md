@@ -176,14 +176,16 @@ avg_kl_d = mean(sum_kl_d)
 is_score = exp(avg_kl_d)
 return is_score
 
-Listing 12.1: Example of a function for calculating the inception score for probabilities.
+```
+
 We can then test out this function to calculate the inception score for some contrived
 conditional probabilities. We can imagine the case of three classes of image and a perfect
 confident prediction for each class for three images.
 # conditional probabilities for high quality images
 p_yx = asarray([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
 
-Listing 12.2: Example of confident conditional probabilities.
+```
+
 We would expect the inception score for this case to be 3.0 (or very close to it). This is
 because we have the same number of images for each image class (one image for each of the
 three classes) and each conditional probability is maximally confident. The complete example
@@ -217,11 +219,13 @@ p_yx = asarray([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
 score = calculate_inception_score(p_yx)
 print(score)
 
-Listing 12.3: Example of calculating the inception score for confident probabilities.
+```
+
 Running the example gives the expected score of 3.0 (or a number extremely close).
 2.999999999999999
 
-Listing 12.4: Example output from calculating the inception score for confident probabilities.
+```
+
 We can also try the worst case. This is where we still have the same number of images for
 each class (one for each of the three classes), but the objects are unknown, giving a uniform
 predicted probability distribution across each class.
@@ -230,7 +234,8 @@ p_yx = asarray([[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]])
 score = calculate_inception_score(p_yx)
 print(score)
 
-Listing 12.5: Example of uniform conditional probabilities.
+```
+
 In this case, we would expect the inception score to be the worst possible where there is no
 difference between the conditional and marginal distributions, e.g. an inception score of 1.0.
 Tying this together, the complete example is listed below.
@@ -263,11 +268,13 @@ score = calculate_inception_score(p_yx)
 
 print(score)
 
-Listing 12.6: Example of calculating the inception score for uniform probabilities.
+```
+
 Running the example reports the expected inception score of 1.0.
 1.0
 
-Listing 12.7: Example output from calculating the inception score for uniform probabilities.
+```
+
 You may want to experiment with the calculation of the inception score and test other
 pathological cases.
 
@@ -283,7 +290,8 @@ First, we can load the Inception v3 model in Keras directly.
 # load inception v3 model
 model = InceptionV3()
 
-Listing 12.8: Example of loading the inception v3 model.
+```
+
 The model expects images to be color and to have the shape 299 × 299 pixels. Additionally,
 the pixel values must be scaled in the same way as the training data images, before they can be
 classified. This can be achieved by converting the pixel values from integers to floating point
@@ -294,14 +302,16 @@ processed = images.astype(✬float32✬)
 # pre-process raw images for inception v3 model
 processed = preprocess_input(processed)
 
-Listing 12.9: Example of pre-processing images for the inception v3 model.
+```
+
 Then the conditional probabilities for each of the 1,000 image classes can be predicted for
 the images.
 ...
 # predict class probabilities for images
 yhat = model.predict(images)
 
-Listing 12.10: Example of making a prediction with the inception v3 model.
+```
+
 The inception score can then be calculated directly on the NumPy array of probabilities as
 we did in the previous section. Before we do that, we must split the conditional probabilities
 into groups, controlled by a n split argument and set to the default of 10 as was used in the
@@ -309,7 +319,8 @@ original paper.
 ...
 n_part = floor(images.shape[0] / n_split)
 
-Listing 12.11: Example of calculating the number of images in each split.
+```
+
 
 ### 12.5. How to Implement the Inception Score With Keras
 
@@ -322,14 +333,16 @@ predictions and calculate the inception score.
 ix_start, ix_end = i * n_part, (i+1) * n_part
 p_yx = yhat[ix_start:ix_end]
 
-Listing 12.12: Example of retrieving the conditional probabilities for the images in a given split.
+```
+
 After calculating the scores for each split of conditional probabilities, we can calculate and
 return the average and standard deviation inception scores.
 ...
 # average across images
 is_avg, is_std = mean(scores), std(scores)
 
-Listing 12.13: Example of calculating summary statistics on the calculated inception scores
+```
+
 across splits.
 Tying all of this together, the calculate inception score() function below takes an array
 of images with the expected size and pixel values in [0,255] and calculates the average and
@@ -371,7 +384,8 @@ return is_avg, is_std
 
 260
 
-Listing 12.14: Example of a function for calculating the conditional probabilities for images and
+```
+
 calculating the inception score.
 We can test this function with 50 artificial images with the value 1.0 for all pixels.
 ...
@@ -379,7 +393,8 @@ We can test this function with 50 artificial images with the value 1.0 for all p
 images = ones((50, 299, 299, 3))
 print(✬loaded✬, images.shape)
 
-Listing 12.15: Example of a sample of contrived images.
+```
+
 This will calculate the score for each group of five images and the low quality would suggest
 that an average inception score of 1.0 will be reported. The complete example is listed below.
 # calculate inception score with Keras
@@ -436,7 +451,8 @@ print(✬loaded✬, images.shape)
 is_avg, is_std = calculate_inception_score(images)
 print(✬score✬, is_avg, is_std)
 
-Listing 12.16: Example of calculating conditional probabilities with the Inception model and
+```
+
 calculating the inception score.
 Running the example first defines the 50 fake images, then calculates the inception score on
 each batch and reports the expected inception score of 1.0, with a standard deviation of 0.0.
@@ -447,7 +463,8 @@ internet connection.
 loaded (50, 299, 299, 3)
 score 1.0 0.0
 
-Listing 12.17: Example output from calculating conditional probabilities with the Inception
+```
+
 model and calculating the inception score.
 We can test the calculation of the inception score on some real images. The Keras API
 provides access to the CIFAR-10 dataset (described in Section 8.2). These are color photos
@@ -464,7 +481,8 @@ diverse set of classes.
 # shuffle images
 shuffle(images)
 
-Listing 12.18: Example of loading and shuffling the CIFAR-10 training dataset.
+```
+
 Next, we need a way to scale the images. We will use the scikit-image library to resize
 the NumPy array of pixel values to the required size. The scale images() function below
 implements this.
@@ -483,12 +501,14 @@ new_image = resize(image, new_shape, 0)
 images_list.append(new_image)
 return asarray(images_list)
 
-Listing 12.19: Example of a function for scaling images to a new size.
+```
+
 You may have to install the scikit-image library if it is not already installed. This can be
 achieved as follows:
 sudo pip install scikit-image
 
-Listing 12.20: Example installing the scikit-image library with pip.
+```
+
 We can then enumerate the number of splits, select a subset of the images, scale them,
 pre-process them, and use the model to predict the conditional class probabilities.
 ...
@@ -504,7 +524,8 @@ subset = preprocess_input(subset)
 # predict p(y|x)
 p_yx = model.predict(subset)
 
-Listing 12.21: Example of preparing a split of the CIFAR-10 images and predicting the conditional
+```
+
 probabilities.
 The rest of the calculation of the inception score is the same. Tying this all together, the
 complete example for calculating the inception score on the real CIFAR-10 training dataset is
@@ -582,7 +603,8 @@ print(✬loaded✬, images.shape)
 is_avg, is_std = calculate_inception_score(images)
 print(✬score✬, is_avg, is_std)
 
-Listing 12.22: Example of calculating the inception score for the CIFAR-10 training dataset.
+```
+
 Running the example may take some time depending on the speed of your workstation. It
 may also require a large amount of RAM. If you have trouble with the example, try reducing
 
@@ -596,7 +618,8 @@ that the score is 11.3, which is close to the expected score of 11.24.
 loaded (50000, 32, 32, 3)
 score 11.317895 0.14821531
 
-Listing 12.23: Example output from calculating the inception score for the CIFAR-10 training
+```
+
 dataset.
 
 12.6

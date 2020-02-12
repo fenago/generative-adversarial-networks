@@ -235,14 +235,16 @@ setting the activation argument to ‘linear’ in the output layer of the criti
 ...
 model.add(Dense(1, activation=✬linear✬))
 
-Listing 16.1: Example of the linear activation function in the output layer of the discriminator.
+```
+
 The linear activation is the default activation for a layer, so we can, in fact, leave the
 activation unspecified to achieve the same result.
 # define output layer of the critic model
 ...
 model.add(Dense(1))
 
-Listing 16.2: Example of the linear activation function in the output layer of the discriminator.
+```
+
 
 16.4.2
 
@@ -263,7 +265,8 @@ y = -ones((n_samples, 1))
 # create class labels with 1.0 for ✬fake✬
 y = ones((n_samples, 1))
 
-Listing 16.3: Example of defining the target values for real and fake images.
+```
+
 
 16.4.3
 
@@ -280,7 +283,8 @@ from keras import backend
 def wasserstein_loss(y_true, y_pred):
 return backend.mean(y_true * y_pred)
 
-Listing 16.4: Example of function for calculating Wasserstein loss.
+```
+
 
 ### 16.4. Wasserstein GAN Implementation Details
 
@@ -292,7 +296,8 @@ compiling the model. For example:
 # compile the model
 model.compile(loss=wasserstein_loss, ...)
 
-Listing 16.5: Example of compiling a model to use Wasserstein loss.
+```
+
 
 16.4.4
 
@@ -317,7 +322,8 @@ return backend.clip(weights, -self.clip_value, self.clip_value)
 def get_config(self):
 return {✬clip_value✬: self.clip_value}
 
-Listing 16.6: Example of a custom weight constraint class.
+```
+
 To use the constraint, the class can be constructed, then used in a layer by setting the
 kernel constraint argument; for example:
 ...
@@ -327,7 +333,8 @@ const = ClipConstraint(0.01)
 # use the constraint in a layer
 model.add(Conv2D(..., kernel_constraint=const))
 
-Listing 16.7: Example of using the custom weight constraint in a layer.
+```
+
 The constraint is only required when updating the critic model.
 
 16.4.5
@@ -363,7 +370,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the critic✬s error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 
-Listing 16.8: Example of the DCGAN training algorithm.
+```
+
 In the WGAN model, the critic model must be updated more than the generator model.
 Specifically, a new hyperparameter is defined to control the number of times that the critic is
 updated for each update to the generator model, called n critic, and is set to 5. This can be
@@ -389,7 +397,8 @@ y_gan = ones((n_batch, 1))
 # update the generator via the critic✬s error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 
-Listing 16.9: Example of the WGAN training algorithm.
+```
+
 
 ### 16.5. How to Train a Wasserstein GAN Model
 
@@ -408,7 +417,8 @@ example:
 opt = RMSprop(lr=0.00005)
 model.compile(loss=wasserstein_loss, optimizer=opt)
 
-Listing 16.10: Example of compiling a model to use RMSProp stochastic gradient descent.
+```
+
 
 16.5
 
@@ -459,7 +469,8 @@ opt = RMSprop(lr=0.00005)
 model.compile(loss=wasserstein_loss, optimizer=opt)
 return model
 
-Listing 16.11: Example of a function for defining the critic model.
+```
+
 The generator model takes as input a point in the latent space and outputs a single 28 × 28
 grayscale image. This is achieved by using a fully connected layer to interpret the point in the
 latent space and provide sufficient activations that can be reshaped into many copies (in this case,
@@ -496,7 +507,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬, kernel_initializer=init))
 return model
 
-Listing 16.12: Example of a function for defining the generator model.
+```
+
 Next, a GAN model can be defined that combines both the generator model and the critic
 model into one larger model. This larger model will be used to train the model weights in the
 generator, using the output and error calculated by the critic model. The critic model is trained
@@ -528,7 +540,8 @@ opt = RMSprop(lr=0.00005)
 model.compile(loss=wasserstein_loss, optimizer=opt)
 return model
 
-Listing 16.13: Example of a function for defining the composite model for training the generator.
+```
+
 Now that we have defined the GAN model, we need to train it. But, before we can train the
 model, we require input data. The first step is to load and scale the MNIST dataset. The whole
 dataset is loaded via a call to the load data() Keras function, then a subset of the images is
@@ -551,7 +564,8 @@ X = X.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 16.14: Example of a function for loading and preparing a subset of the MNIST training
+```
+
 dataset.
 We will require one batch (or a half batch) of real images from the dataset each update to
 the GAN model. A simple way to achieve this is to select a random sample of images from the
@@ -573,7 +587,8 @@ X = dataset[ix]
 y = -ones((n_samples, 1))
 return X, y
 
-Listing 16.15: Example of a function for selecting a random subset of real images.
+```
+
 Next, we need inputs for the generator model. These are random points from the latent
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
@@ -586,7 +601,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 16.16: Example of a function for generating random points in latent space.
+```
+
 Next, we need to use the points in the latent space as input to the generator in order to
 generate new images. The generate fake samples() function below implements this, taking
 the generator model and size of the latent space as arguments, then generating points in the
@@ -603,7 +619,8 @@ X = generator.predict(x_input)
 y = ones((n_samples, 1))
 return X, y
 
-Listing 16.17: Example of a function for generating synthetic images with the generator model.
+```
+
 We need to record the performance of the model. Perhaps the most reliable way to evaluate
 the performance of a GAN is to use the generator to generate images, and then review and
 subjectively evaluate them. The summarize performance() function below takes the generator
@@ -638,7 +655,8 @@ filename2 = ✬model_%04d.h5✬ % (step+1)
 g_model.save(filename2)
 print(✬>Saved: %s and %s✬ % (filename1, filename2))
 
-Listing 16.18: Example of a function for summarizing the performance of the model.
+```
+
 In addition to image quality, it is a good idea to keep track of the loss and accuracy of the
 model over time. The loss for the critic for real and fake samples can be tracked for each model
 update, as can the loss for the generator for each update. These can then be used to create line
@@ -654,7 +672,8 @@ pyplot.legend()
 pyplot.savefig(✬plot_line_plot_loss.png✬)
 pyplot.close()
 
-Listing 16.19: Example of a function for generating and saving plots of the model learning
+```
+
 curves.
 We are now ready to fit the GAN model. The model is fit for 10 training epochs, which is
 arbitrary, as the model begins generating plausible number-7 digits after perhaps the first few
@@ -723,7 +742,8 @@ summarize_performance(i, g_model, latent_dim)
 # line plots of loss
 plot_history(c1_hist, c2_hist, g_hist)
 
-Listing 16.20: Example of a function for training the WGAN models.
+```
+
 Now that all of the functions have been defined, we can create the models, load the dataset,
 and begin the training process.
 ...
@@ -743,7 +763,8 @@ print(dataset.shape)
 # train model
 train(generator, critic, gan_model, dataset, latent_dim)
 
-Listing 16.21: Example of configuring and starting the training process.
+```
+
 Tying all of this together, the complete example is listed below.
 # example of a wgan for generating handwritten digits
 from numpy import expand_dims
@@ -989,7 +1010,8 @@ print(dataset.shape)
 # train model
 train(generator, critic, gan_model, dataset, latent_dim)
 
-Listing 16.22: Example of training the WGAN on the MNIST training dataset.
+```
+
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU. First, the loss of the critic and generator models is reported to the console each iteration
 of the training loop. Specifically, c1 is the loss of the critic on real examples, c2 is the loss of
@@ -1053,7 +1075,8 @@ g=17.956
 g=17.326
 g=19.927
 
-Listing 16.23: Example output from training the WGAN on the MNIST training dataset.
+```
+
 Line plots for loss are created and saved at the end of the run. The plot shows the loss for
 the critic on real samples (blue), the loss for the critic on fake samples (orange), and the loss for
 the critic when updating the generator with fake samples (green). There is one important factor
@@ -1129,7 +1152,8 @@ X = model.predict(latent_points)
 # plot the result
 plot_generated(X, 5)
 
-Listing 16.24: Example of loading the saved WGAN generator model and using it to generate
+```
+
 images.
 Running the example generates a plot of 5 × 5, or 25, new and plausible handwritten number
 seven digits.

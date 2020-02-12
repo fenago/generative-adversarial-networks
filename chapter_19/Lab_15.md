@@ -207,14 +207,16 @@ fe = Dropout(0.5)(fe)
 fe = Flatten()(fe)
 ...
 
-Listing 19.1: Example of a defining a normal DCGAN discriminator model.
+```
+
 The main difference is that the model has two output layers. The first is a single node with
 the sigmoid activation for predicting the realness of the image.
 ...
 # real/fake output
 out1 = Dense(1, activation=✬sigmoid✬)(fe)
 
-Listing 19.2: Example of a defining the first output layer for the discriminator model.
+```
+
 The second is multiple nodes, one for each class, using the softmax activation function to
 predict the class label of the given image.
 ...
@@ -225,13 +227,15 @@ out2 = Dense(n_classes, activation=✬softmax✬)(fe)
 
 398
 
-Listing 19.3: Example of a defining the second output layer for the discriminator model.
+```
+
 We can then construct the image with a single input and two outputs.
 ...
 # define model
 model = Model(in_image, [out1, out2])
 
-Listing 19.4: Example of a defining the discriminator model with two output layers.
+```
+
 The model must be trained with two loss functions, binary cross-entropy for the first output
 layer, and categorical cross-entropy loss for the second output layer. Rather than comparing a
 one hot encoding of the class labels to the second output layer, as we might do normally, we can
@@ -242,7 +246,8 @@ compiling the model, we can inform Keras to use the two different loss functions
 output layers by specifying a list of function names as strings; for example:
 loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬]
 
-Listing 19.5: Example of a defining two loss functions for the discriminator model.
+```
+
 The model is fit using the Adam version of stochastic gradient descent with a small learning
 rate and modest momentum, as is recommended for DCGANs.
 ...
@@ -251,7 +256,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
 optimizer=opt)
 
-Listing 19.6: Example of a compiling the discriminator model.
+```
+
 Tying this together, the define discriminator() function will define and compile the
 discriminator model for the AC-GAN. The shape of the input images and the number of classes
 are parameterized and set with defaults, allowing them to be easily changed for your own project
@@ -300,7 +306,8 @@ model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentrop
 optimizer=opt)
 return model
 
-Listing 19.7: Example of a function for defining the discriminator model.
+```
+
 We can define and summarize this model. The complete example is listed below.
 # example of defining the discriminator model
 from keras.models import Model
@@ -364,7 +371,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 19.8: Example of defining and summarizing the discriminator model.
+```
+
 The model summary was left out for brevity. A plot of the model is created, showing the
 linear processing of the input image and the two clear output layers.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -407,7 +415,8 @@ li = Dense(n_nodes, kernel_initializer=init)(li)
 # reshape to additional channel
 li = Reshape((7, 7, 1))(li)
 
-Listing 19.9: Example of defining the first input for the generator model.
+```
+
 The point in latent space can be interpreted by a fully connected layer with sufficient
 activations to create multiple 7 × 7 feature maps, in this case, 384, and provide the basis for a
 low-resolution version of our output image. The 7 × 7 single feature map interpretation of the
@@ -423,7 +432,8 @@ gen = Reshape((7, 7, 384))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 
-Listing 19.10: Example of defining the second input for the generator model.
+```
+
 These feature maps can then go through the process of two transpose convolutional layers to
 upsample the 7 × 7 feature maps first to 14 × 14 pixels, and then finally to 28 × 28 features,
 quadrupling the area of the feature maps with each upsampling step. The output of the generator
@@ -444,7 +454,8 @@ gen = Activation(✬relu✬)(gen)
 gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding=✬same✬, kernel_initializer=init)(gen)
 out_layer = Activation(✬tanh✬)(gen)
 
-Listing 19.11: Example of defining the body of the generator model.
+```
+
 We can tie all of this together and into the define generator() function defined below
 that will create and return the generator model for the AC-GAN. The model is intentionally
 not compiled as it is not trained directly; instead, it is trained via the discriminator model.
@@ -483,7 +494,8 @@ out_layer = Activation(✬tanh✬)(gen)
 model = Model([in_lat, in_label], out_layer)
 return model
 
-Listing 19.12: Example of a function for defining the generator model.
+```
+
 We can create this model and summarize and plot its structure. The complete example is
 listed below.
 # example of defining the generator model
@@ -552,7 +564,8 @@ model.summary()
 # plot the model
 plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 19.13: Example of defining and summarizing the generator model.
+```
+
 The model summary was left out for brevity. A plot of the network is created summarizing
 the input and output shapes for each layer. The plot confirms the two inputs to the network
 and the correct concatenation of the inputs.
@@ -609,7 +622,8 @@ model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentrop
 optimizer=opt)
 return model
 
-Listing 19.14: Example of a function for defining the composite model for training the generator.
+```
+
 Now that we have defined the models used in the AC-GAN, we can fit them on the FashionMNIST dataset.
 
 19.5
@@ -640,7 +654,8 @@ X = (X - 127.5) / 127.5
 print(X.shape, trainy.shape)
 return [X, trainy]
 
-Listing 19.15: Example of a function for loading and preparing the Fashion-MNIST dataset.
+```
+
 We will require one batch (or a half batch) of real images from the dataset each update to
 the GAN model. A simple way to achieve this is to select a random sample of images from the
 dataset each time. The generate real samples() function below implements this, taking the
@@ -661,7 +676,8 @@ X, labels = images[ix], labels[ix]
 y = ones((n_samples, 1))
 return [X, labels], y
 
-Listing 19.16: Example of a function for creating a sample of real images.
+```
+
 Next, we need inputs for the generator model. These are random points from the latent
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
@@ -678,7 +694,8 @@ z_input = x_input.reshape(n_samples, latent_dim)
 labels = randint(0, n_classes, n_samples)
 return [z_input, labels]
 
-Listing 19.17: Example of a function for sampling points in the latent space and classes.
+```
+
 Next, we need to use the points in the latent space and clothing class labels as input
 to the generator in order to generate new images. The generate fake samples() function
 below implements this, taking the generator model and size of the latent space as arguments,
@@ -700,7 +717,8 @@ images = generator.predict([z_input, labels_input])
 y = zeros((n_samples, 1))
 return [images, labels_input], y
 
-Listing 19.18: Example of a function for generating synthetic images using the generator model.
+```
+
 There are no agreed-upon ways to determine when to stop training a GAN; instead, images
 can be subjectively inspected in order to choose a final model. Therefore, we can periodically
 generate a sample of images using the generator model and save the generator model to file
@@ -730,7 +748,8 @@ filename2 = ✬model_%04d.h5✬ % (step+1)
 g_model.save(filename2)
 print(✬>Saved: %s and %s✬ % (filename1, filename2))
 
-Listing 19.19: Example of a function for summarizing model performance and saving the
+```
+
 generator.
 We are now ready to fit the GAN models. The model is fit for 100 training epochs, which is
 arbitrary, as the model begins generating plausible items of clothing after perhaps 20 epochs. A
@@ -786,7 +805,8 @@ g_1,g_2))
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, latent_dim)
 
-Listing 19.20: Example of a function for training the AC-GAN models.
+```
+
 We can then define the size of the latent space, define all three models, and train them on
 the loaded Fashion-MNIST dataset.
 ...
@@ -808,7 +828,8 @@ dataset = load_real_samples()
 
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 19.21: Example of configuring and starting the training process.
+```
+
 Tying all of this together, the complete example is listed below.
 # example of fitting an auxiliary classifier gan (ac-gan) on fashion mnsit
 from numpy import zeros
@@ -1043,7 +1064,8 @@ dataset = load_real_samples()
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 19.22: Example of training the AC-GAN model on the Fashion-MNIST dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1077,7 +1099,8 @@ g[0.844,3.226]
 g[1.048,3.292]
 g[1.123,3.313]
 
-Listing 19.23: Example output from training the AC-GAN model on the Fashion-MNIST
+```
+
 dataset.
 A total of 10 sample images are generated and 10 models saved over the run. Plots of
 generated clothing after 10 iterations already look plausible.
@@ -1150,7 +1173,8 @@ X = (X + 1) / 2.0
 # plot the result
 save_plot(X, n_examples)
 
-Listing 19.24: Example of using the saved AC-GAN generator to create images.
+```
+
 Running the example, in this case, generates 100 very plausible photos of sneakers.
 
 417

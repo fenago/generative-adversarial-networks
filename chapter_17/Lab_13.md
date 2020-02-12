@@ -163,14 +163,16 @@ from keras.datasets.fashion_mnist import load_data
 print(✬Train✬, trainX.shape, trainy.shape)
 print(✬Test✬, testX.shape, testy.shape)
 
-Listing 17.1: Example of loading and summarizing the Fashion-MNIST dataset.
+```
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 60K examples in
 the training set and 10K in the test set and that each image is a square of 28 by 28 pixels.
 Train (60000, 28, 28) (60000,)
 Test (10000, 28, 28) (10000,)
 
-Listing 17.2: Example output from loading and summarizing the Fashion-MNIST dataset.
+```
+
 
 ### 17.3. Fashion-MNIST Clothing Photograph Dataset
 
@@ -185,7 +187,8 @@ color map via the cmap argument as ‘gray’ to show the pixel values correctly
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray✬)
 
-Listing 17.3: Example of plotting an image with a grayscale color map.
+```
+
 Alternately, the images are easier to review when we reverse the colors and plot the
 background as white and the clothing in black. They are easier to view as most of the image is
 now white with the area of interest in black. This can be achieved using a reverse grayscale
@@ -194,7 +197,8 @@ color map, as follows:
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap=✬gray_r✬)
 
-Listing 17.4: Example of plotting an image with a reverse grayscale color map.
+```
+
 The example below plots the first 100 images from the training dataset in a 10 by 10 square.
 # example of loading the fashion_mnist dataset
 from keras.datasets.fashion_mnist import load_data
@@ -211,7 +215,8 @@ pyplot.axis(✬off✬)
 pyplot.imshow(trainX[i], cmap=✬gray_r✬)
 pyplot.show()
 
-Listing 17.5: Example of loading and plotting the Fashion-MNIST dataset.
+```
+
 Running the example creates a figure with a plot of 100 images from the MNIST training
 dataset, arranged in a 10 × 10 square.
 
@@ -264,7 +269,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 17.6: Example of a function for defining the discriminator model.
+```
+
 The generator model takes as input a point in the latent space and outputs a single 28 × 28
 grayscale image. This is achieved by using a fully connected layer to interpret the point in the
 latent space and provide sufficient activations that can be reshaped into many copies (in this
@@ -294,7 +300,8 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬))
 return model
 
-Listing 17.7: Example of a function for defining the generator model.
+```
+
 Next, a GAN model can be defined that combines both the generator model and the
 discriminator model into one larger model. This larger model will be used to train the model
 
@@ -326,7 +333,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 17.8: Example of a function for defining the composite model for training the generator.
+```
+
 Now that we have defined the GAN model, we need to train it. But, before we can train the
 model, we require input data. The first step is to load and prepare the Fashion-MNIST dataset.
 We only require the images in the training dataset. The images are black and white, therefore
@@ -347,7 +355,8 @@ X = X.astype(✬float32✬)
 X = (X - 127.5) / 127.5
 return X
 
-Listing 17.9: Example of a function for loading and preparing the Fashion-MNIST dataset.
+```
+
 We will require one batch (or a half batch) of real images from the dataset each update to
 the GAN model. A simple way to achieve this is to select a random sample of images from the
 dataset each time. The generate real samples() function below implements this, taking the
@@ -369,7 +378,8 @@ X = dataset[ix]
 y = ones((n_samples, 1))
 return X, y
 
-Listing 17.10: Example of a function for selecting random samples of real images.
+```
+
 Next, we need inputs for the generator model. These are random points from the latent
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
@@ -382,7 +392,8 @@ x_input = randn(latent_dim * n_samples)
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 
-Listing 17.11: Example of a function for generating random points in the latent space.
+```
+
 Next, we need to use the points in the latent space as input to the generator in order to
 generate new images. The generate fake samples() function below implements this, taking
 the generator model and size of the latent space as arguments, then generating points in the
@@ -399,7 +410,8 @@ X = generator.predict(x_input)
 y = zeros((n_samples, 1))
 return X, y
 
-Listing 17.12: Example of a function for generating synthetic images with the generator model.
+```
+
 We are now ready to fit the GAN models. The model is fit for 100 training epochs, which is
 arbitrary, as the model begins generating plausible items of clothing after perhaps 20 epochs. A
 batch size of 128 samples is used, and each training epoch involves 60000
@@ -446,7 +458,8 @@ print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
 # save the generator model
 g_model.save(✬generator.h5✬)
 
-Listing 17.13: Example of a function for training the GAN models.
+```
+
 We can then define the size of the latent space, define all three models, and train them on
 the loaded Fashion-MNIST dataset.
 ...
@@ -463,7 +476,8 @@ dataset = load_real_samples()
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 17.14: Example of configuring and starting the training process.
+```
+
 Tying all of this together, the complete example is listed below.
 
 ### 17.4. Unconditional GAN for Fashion-MNIST
@@ -619,7 +633,8 @@ dataset = load_real_samples()
 # train model
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
-Listing 17.15: Example of training an unconditional GAN on the Fashion-MNIST dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -665,7 +680,8 @@ g=0.706
 g=0.699
 g=0.708
 
-Listing 17.16: Example output from training an unconditional GAN on the Fashion-MNIST
+```
+
 dataset.
 At the end of training, the generator model will be saved to file with the filename generator.h5.
 This model can be loaded and used to generate new random but plausible samples from the
@@ -702,7 +718,8 @@ X = model.predict(latent_points)
 # plot the result
 show_plot(X, 10)
 
-Listing 17.17: Example of loading the saved unconditional generator model and using it to
+```
+
 generate images.
 Running the example creates a plot of 100 randomly generated items of clothing arranged
 into a 10 × 10 grid.
@@ -781,7 +798,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
 return model
 
-Listing 17.18: Example of a function for defining the conditional discriminator model.
+```
+
 In order to make the architecture clear, below is a plot of the discriminator model. The plot
 shows the two inputs: first the class label that passes through the embedding (left) and the
 image (right), and their concatenation into a two-channel 28 × 28 image or feature map (middle).
@@ -839,7 +857,8 @@ out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
 model = Model([in_lat, in_label], out_layer)
 return model
 
-Listing 17.19: Example of a function for defining the conditional generator model.
+```
+
 To help understand the new model architecture, the image below provides a plot of the new
 conditional generator model. In this case, you can see the 100-element point in latent space as
 input and subsequent resizing (left) and the new class label input and embedding layer (right),
@@ -880,7 +899,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
 return model
 
-Listing 17.20: Example of a function for defining the conditional composite model for training
+```
+
 the generator.
 The plot below summarizes the composite GAN model. Importantly, it shows the generator
 model in full with the point in latent space and class label as input, and the connection of the
@@ -928,7 +948,8 @@ X, labels = images[ix], labels[ix]
 y = ones((n_samples, 1))
 return [X, labels], y
 
-Listing 17.21: Example of functions for preparing and selecting random samples of real images
+```
+
 with target classes.
 Next, the generate latent points() function must be updated to also generate an array of
 randomly selected integer class labels to go along with the randomly selected points in the latent
@@ -958,7 +979,8 @@ images = generator.predict([z_input, labels_input])
 y = zeros((n_samples, 1))
 return [images, labels_input], y
 
-Listing 17.22: Example of functions for generating points in latent space and synthetic images
+```
+
 using class labels.
 Finally, the train() function must be updated to retrieve and use the class labels in the
 calls to updating the discriminator and generator models.
@@ -990,7 +1012,8 @@ print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
 # save the generator model
 g_model.save(✬cgan_generator.h5✬)
 
-Listing 17.23: Example of the updated function for training the conditional GAN models.
+```
+
 Tying all of this together, the complete example of a conditional deep convolutional generative
 adversarial network for the Fashion-MNIST dataset is listed below.
 # example of training an conditional gan on the fashion mnist dataset
@@ -1209,7 +1232,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim)
 
-Listing 17.24: Example of training the conditional GAN on the Fashion-MNIST dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1267,7 +1291,8 @@ X = (X + 1) / 2.0
 # plot the result
 save_plot(X, 10)
 
-Listing 17.25: Example of loading the saved conditional generator model and using it to generate
+```
+
 images.
 Running the example loads the saved conditional GAN model and uses it to generate 100
 items of clothing. The clothing is organized in columns. From left to right, they are t-shirt,

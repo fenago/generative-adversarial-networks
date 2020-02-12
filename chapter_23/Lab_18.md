@@ -95,7 +95,8 @@ maps
 train
 val
 
-Listing 23.1: Example directory structure for the maps dataset.
+```
+
 The train folder contains 1,097 images, whereas the validation dataset contains 1,099 images.
 Images have a digit filename and are in JPEG format. Each image is 1,200 pixels wide and 600
 pixels tall and contains both the satellite image on the left and the Google maps image on the
@@ -131,7 +132,8 @@ src_list.append(sat_img)
 tar_list.append(map_img)
 return [asarray(src_list), asarray(tar_list)]
 
-Listing 23.2: Example of a function for loading, scaling and splitting the map images.
+```
+
 We can call this function with the path to the training dataset. Once loaded, we can save
 the prepared arrays to a new file in compressed format for later use. The complete example is
 listed below.
@@ -170,14 +172,16 @@ filename = ✬maps_256.npz✬
 savez_compressed(filename, src_images, tar_images)
 print(✬Saved dataset: ✬, filename)
 
-Listing 23.3: Example of preparing and saving the maps dataset.
+```
+
 Running the example loads all images in the training dataset, summarizes their shape to
 ensure the images were loaded correctly, then saves the arrays to a new file called maps 256.npz
 in compressed NumPy array format.
 Loaded: (1096, 256, 256, 3) (1096, 256, 256, 3)
 Saved dataset: maps_256.npz
 
-Listing 23.4: Example output from preparing and saving the maps dataset.
+```
+
 This file can be loaded later via the load() NumPy function and retrieving each array in
 turn. We can then plot some images pairs to confirm the data has been handled correctly.
 # load the prepared dataset
@@ -205,12 +209,14 @@ pyplot.axis(✬off✬)
 pyplot.imshow(tar_images[i].astype(✬uint8✬))
 pyplot.show()
 
-Listing 23.5: Example of loading and plotting the prepared dataset.
+```
+
 Running this example loads the prepared dataset and summarizes the shape of each array,
 confirming our expectations of a little over one thousand 256 × 256 image pairs.
 Loaded: (1096, 256, 256, 3) (1096, 256, 256, 3)
 
-Listing 23.6: Example output from loading and plotting the prepared dataset.
+```
+
 A plot of three image pairs is also created showing the satellite images on the top and
 Google Maps images on the bottom. We can see that satellite images are quite complex and
 that although the Google Maps images are much simpler, they have color codings for things like
@@ -299,7 +305,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=✬binary_crossentropy✬, optimizer=opt, loss_weights=[0.5])
 return model
 
-Listing 23.7: Example of a function for defining the PatchGAN discriminator.
+```
+
 The generator model is more complex than the discriminator model. The generator is
 an encoder-decoder model using a U-Net architecture. The model takes a source image (e.g.
 satellite photo) and generates a target image (e.g. Google maps image). It does this by first
@@ -382,7 +389,8 @@ out_image = Activation(✬tanh✬)(g)
 model = Model(in_image, out_image)
 return model
 
-Listing 23.8: Example of functions for defining the U-Net generator.
+```
+
 The discriminator model is trained directly on real and generated images, whereas the
 generator model is not. Instead, the generator model is trained via the discriminator model. It
 is updated to minimize the loss predicted by the discriminator for generated images marked as
@@ -429,7 +437,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
 return model
 
-Listing 23.9: Example of a function for defining the composite model for training the generator.
+```
+
 Next, we can load our paired images dataset in compressed NumPy array format. This will
 return a list of two NumPy arrays: the first for source images and the second for corresponding
 target images.
@@ -444,7 +453,8 @@ X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
 return [X1, X2]
 
-Listing 23.10: Example of a function for loading the prepared dataset.
+```
+
 
 ### 23.4. How to Develop and Train a Pix2Pix Model
 
@@ -465,7 +475,8 @@ X1, X2 = trainA[ix], trainB[ix]
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return [X1, X2], y
 
-Listing 23.11: Example of a function for selecting a sample of real images.
+```
+
 The generate fake samples() function below uses the generator model and a batch of real
 source images to generate an equivalent batch of target images for the discriminator. These are
 returned with the label class = 0 to indicate to the discriminator that they are fake.
@@ -477,7 +488,8 @@ X = g_model.predict(samples)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
-Listing 23.12: Example of a function for generating synthetic images with the generator.
+```
+
 Typically, GAN models do not converge; instead, an equilibrium is found between the
 generator and discriminator models. As such, we cannot easily judge when training should stop.
 Therefore, we can save the model and use it to generate sample image-to-image translations
@@ -527,7 +539,8 @@ filename2 = ✬model_%06d.h5✬ % (step+1)
 g_model.save(filename2)
 print(✬>Saved: %s and %s✬ % (filename1, filename2))
 
-Listing 23.13: Example of a function for summarizing model performance and saving the
+```
+
 generator.
 Finally, we can train the generator and discriminator models. The train() function below
 implements this, taking the defined generator, discriminator, composite model, and loaded
@@ -580,7 +593,8 @@ print(✬>%d, d1[%.3f] d2[%.3f] g[%.3f]✬ % (i+1, d_loss1, d_loss2, g_loss))
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, dataset)
 
-Listing 23.14: Example of a function for training the Pix2Pix GAN models.
+```
+
 Tying all of this together, the complete code example of training a Pix2Pix GAN to translate
 satellite photos to Google maps images is listed below.
 # example of pix2pix gan for satellite to map image-to-image translation
@@ -835,7 +849,8 @@ gan_model = define_gan(g_model, d_model, image_shape)
 # train model
 train(d_model, g_model, gan_model, dataset)
 
-Listing 23.15: Example of training the Pix2Pix GAN on the prepared maps dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -864,7 +879,8 @@ Consider running the example a few times and compare the average performance.
 >109600, d1[0.437] d2[0.005] g[10.460]
 >Saved: plot_109600.png and model_109600.h5
 
-Listing 23.16: Example output from training the Pix2Pix GAN on the prepared maps dataset.
+```
+
 Models are saved every 10 epochs and saved to a file with the training iteration number.
 Additionally, images are generated every 10 epochs and compared to the expected target images.
 These plots can be assessed at the end of the run and used to select a final generator model
@@ -921,34 +937,39 @@ X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
 return [X1, X2]
 
-Listing 23.17: Example of a function for loading the prepared dataset.
+```
+
 This function can be called as follows:
 ...
 # load dataset
 [X1, X2] = load_real_samples(✬maps_256.npz✬)
 print(✬Loaded✬, X1.shape, X2.shape)
 
-Listing 23.18: Example of loading the prepared dataset.
+```
+
 Next, we can load the saved Keras model.
 ...
 # load model
 model = load_model(✬model_109600.h5✬)
 
-Listing 23.19: Example of loading the saved generator model.
+```
+
 Next, we can choose a random image pair from the training dataset to use as an example.
 ...
 # select random example
 ix = randint(0, len(X1), 1)
 src_image, tar_image = X1[ix], X2[ix]
 
-Listing 23.20: Example of choosing a random image pair from the dataset.
+```
+
 We can provide the source satellite image as input to the model and use it to predict a
 Google Maps image.
 ...
 # generate image from source
 gen_image = model.predict(src_image)
 
-Listing 23.21: Example of generating translated version of the image.
+```
+
 Finally, we can plot the source, generated image, and the expected target image. The
 plot images() function below implements this, providing a nice title above each image.
 # plot source, generated and target images
@@ -974,13 +995,15 @@ pyplot.imshow(images[i])
 pyplot.title(titles[i])
 pyplot.show()
 
-Listing 23.22: Example of a function for plotting generated images.
+```
+
 This function can be called with each of our source, generated, and target images.
 ...
 # plot all three images
 plot_images(src_image, gen_image, tar_image)
 
-Listing 23.23: Example of plotting images.
+```
+
 Tying all of this together, the complete example of performing an ad hoc image-to-image
 translation with an example from the training dataset is listed below.
 # example of loading a pix2pix model and using it for image to image translation
@@ -1034,7 +1057,8 @@ gen_image = model.predict(src_image)
 # plot all three images
 plot_images(src_image, gen_image, tar_image)
 
-Listing 23.24: Example of using the saved generator to translate images.
+```
+
 Running the example will select a random image from the training dataset, translate it to a
 Google Maps, and plot the result compared to the expected image.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
@@ -1081,14 +1105,16 @@ pixels = (pixels - 127.5) / 127.5
 pixels = expand_dims(pixels, 0)
 return pixels
 
-Listing 23.25: Example of a function for loading and preparing an image for translation.
+```
+
 We can then load our cropped satellite image.
 ...
 # load source image
 src_image = load_image(✬satellite.jpg✬)
 print(✬Loaded✬, src_image.shape)
 
-Listing 23.26: Example of loading and preparing an image.
+```
+
 As before, we can load our saved Pix2Pix generator model and generate a translation of the
 loaded image.
 ...
@@ -1097,7 +1123,8 @@ model = load_model(✬model_109600.h5✬)
 # generate image from source
 gen_image = model.predict(src_image)
 
-Listing 23.27: Example of loading the generator and translating an image.
+```
+
 Finally, we can scale the pixel values back to the range [0,1] and plot the result.
 ...
 # scale from [-1,1] to [0,1]
@@ -1107,7 +1134,8 @@ pyplot.imshow(gen_image[0])
 pyplot.axis(✬off✬)
 pyplot.show()
 
-Listing 23.28: Example of plotting a single translated image.
+```
+
 Tying this all together, the complete example of performing an ad hoc image translation
 with a single image file is listed below.
 # example of loading a pix2pix model and using it for one-off image translation
@@ -1146,7 +1174,8 @@ pyplot.imshow(gen_image[0])
 pyplot.axis(✬off✬)
 pyplot.show()
 
-Listing 23.29: Example of translating a single image.
+```
+
 Running the example loads the image from file, creates a translation of it, and plots the
 result. The generated image appears to be a reasonable translation of the source image. The
 streets do not appear to be straight lines and the detail of the buildings is a bit lacking. Perhaps
@@ -1185,7 +1214,8 @@ return [X2, X1]
 
 510
 
-Listing 23.30: Example of a function for loading the paired images in reverse order.
+```
+
 The order of X1 and X2 is reversed in this version of the function. This means that the model
 will take Google Maps images as input and learn to generate satellite images. The complete
 example is omitted here for brevity. Run the example as before.
@@ -1210,7 +1240,8 @@ Consider running the example a few times and compare the average performance.
 >109600, d1[0.279] d2[0.049] g[9.941]
 >Saved: plot_109600.png and model_109600.h5
 
-Listing 23.31: Example output from training the Pix2Pix GAN on the prepared maps dataset
+```
+
 with reverse order.
 It is harder to judge the quality of generated satellite images, nevertheless, plausible images
 are generated after just 10 epochs.

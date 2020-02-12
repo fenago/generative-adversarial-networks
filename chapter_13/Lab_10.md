@@ -181,7 +181,8 @@ sqrt
 
 * covmean)
 
-Listing 13.1: Example of a function for calculating the Frechet inception distance between two
+```
+
 sets of activations.
 We can then test out this function to calculate the inception score for some contrived feature
 vectors. Feature vectors will probably contain small positive values and will have a length of
@@ -199,7 +200,8 @@ act1 = act1.reshape((10,2048))
 act2 = random(10*2048)
 act2 = act2.reshape((10,2048))
 
-Listing 13.2: Example of defining some random activations.
+```
+
 One test would be to calculate the FID between a set of activations and itself, which we
 would expect to have a score of 0.0. We can then calculate the distance between the two sets of
 random activations, which we would expect to be a large number.
@@ -211,7 +213,8 @@ print(✬FID (same): %.3f✬ % fid)
 fid = calculate_fid(act1, act2)
 print(✬FID (different): %.3f✬ % fid)
 
-Listing 13.3: Example of calculating the FID between sets of activations.
+```
+
 Tying this all together, the complete example is listed below.
 # example of calculating the frechet inception distance
 import numpy
@@ -260,7 +263,8 @@ print(✬FID (same): %.3f✬ % fid)
 fid = calculate_fid(act1, act2)
 print(✬FID (different): %.3f✬ % fid)
 
-Listing 13.4: Example of calculating the FID in NumPy between two sets of activations.
+```
+
 Running the example first reports the FID between the act1 activations and itself, which is
 0.0 as we expect (note that the sign of the score can be ignored). The distance between the two
 collections of random activations is also as we expect: a large number, which in this case was
@@ -268,7 +272,8 @@ about 359.
 FID (same): -0.000
 FID (different): 358.927
 
-Listing 13.5: Example output from calculating the FID in NumPy between two sets of activations.
+```
+
 You may want to experiment with the calculation of the FID score and test other pathological
 cases.
 
@@ -284,7 +289,8 @@ First, we can load the Inception v3 model in Keras directly.
 # load inception v3 model
 model = InceptionV3()
 
-Listing 13.6: Example of loading the inception v3 model.
+```
+
 This will prepare a version of the inception model for classifying images as one of 1,000
 known classes. We can remove the output (the top) of the model via the include top=False
 argument. Painfully, this also removes the global average pooling layer that we require, but
@@ -296,7 +302,8 @@ as follows:
 # prepare the inception v3 model
 model = InceptionV3(include_top=False, pooling=✬avg✬, input_shape=(299,299,3))
 
-Listing 13.7: Example of loading the inception v3 model to output an embedding for an image.
+```
+
 This model can then be used to predict the feature vector for one or more images. Our
 images are likely to not have the required shape. We will use the scikit-image library to resize
 the NumPy array of pixel values to the required size. The scale images() function below
@@ -316,12 +323,14 @@ new_image = resize(image, new_shape, 0)
 images_list.append(new_image)
 return asarray(images_list)
 
-Listing 13.8: Example of a function for scaling images to a new size.
+```
+
 You may have to install the scikit-image library if it is not already installed. This can be
 achieved as follows:
 sudo pip install scikit-image
 
-Listing 13.9: Example installing the scikit-image library with pip.
+```
+
 Once resized, the image pixel values will also need to be scaled to meet the expectations
 for inputs to the inception model. This can be achieved by calling the preprocess input()
 function. We can update our calculate fid() function defined in the previous section to take
@@ -355,7 +364,8 @@ sqrt
 
 * covmean)
 
-Listing 13.10: Example of a function for predicting the embedding for two images and calculating
+```
+
 the FID between them.
 We can then test this function with some contrived collections of images, in this case, 10
 32 × 32 images with random pixel values in the range [0,255].
@@ -366,7 +376,8 @@ images1 = images1.reshape((10,32,32,3))
 images2 = randint(0, 255, 10*32*32*3)
 images2 = images2.reshape((10,32,32,3))
 
-Listing 13.11: Example of defining images with random pixel values.
+```
+
 
 ### 13.5. How to Implement the FID With Keras
 
@@ -382,14 +393,16 @@ images2 = images2.astype(✬float32✬)
 images1 = scale_images(images1, (299,299,3))
 images2 = scale_images(images2, (299,299,3))
 
-Listing 13.12: Example of scaling the random images to the required size.
+```
+
 Then the pixel values can be scaled to meet the expectations of the Inception v3 model.
 ...
 # pre-process images
 images1 = preprocess_input(images1)
 images2 = preprocess_input(images2)
 
-Listing 13.13: Example of scaling pixel values to the required bounds.
+```
+
 Then calculate the FID scores, first between a collection of images and itself, then between
 the two collections of images.
 ...
@@ -400,7 +413,8 @@ print(✬FID (same): %.3f✬ % fid)
 fid = calculate_fid(model, images1, images2)
 print(✬FID (different): %.3f✬ % fid)
 
-Listing 13.14: Example of calculating the FID between two sets of prepared images.
+```
+
 Tying all of this together, the complete example is listed below.
 # example of calculating the frechet inception distance in Keras
 import numpy
@@ -479,7 +493,8 @@ print(✬FID (same): %.3f✬ % fid)
 fid = calculate_fid(model, images1, images2)
 print(✬FID (different): %.3f✬ % fid)
 
-Listing 13.15: Example of calculating the FID in Keras between two sets of random images.
+```
+
 Running the example first summarizes the shapes of the fabricated images and their rescaled
 versions, matching our expectations.
 Note: the first time the InceptionV3 model is used, Keras will download the model weights
@@ -498,7 +513,8 @@ Scaled (10, 299, 299, 3) (10, 299, 299, 3)
 FID (same): -0.000
 FID (different): 35.495
 
-Listing 13.16: Example output from calculating the FID in Keras between two sets of random
+```
+
 images.
 
 13.6
@@ -513,7 +529,8 @@ split into train and test elements and can be loaded as follows:
 # load cifar-10 images
 (images, _), (_, _) = cifar10.load_data()
 
-Listing 13.17: Example of loading the CIFAR-10 training dataset.
+```
+
 The training dataset has 50,000 images, whereas the test dataset has only 10,000 images. It
 may be interesting to calculate the FID score between these two datasets to get an idea of how
 representative the test dataset is of the training dataset. Scaling and scoring 50K images takes
@@ -522,7 +539,8 @@ a long time, therefore, we can reduce the training set to a 10K random sample as
 shuffle(images1)
 images1 = images1[:10000]
 
-Listing 13.18: Example of shuffling and selecting a subset of the image dataset.
+```
+
 Tying this all together, we can calculate the FID score between a sample of the train and
 the test dataset as follows.
 # example of calculating the frechet inception distance in Keras for cifar10
@@ -599,7 +617,8 @@ images2 = preprocess_input(images2)
 fid = calculate_fid(model, images1, images2)
 print(✬FID: %.3f✬ % fid)
 
-Listing 13.19: Example of calculating the FID in Keras for a sample if the CIFAR-10 dataset.
+```
+
 Running the example may take some time depending on the speed of your workstation. It
 may also require a large amount of RAM. If you have trouble with the example, try halving the
 number of samples to 5,000. At the end of the run, we can see that the FID score between the
@@ -617,7 +636,8 @@ Loaded (10000, 32, 32, 3) (10000, 32, 32, 3)
 Scaled (10000, 299, 299, 3) (10000, 299, 299, 3)
 FID: 5.492
 
-Listing 13.20: Example output from calculating the FID in Keras for a sample if the CIFAR-10
+```
+
 dataset.
 
 13.7

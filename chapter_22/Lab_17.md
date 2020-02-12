@@ -147,7 +147,8 @@ print(rf)
 rf = receptive_field(rf, 4, 2)
 print(rf)
 
-Listing 22.1: Example of calculating the receptive field for a PatchGAN.
+```
+
 Running the example prints the size of the receptive field for each layer in the model from
 the output layer to the input layer. We can see that each 1 × 1 pixel in the output layer maps
 to a 70 × 70 receptive field in the input layer.
@@ -165,7 +166,8 @@ https://github.com/phillipi/pix2pix/blob/master/scripts/receptive_field_sizes.m
 34
 70
 
-Listing 22.2: Example output from calculating the receptive field for a PatchGAN.
+```
+
 The authors of the Pix2Pix paper explore different PatchGAN configurations, including a
 1 × 1 receptive field called a PixelGAN and a receptive field that matches the 256 × 256 pixel
 images input to the model (resampled to 286 × 286) called an ImageGAN. They found that the
@@ -277,7 +279,8 @@ model.summary()
 plot_model(model, to_file=✬discriminator_model_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 22.3: Example of defining and summarizing the PatchGAN discriminator model.
+```
+
 Running the example first summarizes the model, providing insight into how the input shape
 is transformed across the layers and the number of parameters in the model. The output is
 omitted here for brevity. A plot of the model is created showing much the same information in
@@ -361,7 +364,8 @@ to the model as follows:
 ...
 g = Dropout(0.5)(g, training=True)
 
-Listing 22.4: Example of configuring a Dropout layer to operate during inference.
+```
+
 As with the discriminator model, the configuration details of the generator model are
 defined in the appendix of the paper and can be confirmed when comparing against the
 defineG unet() function in the official Torch implementation3 . The encoder uses blocks
@@ -494,7 +498,8 @@ model.summary()
 plot_model(model, to_file=✬generator_model_plot.png✬, show_shapes=True,
 show_layer_names=True)
 
-Listing 22.5: Example of defining and summarizing the U-Net generator model.
+```
+
 
 ### 22.5. How to Implement Adversarial and L1 Loss
 
@@ -572,7 +577,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
 return model
 
-Listing 22.6: Example of a function for defining the composite model for training the generator.
+```
+
 Tying this together with the model definitions from the previous sections, the complete
 example is listed below.
 # example of defining a composite model for training the generator model
@@ -730,7 +736,8 @@ gan_model.summary()
 # plot the model
 plot_model(gan_model, to_file=✬gan_model_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 22.7: Example of defining and summarizing the composite model for training the
+```
+
 generator.
 Running the example first summarizes the composite model, showing the 256 × 256 image
 input, the same shaped output from model 2 (the generator) and the PatchGAN classification
@@ -757,7 +764,8 @@ Trainable params: 54,419,459
 Non-trainable params: 6,978,113
 ________________________________________________________________________________
 
-Listing 22.8: Example output from defining and summarizing the composite model for training
+```
+
 the generator.
 A plot of the composite model is also created, showing how the input image flows into the
 generator and discriminator, and that the model has two outputs or end-points from each of the
@@ -792,7 +800,8 @@ X1, X2 = trainA[ix], trainB[ix]
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return [X1, X2], y
 
-Listing 22.9: Example of a function for selecting samples of real images.
+```
+
 Similarly, we need a function to generate a batch of fake images and the associated output
 (0.0). Here, the samples are an array of source images for which target images will be generated.
 # generate a batch of images, returns images and targets
@@ -803,7 +812,8 @@ X = g_model.predict(samples)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
-Listing 22.10: Example of a function for generating synthetic images with the generator.
+```
+
 Now, we can define the steps of a single training iteration. First, we must select a batch
 of source and target images by calling generate real samples(). Typically, the batch size
 
@@ -817,14 +827,16 @@ n patch for the PatchGAN discriminator will be 16 to indicate a 16 × 16 output 
 # select a batch of real samples
 [X_realA, X_realB], y_real = generate_real_samples(dataset, n_batch, n_patch)
 
-Listing 22.11: Example of selecting a sample of real images.
+```
+
 Next, we can use the batches of selected real source images to generate corresponding batches
 of generated or fake target images.
 ...
 # generate a batch of fake samples
 X_fakeB, y_fake = generate_fake_samples(g_model, X_realA, n_patch)
 
-Listing 22.12: Example of generating a sample of synthetic images.
+```
+
 We can then use the real and fake images, as well as their targets, to update the standalone
 discriminator model.
 ...
@@ -833,7 +845,8 @@ d_loss1 = d_model.train_on_batch([X_realA, X_realB], y_real)
 # update discriminator for generated samples
 d_loss2 = d_model.train_on_batch([X_realA, X_fakeB], y_fake)
 
-Listing 22.13: Example of updating the PatchGAN discriminator model.
+```
+
 So far, this is normal for updating a GAN in Keras. Next, we can update the generator
 model via adversarial loss and L1 loss. Recall that the composite GAN model takes a batch of
 source images as input and predicts first the classification of real/fake and second the generated
@@ -846,7 +859,8 @@ is the weighted sum of the adversarial and L1 loss values for the batch.
 # update the generator
 g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 
-Listing 22.14: Example of updating the U-Net generator model.
+```
+
 That’s all there is to it. We can define all of this in a function called train() that takes the
 defined models and a loaded dataset (as a list of two NumPy arrays) and trains the models.
 # train pix2pix models
@@ -877,7 +891,8 @@ g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 # summarize performance
 print(✬>%d, d1[%.3f] d2[%.3f] g[%.3f]✬ % (i+1, d_loss1, d_loss2, g_loss))
 
-Listing 22.15: Example of a function that implements the Pix2Pix training algorithm.
+```
+
 The train function can then be called directly with our defined models and loaded dataset.
 ...
 # load image data
@@ -885,7 +900,8 @@ dataset = ...
 # train model
 train(d_model, g_model, gan_model, dataset)
 
-Listing 22.16: Example of calling the Pix2Pix training algorithm.
+```
+
 
 22.7
 

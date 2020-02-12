@@ -333,7 +333,8 @@ out_layer = Activation(✬tanh✬)(gen)
 model = Model(in_lat, out_layer)
 return model
 
-Listing 18.1: Example of a function for defining the generator model.
+```
+
 Next, we can define the discriminator and auxiliary models. The discriminator model is
 trained in a standalone manner on real and fake images, as per a normal GAN. Neither the
 generator nor the auxiliary models are fit directly; instead, they are fit as part of a composite
@@ -396,7 +397,8 @@ out_codes = Dense(n_cat, activation=✬softmax✬)(q)
 q_model = Model(in_image, out_codes)
 return d_model, q_model
 
-Listing 18.2: Example of a function for defining the discriminator and auxiliary models.
+```
+
 Next, we can define the composite GAN model. This model uses all submodels and is
 the basis for training the weights of the generator model. The define gan() function below
 implements this and defines and returns the model, taking the three submodels as input. The
@@ -426,7 +428,8 @@ opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=[✬binary_crossentropy✬, ✬categorical_crossentropy✬], optimizer=opt)
 return model
 
-Listing 18.3: Example of a function for defining the composite model.
+```
+
 To make the GAN model architecture clearer, we can create the models and a plot of the
 composite model. The complete example is listed below.
 # create and plot the infogan model for mnist
@@ -543,7 +546,8 @@ gan_model = define_gan(g_model, d_model, q_model)
 # plot the model
 plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
 
-Listing 18.4: Example of defining and summarizing the InfoGAN models.
+```
+
 Running the example creates all three models, then creates the composite GAN model and
 saves a plot of the model architecture.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
@@ -591,7 +595,8 @@ cat_codes = to_categorical(cat_codes, num_classes=n_cat)
 z_input = hstack((z_latent, cat_codes))
 return [z_input, cat_codes]
 
-Listing 18.5: Example of a function for sampling random points in the latent space and control
+```
+
 codes.
 Next, we can generate real and fake examples. The MNIST dataset can be loaded, transformed
 into 3D input by adding an additional dimension for the grayscale images, and scaling all pixel
@@ -640,7 +645,8 @@ images = generator.predict(z_input)
 y = zeros((n_samples, 1))
 return images, y
 
-Listing 18.6: Example of a defining functions for loading and sampling real and fake images .
+```
+
 Next, we need to keep track of the quality of the generated images. We will periodically use
 the generator to generate a sample of images and save the generator and composite models to file.
 We can then review the generated images at the end of training in order to choose a final generator
@@ -675,7 +681,8 @@ filename3 = ✬gan_model_%04d.h5✬ % (step+1)
 gan_model.save(filename3)
 print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
 
-Listing 18.7: Example of a function for summarizing the performance of the model and saving
+```
+
 
 ### 18.4. How to Develop an InfoGAN for MNIST
 
@@ -726,7 +733,8 @@ print(✬>%d, d[%.3f,%.3f], g[%.3f] q[%.3f]✬ % (i+1, d_loss1, d_loss2, g_1, g_
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, gan_model, latent_dim, n_cat)
 
-Listing 18.8: Example of a function for training the InfoGAN models.
+```
+
 We can then configure and create the models, then run the training process. We will use 10
 values for the single categorical variable to match the 10 known classes in the MNIST dataset.
 We will use a latent space with 64 dimensions to match the InfoGAN paper, meaning, in this
@@ -754,7 +762,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim, n_cat)
 
-Listing 18.9: Example of configuring and starting the training process.
+```
+
 Tying this together, the complete example of training an InfoGAN model on the MNIST
 dataset with a single categorical control variable is listed below.
 # example of training an infogan on mnist
@@ -987,7 +996,8 @@ dataset = load_real_samples()
 # train model
 train(g_model, d_model, gan_model, dataset, latent_dim, n_cat)
 
-Listing 18.10: Example of training the InfoGAN on the MNIST dataset.
+```
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1013,7 +1023,8 @@ Consider running the example a few times and compare the average performance.
 >93700, d[0.968,1.016], g[1.200] q[0.001]
 >Saved: generated_plot_93700.png, model_93700.h5, and gan_model_93700.h5
 
-Listing 18.11: Example output from training the InfoGAN on the MNIST dataset.
+```
+
 
 ### 18.4. How to Develop an InfoGAN for MNIST
 
@@ -1098,7 +1109,8 @@ X = (X + 1) / 2.0
 # plot the result
 create_plot(X, n_samples)
 
-Listing 18.12: Example of loading the saved generator model and using it to generate images.
+```
+
 Running the example will load the saved generator model and use it to generate 100 random
 images and plot the images on a 10 × 10 grid.
 
@@ -1125,7 +1137,8 @@ cat_codes = to_categorical(cat_codes, num_classes=n_cat)
 z_input = hstack((z_latent, cat_codes))
 return [z_input, cat_codes]
 
-Listing 18.13: Example of a function for sampling points in latent space for a specific control
+```
+
 code.
 We can test this by generating a grid of 25 images with the categorical value 1. The complete
 example is listed below.
@@ -1181,7 +1194,8 @@ X = (X + 1) / 2.0
 # plot the result
 save_plot(X, n_samples)
 
-Listing 18.14: Example of loading the saved generator model and using it to generate images
+```
+
 
 ### 18.5. How to Use Control Codes With an InfoGAN
 
