@@ -196,11 +196,11 @@ function parameterizes the number of inputs to expect, which defaults to two.
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
 model = Sequential()
-model.add(Dense(25, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(25, activation='relu', kernel_initializer='he_uniform',
 input_dim=n_inputs))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 return model
 
 ```
@@ -216,11 +216,11 @@ from keras.utils.vis_utils import plot_model
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
 model = Sequential()
-model.add(Dense(25, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(25, activation='relu', kernel_initializer='he_uniform',
 input_dim=n_inputs))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 return model
 # define the discriminator model
 
@@ -228,7 +228,7 @@ model = define_discriminator()
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -355,11 +355,11 @@ from keras.layers import Dense
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
 model = Sequential()
-model.add(Dense(25, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(25, activation='relu', kernel_initializer='he_uniform',
 input_dim=n_inputs))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 return model
 # generate n real samples with class labels
 def generate_real_samples(n):
@@ -484,9 +484,9 @@ model.
 # define the standalone generator model
 def define_generator(latent_dim, n_outputs=2):
 model = Sequential()
-model.add(Dense(15, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform',
 input_dim=latent_dim))
-model.add(Dense(n_outputs, activation=✬linear✬))
+model.add(Dense(n_outputs, activation='linear'))
 return model
 
 ```
@@ -502,9 +502,9 @@ from keras.utils.vis_utils import plot_model
 # define the standalone generator model
 def define_generator(latent_dim, n_outputs=2):
 model = Sequential()
-model.add(Dense(15, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform',
 input_dim=latent_dim))
-model.add(Dense(n_outputs, activation=✬linear✬))
+model.add(Dense(n_outputs, activation='linear'))
 
 return model
 # define the discriminator model
@@ -512,7 +512,7 @@ model = define_generator(5)
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -598,9 +598,9 @@ from matplotlib import pyplot
 # define the standalone generator model
 def define_generator(latent_dim, n_outputs=2):
 model = Sequential()
-model.add(Dense(15, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform',
 input_dim=latent_dim))
-model.add(Dense(n_outputs, activation=✬linear✬))
+model.add(Dense(n_outputs, activation='linear'))
 return model
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n):
@@ -696,7 +696,7 @@ model.add(generator)
 # add the discriminator
 model.add(discriminator)
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
+model.compile(loss='binary_crossentropy', optimizer='adam')
 return model
 
 ```
@@ -718,18 +718,18 @@ from keras.utils.vis_utils import plot_model
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
 model = Sequential()
-model.add(Dense(25, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(25, activation='relu', kernel_initializer='he_uniform',
 input_dim=n_inputs))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 return model
 # define the standalone generator model
 def define_generator(latent_dim, n_outputs=2):
 model = Sequential()
-model.add(Dense(15, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform',
 input_dim=latent_dim))
-model.add(Dense(n_outputs, activation=✬linear✬))
+model.add(Dense(n_outputs, activation='linear'))
 return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
@@ -742,7 +742,7 @@ model.add(generator)
 # add the discriminator
 model.add(discriminator)
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
+model.compile(loss='binary_crossentropy', optimizer='adam')
 return model
 # size of the latent space
 latent_dim = 5
@@ -755,7 +755,7 @@ gan_model = define_gan(generator, discriminator)
 # summarize gan model
 gan_model.summary()
 # plot gan model
-plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -810,7 +810,7 @@ for i in range(n_epochs):
 x_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 gan_model.train_on_batch(x_gan, y_gan)
 
 ```
@@ -841,7 +841,7 @@ d_model.train_on_batch(x_fake, y_fake)
 x_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 gan_model.train_on_batch(x_gan, y_gan)
 
 ```
@@ -925,8 +925,8 @@ x_real, y_real = generate_real_samples(n)
 # prepare fake examples
 x_fake, y_fake = generate_fake_samples(generator, latent_dim, n)
 # scatter plot real and fake data points
-pyplot.scatter(x_real[:, 0], x_real[:, 1], color=✬red✬)
-pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color=✬blue✬)
+pyplot.scatter(x_real[:, 0], x_real[:, 1], color='red')
+pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color='blue')
 pyplot.show()
 
 ```
@@ -953,10 +953,10 @@ _, acc_fake = discriminator.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
 print(epoch, acc_real, acc_fake)
 # scatter plot real and fake data points
-pyplot.scatter(x_real[:, 0], x_real[:, 1], color=✬red✬)
-pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color=✬blue✬)
+pyplot.scatter(x_real[:, 0], x_real[:, 1], color='red')
+pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color='blue')
 # save plot to file
-filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
+filename = 'generated_plot_e%03d.png' % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 
@@ -989,7 +989,7 @@ d_model.train_on_batch(x_fake, y_fake)
 x_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 gan_model.train_on_batch(x_gan, y_gan)
 # evaluate the model every n_eval epochs
 if (i+1) % n_eval == 0:
@@ -1016,18 +1016,18 @@ from matplotlib import pyplot
 # define the standalone discriminator model
 def define_discriminator(n_inputs=2):
 model = Sequential()
-model.add(Dense(25, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(25, activation='relu', kernel_initializer='he_uniform',
 input_dim=n_inputs))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 return model
 # define the standalone generator model
 def define_generator(latent_dim, n_outputs=2):
 model = Sequential()
-model.add(Dense(15, activation=✬relu✬, kernel_initializer=✬he_uniform✬,
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform',
 input_dim=latent_dim))
-model.add(Dense(n_outputs, activation=✬linear✬))
+model.add(Dense(n_outputs, activation='linear'))
 return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
@@ -1041,7 +1041,7 @@ model.add(generator)
 # add the discriminator
 model.add(discriminator)
 # compile model
-model.compile(loss=✬binary_crossentropy✬, optimizer=✬adam✬)
+model.compile(loss='binary_crossentropy', optimizer='adam')
 return model
 # generate n real samples with class labels
 def generate_real_samples(n):
@@ -1085,12 +1085,12 @@ _, acc_fake = discriminator.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
 print(epoch, acc_real, acc_fake)
 # scatter plot real and fake data points
-pyplot.scatter(x_real[:, 0], x_real[:, 1], color=✬red✬)
+pyplot.scatter(x_real[:, 0], x_real[:, 1], color='red')
 
 
-pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color=✬blue✬)
+pyplot.scatter(x_fake[:, 0], x_fake[:, 1], color='blue')
 # save plot to file
-filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
+filename = 'generated_plot_e%03d.png' % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 # train the generator and discriminator
@@ -1111,7 +1111,7 @@ d_model.train_on_batch(x_fake, y_fake)
 x_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 gan_model.train_on_batch(x_gan, y_gan)
 # evaluate the model every n_eval epochs
 if (i+1) % n_eval == 0:

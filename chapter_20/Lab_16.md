@@ -158,28 +158,28 @@ def define_discriminator(in_shape=(28,28,1)):
 # image input
 in_image = Input(shape=in_shape)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(in_image)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # dropout
 fe = Dropout(0.4)(fe)
 # output layer
-d_out_layer = Dense(1, activation=✬sigmoid✬)(fe)
+d_out_layer = Dense(1, activation='sigmoid')(fe)
 # define and compile discriminator model
 d_model = Model(in_image, d_out_layer)
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return d_model
 # create model
 model = define_discriminator()
 # plot the model
-plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -235,41 +235,41 @@ def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # image input
 in_image = Input(shape=in_shape)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(in_image)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # dropout
 fe = Dropout(0.4)(fe)
 # unsupervised output
-d_out_layer = Dense(1, activation=✬sigmoid✬)(fe)
+d_out_layer = Dense(1, activation='sigmoid')(fe)
 # define and compile unsupervised discriminator model
 d_model = Model(in_image, d_out_layer)
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 # supervised output
-c_out_layer = Dense(n_classes, activation=✬softmax✬)(fe)
+c_out_layer = Dense(n_classes, activation='softmax')(fe)
 # define and compile supervised discriminator model
 c_model = Model(in_image, c_out_layer)
-c_model.compile(loss=✬sparse_categorical_crossentropy✬, optimizer=Adam(lr=0.0002,
-beta_1=0.5), metrics=[✬accuracy✬])
+c_model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(lr=0.0002,
+beta_1=0.5), metrics=['accuracy'])
 return d_model, c_model
 # create model
 d_model, c_model = define_discriminator()
 # plot the model
-plot_model(d_model, to_file=✬discriminator1_plot.png✬, show_shapes=True,
+plot_model(d_model, to_file='discriminator1_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ### 20.3. How to Implement the Semi-Supervised Discriminator
 
 428
 
-plot_model(c_model, to_file=✬discriminator2_plot.png✬, show_shapes=True,
+plot_model(c_model, to_file='discriminator2_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -322,26 +322,26 @@ def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # image input
 in_image = Input(shape=in_shape)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(in_image)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # dropout
 fe = Dropout(0.4)(fe)
 # unsupervised output
-d_out_layer = Dense(1, activation=✬sigmoid✬)(fe)
+d_out_layer = Dense(1, activation='sigmoid')(fe)
 # supervised output
-c_out_layer = Dense(n_classes + 1, activation=✬softmax✬)(fe)
+c_out_layer = Dense(n_classes + 1, activation='softmax')(fe)
 # define and compile supervised discriminator model
 model = Model(in_image, [d_out_layer, c_out_layer])
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
-optimizer=Adam(lr=0.0002, beta_1=0.5), metrics=[✬accuracy✬])
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
+optimizer=Adam(lr=0.0002, beta_1=0.5), metrics=['accuracy'])
 
 ### 20.3. How to Implement the Semi-Supervised Discriminator
 
@@ -351,7 +351,7 @@ return model
 # create model
 model = define_discriminator()
 # plot the model
-plot_model(model, to_file=✬multioutput_discriminator_plot.png✬, show_shapes=True,
+plot_model(model, to_file='multioutput_discriminator_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -474,13 +474,13 @@ def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # image input
 in_image = Input(shape=in_shape)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(in_image)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
@@ -494,23 +494,23 @@ fe = Dropout(0.4)(fe)
 
 fe = Dense(n_classes)(fe)
 # supervised output
-c_out_layer = Activation(✬softmax✬)(fe)
+c_out_layer = Activation('softmax')(fe)
 # define and compile supervised discriminator model
 c_model = Model(in_image, c_out_layer)
-c_model.compile(loss=✬sparse_categorical_crossentropy✬, optimizer=Adam(lr=0.0002,
-beta_1=0.5), metrics=[✬accuracy✬])
+c_model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(lr=0.0002,
+beta_1=0.5), metrics=['accuracy'])
 # unsupervised output
 d_out_layer = Lambda(custom_activation)(fe)
 # define and compile unsupervised discriminator model
 d_model = Model(in_image, d_out_layer)
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return d_model, c_model
 # create model
 d_model, c_model = define_discriminator()
 # plot the model
-plot_model(d_model, to_file=✬stacked_discriminator1_plot.png✬, show_shapes=True,
+plot_model(d_model, to_file='stacked_discriminator1_plot.png', show_shapes=True,
 show_layer_names=True)
-plot_model(c_model, to_file=✬stacked_discriminator2_plot.png✬, show_shapes=True,
+plot_model(c_model, to_file='stacked_discriminator2_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -565,13 +565,13 @@ gen = Dense(n_nodes)(in_lat)
 gen = LeakyReLU(alpha=0.2)(gen)
 gen = Reshape((7, 7, 128))(gen)
 # upsample to 14x14
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # output
-out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
+out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
 # define model
 model = Model(in_lat, out_layer)
 return model
@@ -595,7 +595,7 @@ gan_output = d_model(g_model.output)
 model = Model(g_model.input, gan_output)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 
 ```
@@ -614,7 +614,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 print(X.shape, trainy.shape)
@@ -710,11 +710,11 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # evaluate the classifier model
@@ -725,14 +725,14 @@ pyplot.close()
 
 X, y = dataset
 _, acc = c_model.evaluate(X, y, verbose=0)
-print(✬Classifier Accuracy: %.3f%%✬ % (acc * 100))
+print('Classifier Accuracy: %.3f%%' % (acc * 100))
 # save the generator model
-filename2 = ✬g_model_%04d.h5✬ % (step+1)
+filename2 = 'g_model_%04d.h5' % (step+1)
 g_model.save(filename2)
 # save the classifier model
-filename3 = ✬c_model_%04d.h5✬ % (step+1)
+filename3 = 'c_model_%04d.h5' % (step+1)
 c_model.save(filename3)
-print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
+print('>Saved: %s, %s, and %s' % (filename1, filename2, filename3))
 
 ```
 
@@ -766,7 +766,7 @@ bat_per_epo = int(dataset[0].shape[0] / n_batch)
 n_steps = bat_per_epo * n_epochs
 # calculate the size of half a batch of samples
 half_batch = int(n_batch / 2)
-print(✬n_epochs=%d, n_batch=%d, 1/2=%d, b/e=%d, steps=%d✬ % (n_epochs, n_batch,
+print('n_epochs=%d, n_batch=%d, 1/2=%d, b/e=%d, steps=%d' % (n_epochs, n_batch,
 half_batch, bat_per_epo, n_steps))
 # manually enumerate epochs
 for i in range(n_steps):
@@ -787,7 +787,7 @@ d_loss2 = d_model.train_on_batch(X_fake, y_fake)
 X_gan, y_gan = generate_latent_points(latent_dim, n_batch), ones((n_batch, 1))
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, c[%.3f,%.0f], d[%.3f,%.3f], g[%.3f]✬ % (i+1, c_loss, c_acc*100, d_loss1,
+print('>%d, c[%.3f,%.0f], d[%.3f,%.3f], g[%.3f]' % (i+1, c_loss, c_acc*100, d_loss1,
 d_loss2, g_loss))
 # evaluate the model performance every so often
 if (i+1) % (bat_per_epo * 1) == 0:
@@ -848,13 +848,13 @@ def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # image input
 in_image = Input(shape=in_shape)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(in_image)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
@@ -863,16 +863,16 @@ fe = Dropout(0.4)(fe)
 # output layer nodes
 fe = Dense(n_classes)(fe)
 # supervised output
-c_out_layer = Activation(✬softmax✬)(fe)
+c_out_layer = Activation('softmax')(fe)
 # define and compile supervised discriminator model
 c_model = Model(in_image, c_out_layer)
-c_model.compile(loss=✬sparse_categorical_crossentropy✬, optimizer=Adam(lr=0.0002,
-beta_1=0.5), metrics=[✬accuracy✬])
+c_model.compile(loss='sparse_categorical_crossentropy', optimizer=Adam(lr=0.0002,
+beta_1=0.5), metrics=['accuracy'])
 # unsupervised output
 d_out_layer = Lambda(custom_activation)(fe)
 # define and compile unsupervised discriminator model
 d_model = Model(in_image, d_out_layer)
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return d_model, c_model
 # define the standalone generator model
 def define_generator(latent_dim):
@@ -884,17 +884,17 @@ gen = Dense(n_nodes)(in_lat)
 gen = LeakyReLU(alpha=0.2)(gen)
 gen = Reshape((7, 7, 128))(gen)
 # upsample to 14x14
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # output
 
 441
 
 ### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
+out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
 # define model
 model = Model(in_lat, out_layer)
 return model
@@ -908,7 +908,7 @@ gan_output = d_model(g_model.output)
 model = Model(g_model.input, gan_output)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 # load the images
 def load_real_samples():
@@ -917,7 +917,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 print(X.shape, trainy.shape)
@@ -978,24 +978,24 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # evaluate the classifier model
 X, y = dataset
 _, acc = c_model.evaluate(X, y, verbose=0)
-print(✬Classifier Accuracy: %.3f%%✬ % (acc * 100))
+print('Classifier Accuracy: %.3f%%' % (acc * 100))
 # save the generator model
-filename2 = ✬g_model_%04d.h5✬ % (step+1)
+filename2 = 'g_model_%04d.h5' % (step+1)
 g_model.save(filename2)
 # save the classifier model
-filename3 = ✬c_model_%04d.h5✬ % (step+1)
+filename3 = 'c_model_%04d.h5' % (step+1)
 c_model.save(filename3)
-print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
+print('>Saved: %s, %s, and %s' % (filename1, filename2, filename3))
 # train the generator and discriminator
 def train(g_model, d_model, c_model, gan_model, dataset, latent_dim, n_epochs=20,
 n_batch=100):
@@ -1015,7 +1015,7 @@ bat_per_epo = int(dataset[0].shape[0] / n_batch)
 n_steps = bat_per_epo * n_epochs
 # calculate the size of half a batch of samples
 half_batch = int(n_batch / 2)
-print(✬n_epochs=%d, n_batch=%d, 1/2=%d, b/e=%d, steps=%d✬ % (n_epochs, n_batch,
+print('n_epochs=%d, n_batch=%d, 1/2=%d, b/e=%d, steps=%d' % (n_epochs, n_batch,
 half_batch, bat_per_epo, n_steps))
 # manually enumerate epochs
 for i in range(n_steps):
@@ -1031,7 +1031,7 @@ d_loss2 = d_model.train_on_batch(X_fake, y_fake)
 X_gan, y_gan = generate_latent_points(latent_dim, n_batch), ones((n_batch, 1))
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, c[%.3f,%.0f], d[%.3f,%.3f], g[%.3f]✬ % (i+1, c_loss, c_acc*100, d_loss1,
+print('>%d, c[%.3f,%.0f], d[%.3f,%.3f], g[%.3f]' % (i+1, c_loss, c_acc*100, d_loss1,
 d_loss2, g_loss))
 # evaluate the model performance every so often
 if (i+1) % (bat_per_epo * 1) == 0:
@@ -1132,7 +1132,7 @@ about 95.432% on the training dataset. We can load the model directly via the lo
 Keras function.
 ...
 # load the model
-model = load_model(✬c_model_7200.h5✬)
+model = load_model('c_model_7200.h5')
 
 ```
 
@@ -1151,23 +1151,23 @@ from numpy import expand_dims
 from keras.models import load_model
 from keras.datasets.mnist import load_data
 # load the model
-model = load_model(✬c_model_7200.h5✬)
+model = load_model('c_model_7200.h5')
 # load the dataset
 (trainX, trainy), (testX, testy) = load_data()
 # expand to 3d, e.g. add channels
 trainX = expand_dims(trainX, axis=-1)
 testX = expand_dims(testX, axis=-1)
 # convert from ints to floats
-trainX = trainX.astype(✬float32✬)
-testX = testX.astype(✬float32✬)
+trainX = trainX.astype('float32')
+testX = testX.astype('float32')
 # scale from [0,255] to [-1,1]
 trainX = (trainX - 127.5) / 127.5
 testX = (testX - 127.5) / 127.5
 # evaluate the model
 _, train_acc = model.evaluate(trainX, trainy, verbose=0)
-print(✬Train Accuracy: %.3f%%✬ % (train_acc * 100))
+print('Train Accuracy: %.3f%%' % (train_acc * 100))
 _, test_acc = model.evaluate(testX, testy, verbose=0)
-print(✬Test Accuracy: %.3f%%✬ % (test_acc * 100))
+print('Test Accuracy: %.3f%%' % (test_acc * 100))
 
 ```
 

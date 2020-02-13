@@ -234,7 +234,7 @@ setting the activation argument to ‘linear’ in the output layer of the criti
 
 # define output layer of the critic model
 ...
-model.add(Dense(1, activation=✬linear✬))
+model.add(Dense(1, activation='linear'))
 
 ```
 
@@ -260,10 +260,10 @@ WGAN can be implemented where -1 class labels are used for real images and 1 cla
 used for fake or generated images. This can be achieved using the ones() NumPy function. For
 example:
 ...
-# generate class labels, -1 for ✬real✬
+# generate class labels, -1 for 'real'
 y = -ones((n_samples, 1))
 ...
-# create class labels with 1.0 for ✬fake✬
+# create class labels with 1.0 for 'fake'
 y = ones((n_samples, 1))
 
 ```
@@ -321,7 +321,7 @@ def __call__(self, weights):
 return backend.clip(weights, -self.clip_value, self.clip_value)
 # get the config
 def get_config(self):
-return {✬clip_value✬: self.clip_value}
+return {'clip_value': self.clip_value}
 
 ```
 
@@ -355,11 +355,11 @@ samples (described in Chapter 4). For example:
 # main gan training loop
 for i in range(n_steps):
 # update the discriminator
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update critic model weights
 c_loss1 = c_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update critic model weights
 c_loss2 = c_model.train_on_batch(X_fake, y_fake)
@@ -368,7 +368,7 @@ c_loss2 = c_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the critic✬s error
+# update the generator via the critic's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 
 ```
@@ -382,11 +382,11 @@ implemented as a new loop within the main GAN update loop; for example:
 for i in range(n_steps):
 # update the critic
 for _ in range(n_critic):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update critic model weights
 c_loss1 = c_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update critic model weights
 c_loss2 = c_model.train_on_batch(X_fake, y_fake)
@@ -395,7 +395,7 @@ c_loss2 = c_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the critic✬s error
+# update the generator via the critic's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 
 ```
@@ -448,12 +448,12 @@ const = ClipConstraint(0.01)
 # define model
 model = Sequential()
 # downsample to 14x14
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 kernel_constraint=const, input_shape=in_shape))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 7x7
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 kernel_constraint=const))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
@@ -495,17 +495,17 @@ model.add(Dense(n_nodes, kernel_initializer=init, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((7, 7, 128)))
 # upsample to 14x14
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 28x28
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # output 28x28x1
-model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬, kernel_initializer=init))
+model.add(Conv2D(1, (7,7), activation='tanh', padding='same', kernel_initializer=init))
 return model
 
 ```
@@ -560,7 +560,7 @@ X = trainX[selected_ix]
 # expand to 3d, e.g. add channels
 X = expand_dims(X, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -584,7 +584,7 @@ def generate_real_samples(dataset, n_samples):
 ix = randint(0, dataset.shape[0], n_samples)
 # select images
 X = dataset[ix]
-# generate class labels, -1 for ✬real✬
+# generate class labels, -1 for 'real'
 y = -ones((n_samples, 1))
 return X, y
 
@@ -616,7 +616,7 @@ def generate_fake_samples(generator, latent_dim, n_samples):
 x_input = generate_latent_points(latent_dim, n_samples)
 # predict outputs
 X = generator.predict(x_input)
-# create class labels with 1.0 for ✬fake✬
+# create class labels with 1.0 for 'fake'
 y = ones((n_samples, 1))
 return X, y
 
@@ -644,17 +644,17 @@ for i in range(10 * 10):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
@@ -666,11 +666,11 @@ this and saves the results to file.
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
 # plot history
-pyplot.plot(d1_hist, label=✬crit_real✬)
-pyplot.plot(d2_hist, label=✬crit_fake✬)
-pyplot.plot(g_hist, label=✬gen✬)
+pyplot.plot(d1_hist, label='crit_real')
+pyplot.plot(d2_hist, label='crit_fake')
+pyplot.plot(g_hist, label='gen')
 pyplot.legend()
-pyplot.savefig(✬plot_line_plot_loss.png✬)
+pyplot.savefig('plot_line_plot_loss.png')
 pyplot.close()
 
 ```
@@ -715,12 +715,12 @@ for i in range(n_steps):
 # update the critic more than the generator
 c1_tmp, c2_tmp = list(), list()
 for _ in range(n_critic):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update critic model weights
 c_loss1 = c_model.train_on_batch(X_real, y_real)
 c1_tmp.append(c_loss1)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update critic model weights
 c_loss2 = c_model.train_on_batch(X_fake, y_fake)
@@ -732,12 +732,12 @@ c2_hist.append(mean(c2_tmp))
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = -ones((n_batch, 1))
-# update the generator via the critic✬s error
+# update the generator via the critic's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 g_hist.append(g_loss)
 # summarize loss on this batch
-print(✬>%d, c1=%.3f, c2=%.3f g=%.3f✬ % (i+1, c1_hist[-1], c2_hist[-1], g_loss))
-# evaluate the model performance every ✬epoch✬
+print('>%d, c1=%.3f, c2=%.3f g=%.3f' % (i+1, c1_hist[-1], c2_hist[-1], g_loss))
+# evaluate the model performance every 'epoch'
 if (i+1) % bat_per_epo == 0:
 summarize_performance(i, g_model, latent_dim)
 # line plots of loss
@@ -797,7 +797,7 @@ def __call__(self, weights):
 return backend.clip(weights, -self.clip_value, self.clip_value)
 # get the config
 def get_config(self):
-return {✬clip_value✬: self.clip_value}
+return {'clip_value': self.clip_value}
 # calculate wasserstein loss
 def wasserstein_loss(y_true, y_pred):
 return backend.mean(y_true * y_pred)
@@ -817,12 +817,12 @@ const = ClipConstraint(0.01)
 # define model
 model = Sequential()
 # downsample to 14x14
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 kernel_constraint=const, input_shape=in_shape))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 7x7
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 kernel_constraint=const))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
@@ -845,17 +845,17 @@ model.add(Dense(n_nodes, kernel_initializer=init, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((7, 7, 128)))
 # upsample to 14x14
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 28x28
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # output 28x28x1
-model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬, kernel_initializer=init))
+model.add(Conv2D(1, (7,7), activation='tanh', padding='same', kernel_initializer=init))
 return model
 # define the combined generator and critic model, for updating the generator
 def define_gan(generator, critic):
@@ -883,7 +883,7 @@ X = trainX[selected_ix]
 # expand to 3d, e.g. add channels
 X = expand_dims(X, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -893,7 +893,7 @@ def generate_real_samples(dataset, n_samples):
 ix = randint(0, dataset.shape[0], n_samples)
 # select images
 X = dataset[ix]
-# generate class labels, -1 for ✬real✬
+# generate class labels, -1 for 'real'
 y = -ones((n_samples, 1))
 return X, y
 # generate points in latent space as input for the generator
@@ -909,7 +909,7 @@ def generate_fake_samples(generator, latent_dim, n_samples):
 x_input = generate_latent_points(latent_dim, n_samples)
 # predict outputs
 X = generator.predict(x_input)
-# create class labels with 1.0 for ✬fake✬
+# create class labels with 1.0 for 'fake'
 y = ones((n_samples, 1))
 return X, y
 # generate samples and save as a plot and save the model
@@ -927,25 +927,25 @@ for i in range(10 * 10):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
 # plot history
-pyplot.plot(d1_hist, label=✬crit_real✬)
-pyplot.plot(d2_hist, label=✬crit_fake✬)
-pyplot.plot(g_hist, label=✬gen✬)
+pyplot.plot(d1_hist, label='crit_real')
+pyplot.plot(d2_hist, label='crit_fake')
+pyplot.plot(g_hist, label='gen')
 pyplot.legend()
-pyplot.savefig(✬plot_line_plot_loss.png✬)
+pyplot.savefig('plot_line_plot_loss.png')
 pyplot.close()
 # train the generator and critic
 def train(g_model, c_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch=64,
@@ -963,12 +963,12 @@ for i in range(n_steps):
 # update the critic more than the generator
 c1_tmp, c2_tmp = list(), list()
 for _ in range(n_critic):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update critic model weights
 c_loss1 = c_model.train_on_batch(X_real, y_real)
 c1_tmp.append(c_loss1)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update critic model weights
 c_loss2 = c_model.train_on_batch(X_fake, y_fake)
@@ -987,12 +987,12 @@ c2_hist.append(mean(c2_tmp))
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = -ones((n_batch, 1))
-# update the generator via the critic✬s error
+# update the generator via the critic's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 g_hist.append(g_loss)
 # summarize loss on this batch
-print(✬>%d, c1=%.3f, c2=%.3f g=%.3f✬ % (i+1, c1_hist[-1], c2_hist[-1], g_loss))
-# evaluate the model performance every ✬epoch✬
+print('>%d, c1=%.3f, c2=%.3f g=%.3f' % (i+1, c1_hist[-1], c2_hist[-1], g_loss))
+# evaluate the model performance every 'epoch'
 if (i+1) % bat_per_epo == 0:
 summarize_performance(i, g_model, latent_dim)
 # line plots of loss
@@ -1143,12 +1143,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬model_0970.h5✬)
+model = load_model('model_0970.h5')
 # generate images
 latent_points = generate_latent_points(50, 25)
 # generate images

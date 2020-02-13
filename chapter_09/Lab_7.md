@@ -15,9 +15,10 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
-### Chapter 9
-How to Explore the Latent Space
+
+## How to Explore the Latent Space 
 When Generating Faces
+
 Generative Adversarial Networks, or GANs, are an architecture for training generative models,
 such as deep convolutional neural networks for generating images. The generative model in the
 GAN architecture learns to map points in the latent space to generated images. The latent
@@ -27,33 +28,32 @@ performing vector arithmetic between points in latent space which have meaningfu
 effects on the generated images. In this tutorial, you will discover how to develop a generative
 adversarial network for face generation and explore the structure of the latent space and the
 effect on generated faces. After completing this tutorial, you will know:
+
 - How to develop a generative adversarial network for generating faces.
+
 - How to interpolate between points in latent space and generate images that morph from
 one face to another.
+
 - How to perform vector arithmetic in latent space and achieve targeted effects in the
 resulting generated faces.
 
 Let’s get started.
 
-9.1
-
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into five parts; they are:
+
 1. Vector Arithmetic in Latent Space
+
 2. Large-Scale CelebFaces Dataset (CelebA)
+
 3. How to Prepare the CelebA Faces Dataset
+
 4. How to Develop a GAN for CelebA
+
 5. How to Explore the Latent Space for Faces
-171
 
-### 9.2. Vector Arithmetic in Latent Space
-
-9.2
-
-172
-
-Vector Arithmetic in Latent Space
+## Vector Arithmetic in Latent Space
 
 The generator model in the GAN architecture takes a point from the latent space as input and
 generates a new image. The latent space itself has no meaning. Typically it is a 100-dimensional
@@ -78,32 +78,27 @@ different training datasets, most notably a dataset of celebrity faces. They dem
 interesting aspects. The first was the vector arithmetic with faces. For example, a face of a
 smiling woman minus the face of a neutral woman plus the face of a neutral man resulted in the
 face of a smiling man.
+
 smiling woman − neutral woman + neutral man = smiling man
 
-(9.1)
 
 Specifically, the arithmetic was performed on the points in the latent space for the resulting
 faces. Actually on the average of multiple faces with a given characteristic, to provide a more
 robust result.
 
-### 9.2. Vector Arithmetic in Latent Space
 
-173
 
 ![](../images/-.jpg)
 
 With a GAN. Taken from: Unsupervised Representation Learning with Deep Convolutional
 Generative Adversarial Networks.
+
 The second demonstration was the transition between two generated faces, specifically by
 creating a linear path through the latent dimension between the points that generated two faces
 and then generating all of the faces for the points along the path.
 
 ![](../images/-.jpg)
 
-
-### 9.3. Large-Scale CelebFaces Dataset (CelebA)
-
-174
 
 Exploring the structure of the latent space for a GAN model is both interesting for the
 problem domain and helps to develop an intuition for what has been learned by the generator
@@ -146,7 +141,7 @@ def load_image(filename):
 # load image from file
 image = Image.open(filename)
 # convert to RGB, if needed
-image = image.convert(✬RGB✬)
+image = image.convert('RGB')
 # convert to array
 pixels = asarray(image)
 return pixels
@@ -190,7 +185,7 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(faces[i])
 pyplot.show()
@@ -210,7 +205,7 @@ def load_image(filename):
 # load image from file
 image = Image.open(filename)
 # convert to RGB, if needed
-image = image.convert(✬RGB✬)
+image = image.convert('RGB')
 # convert to array
 pixels = asarray(image)
 return pixels
@@ -238,15 +233,15 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(faces[i])
 pyplot.show()
 # directory that contains all images
-directory = ✬img_align_celeba/✬
+directory = 'img_align_celeba/'
 # load and extract all faces
 faces = load_faces(directory, 25)
-print(✬Loaded: ✬, faces.shape)
+print('Loaded: ', faces.shape)
 # plot faces
 plot_faces(faces, 5)
 
@@ -309,7 +304,7 @@ model = MTCNN()
 # detect face in the image
 faces = model.detect_faces(pixels)
 # extract details of the face
-x1, y1, width, height = faces[0][✬box✬]
+x1, y1, width, height = faces[0]['box']
 
 ```
 
@@ -326,7 +321,7 @@ faces = model.detect_faces(pixels)
 if len(faces) == 0:
 return None
 # extract details of the face
-x1, y1, width, height = faces[0][✬box✬]
+x1, y1, width, height = faces[0]['box']
 # force detected pixel values to be positive (bug fix)
 x1, y1 = abs(x1), abs(y1)
 # convert into coordinates
@@ -386,7 +381,7 @@ def load_image(filename):
 # load image from file
 image = Image.open(filename)
 # convert to RGB, if needed
-image = image.convert(✬RGB✬)
+image = image.convert('RGB')
 # convert to array
 pixels = asarray(image)
 return pixels
@@ -398,7 +393,7 @@ faces = model.detect_faces(pixels)
 if len(faces) == 0:
 return None
 # extract details of the face
-x1, y1, width, height = faces[0][✬box✬]
+x1, y1, width, height = faces[0]['box']
 # force detected pixel values to be positive (bug fix)
 x1, y1 = abs(x1), abs(y1)
 # convert into coordinates
@@ -436,12 +431,12 @@ if len(faces) >= n_faces:
 break
 return asarray(faces)
 # directory that contains all images
-directory = ✬img_align_celeba/✬
+directory = 'img_align_celeba/'
 # load and extract all faces
 all_faces = load_faces(directory, 50000)
-print(✬Loaded: ✬, all_faces.shape)
+print('Loaded: ', all_faces.shape)
 # save in compressed format
-savez_compressed(✬img_align_celeba.npz✬, all_faces)
+savez_compressed('img_align_celeba.npz', all_faces)
 
 ```
 
@@ -452,9 +447,9 @@ time, as follows.
 # load the prepared dataset
 from numpy import load
 # load the face dataset
-data = load(✬img_align_celeba.npz✬)
-faces = data[✬arr_0✬]
-print(✬Loaded: ✬, faces.shape)
+data = load('img_align_celeba.npz')
+faces = data['arr_0']
+print('Loaded: ', faces.shape)
 
 ```
 
@@ -488,27 +483,27 @@ own image data later.
 def define_discriminator(in_shape=(80,80,3)):
 model = Sequential()
 # normal
-model.add(Conv2D(128, (5,5), padding=✬same✬, input_shape=in_shape))
+model.add(Conv2D(128, (5,5), padding='same', input_shape=in_shape))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 40x40
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 20x30
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 10x10
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 5x5
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
 model.add(Dropout(0.4))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 
 ```
@@ -538,19 +533,19 @@ model.add(Dense(n_nodes, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((5, 5, 128)))
 # upsample to 10x10
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 20x20
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 40x40
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 80x80
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # output layer 80x80x3
-model.add(Conv2D(3, (5,5), activation=✬tanh✬, padding=✬same✬))
+model.add(Conv2D(3, (5,5), activation='tanh', padding='same'))
 return model
 
 ```
@@ -578,7 +573,7 @@ model.add(g_model)
 model.add(d_model)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 
 ```
@@ -597,10 +592,10 @@ data ready for modeling.
 # load and prepare training images
 def load_real_samples():
 # load the face dataset
-data = load(✬img_align_celeba.npz✬)
-X = data[✬arr_0✬]
+data = load('img_align_celeba.npz')
+X = data['arr_0']
 # convert from unsigned ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -619,7 +614,7 @@ def generate_real_samples(dataset, n_samples):
 ix = randint(0, dataset.shape[0], n_samples)
 # retrieve selected images
 X = dataset[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, 1))
 return X, y
 
@@ -656,7 +651,7 @@ def generate_fake_samples(g_model, latent_dim, n_samples):
 x_input = generate_latent_points(latent_dim, n_samples)
 # predict outputs
 X = g_model.predict(x_input)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((n_samples, 1))
 return X, y
 
@@ -683,11 +678,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
@@ -695,10 +690,10 @@ d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # evaluate the model performance, sometimes
 
@@ -730,11 +725,11 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i])
 # save plot to file
-filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
+filename = 'generated_plot_e%03d.png' % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 # evaluate the discriminator, plot generated images, save generator model
@@ -748,11 +743,11 @@ x_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_samples)
 # evaluate discriminator on fake examples
 _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
-print(✬>Accuracy real: %.0f%%, fake: %.0f%%✬ % (acc_real*100, acc_fake*100))
+print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
 # save plot
 save_plot(x_fake, epoch)
 # save the generator model tile file
-filename = ✬generator_model_%03d.h5✬ % (epoch+1)
+filename = 'generator_model_%03d.h5' % (epoch+1)
 g_model.save(filename)
 
 ```
@@ -803,19 +798,19 @@ from matplotlib import pyplot
 def define_discriminator(in_shape=(80,80,3)):
 model = Sequential()
 # normal
-model.add(Conv2D(128, (5,5), padding=✬same✬, input_shape=in_shape))
+model.add(Conv2D(128, (5,5), padding='same', input_shape=in_shape))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 40x40
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 20x30
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 10x10
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 5x5
-model.add(Conv2D(128, (5,5), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (5,5), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
@@ -824,10 +819,10 @@ model.add(Dropout(0.4))
 186
 
 ### 9.5. How to Develop a GAN for CelebA
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 # define the standalone generator model
 def define_generator(latent_dim):
@@ -838,19 +833,19 @@ model.add(Dense(n_nodes, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((5, 5, 128)))
 # upsample to 10x10
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 20x20
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 40x40
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 80x80
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # output layer 80x80x3
-model.add(Conv2D(3, (5,5), activation=✬tanh✬, padding=✬same✬))
+model.add(Conv2D(3, (5,5), activation='tanh', padding='same'))
 return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model):
@@ -864,15 +859,15 @@ model.add(g_model)
 model.add(d_model)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 # load and prepare training images
 def load_real_samples():
 # load the face dataset
-data = load(✬img_align_celeba.npz✬)
-X = data[✬arr_0✬]
+data = load('img_align_celeba.npz')
+X = data['arr_0']
 # convert from unsigned ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -886,7 +881,7 @@ def generate_real_samples(dataset, n_samples):
 ix = randint(0, dataset.shape[0], n_samples)
 # retrieve selected images
 X = dataset[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, 1))
 return X, y
 # generate points in latent space as input for the generator
@@ -902,7 +897,7 @@ def generate_fake_samples(g_model, latent_dim, n_samples):
 x_input = generate_latent_points(latent_dim, n_samples)
 # predict outputs
 X = g_model.predict(x_input)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((n_samples, 1))
 return X, y
 # create and save a plot of generated images
@@ -914,11 +909,11 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i])
 # save plot to file
-filename = ✬generated_plot_e%03d.png✬ % (epoch+1)
+filename = 'generated_plot_e%03d.png' % (epoch+1)
 pyplot.savefig(filename)
 pyplot.close()
 # evaluate the discriminator, plot generated images, save generator model
@@ -939,11 +934,11 @@ _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
 
 189
 
-print(✬>Accuracy real: %.0f%%, fake: %.0f%%✬ % (acc_real*100, acc_fake*100))
+print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
 # save plot
 save_plot(x_fake, epoch)
 # save the generator model tile file
-filename = ✬generator_model_%03d.h5✬ % (epoch+1)
+filename = 'generator_model_%03d.h5' % (epoch+1)
 g_model.save(filename)
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=128):
@@ -953,11 +948,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
@@ -965,10 +960,10 @@ d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # evaluate the model performance, sometimes
 if (i+1) % 10 == 0:
@@ -1125,12 +1120,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
 pyplot.show()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # generate images
 latent_points = generate_latent_points(100, 25)
 # generate images
@@ -1214,12 +1209,12 @@ for i in range(n):
 # define subplot
 pyplot.subplot(1, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
 pyplot.show()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # generate points in latent space
 pts = generate_latent_points(100, 2)
 # interpolate points in latent space
@@ -1279,12 +1274,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
 pyplot.show()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # generate points in latent space
 
 ### 9.6. How to Explore the Latent Space for Generated Faces
@@ -1337,7 +1332,7 @@ def slerp(val, low, high):
 omega = arccos(clip(dot(low/norm(low), high/norm(high)), -1, 1))
 so = sin(omega)
 if so == 0:
-# L✬Hopital✬s rule/LERP
+# L'Hopital's rule/LERP
 return (1.0-val) * low + val * high
 return sin((1.0-val)*omega) / so * low + sin(val*omega) / so * high
 
@@ -1371,7 +1366,7 @@ def slerp(val, low, high):
 omega = arccos(clip(dot(low/norm(low), high/norm(high)), -1, 1))
 so = sin(omega)
 if so == 0:
-# L✬Hopital✬s rule/LERP
+# L'Hopital's rule/LERP
 return (1.0-val) * low + val * high
 return sin((1.0-val)*omega) / so * low + sin(val*omega) / so * high
 # uniform interpolation between two points in latent space
@@ -1399,12 +1394,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
 pyplot.show()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # generate points in latent space
 n = 20
 pts = generate_latent_points(100, n)
@@ -1469,17 +1464,17 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
-pyplot.savefig(✬generated_faces.png✬)
+pyplot.savefig('generated_faces.png')
 pyplot.close()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # generate points in latent space
 latent_points = generate_latent_points(100, 100)
 # save points
-savez_compressed(✬latent_points.npz✬, latent_points)
+savez_compressed('latent_points.npz', latent_points)
 # generate images
 X = model.predict(latent_points)
 # scale from [-1,1] to [0,1]
@@ -1519,8 +1514,8 @@ smiling_woman_ix = [92, 98, 99]
 neutral_woman_ix = [9, 21, 79]
 neutral_man_ix = [10, 30, 45]
 # load the saved latent points
-data = load(✬latent_points.npz✬)
-points = data[✬arr_0✬]
+data = load('latent_points.npz')
+points = data['arr_0']
 
 ```
 
@@ -1612,19 +1607,19 @@ for i in range(rows * cols):
 # define subplot
 pyplot.subplot(rows, cols, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(examples[i, :, :])
 pyplot.show()
 # load model
-model = load_model(✬generator_model_030.h5✬)
+model = load_model('generator_model_030.h5')
 # retrieve specific points
 smiling_woman_ix = [92, 98, 99]
 neutral_woman_ix = [9, 21, 79]
 neutral_man_ix = [10, 30, 45]
 # load the saved latent points
-data = load(✬latent_points.npz✬)
-points = data[✬arr_0✬]
+data = load('latent_points.npz')
+points = data['arr_0']
 # average vectors
 smiling_woman = average_points(points, smiling_woman_ix)
 neutral_woman = average_points(points, neutral_woman_ix)

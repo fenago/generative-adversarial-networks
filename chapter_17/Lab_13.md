@@ -161,8 +161,8 @@ from keras.datasets.fashion_mnist import load_data
 # load the images into memory
 (trainX, trainy), (testX, testy) = load_data()
 # summarize the shape of the dataset
-print(✬Train✬, trainX.shape, trainy.shape)
-print(✬Test✬, testX.shape, testy.shape)
+print('Train', trainX.shape, trainy.shape)
+print('Test', testX.shape, testy.shape)
 
 ```
 
@@ -186,7 +186,7 @@ the training dataset using the Matplotlib library with the imshow() function and
 color map via the cmap argument as ‘gray’ to show the pixel values correctly.
 ...
 # plot raw pixel data
-pyplot.imshow(trainX[i], cmap=✬gray✬)
+pyplot.imshow(trainX[i], cmap='gray')
 
 ```
 
@@ -196,7 +196,7 @@ now white with the area of interest in black. This can be achieved using a rever
 color map, as follows:
 ...
 # plot raw pixel data
-pyplot.imshow(trainX[i], cmap=✬gray_r✬)
+pyplot.imshow(trainX[i], cmap='gray_r')
 
 ```
 
@@ -211,9 +211,9 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(trainX[i], cmap=✬gray_r✬)
+pyplot.imshow(trainX[i], cmap='gray_r')
 pyplot.show()
 
 ```
@@ -257,18 +257,18 @@ for your own image data later.
 def define_discriminator(in_shape=(28,28,1)):
 model = Sequential()
 # downsample
-model.add(Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, input_shape=in_shape))
+model.add(Conv2D(128, (3,3), strides=(2,2), padding='same', input_shape=in_shape))
 model.add(LeakyReLU(alpha=0.2))
 # downsample
-model.add(Conv2D(128, (3,3), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (3,3), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
 model.add(Dropout(0.4))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 
 ```
@@ -293,13 +293,13 @@ model.add(Dense(n_nodes, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((7, 7, 128)))
 # upsample to 14x14
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 28x28
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # generate
-model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬))
+model.add(Conv2D(1, (7,7), activation='tanh', padding='same'))
 return model
 
 ```
@@ -332,7 +332,7 @@ model.add(generator)
 model.add(discriminator)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 
 ```
@@ -352,7 +352,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -440,11 +440,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
@@ -452,13 +452,13 @@ d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # save the generator model
-g_model.save(✬generator.h5✬)
+g_model.save('generator.h5')
 
 ```
 
@@ -504,18 +504,18 @@ from keras.layers import Dropout
 def define_discriminator(in_shape=(28,28,1)):
 model = Sequential()
 # downsample
-model.add(Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, input_shape=in_shape))
+model.add(Conv2D(128, (3,3), strides=(2,2), padding='same', input_shape=in_shape))
 model.add(LeakyReLU(alpha=0.2))
 # downsample
-model.add(Conv2D(128, (3,3), strides=(2,2), padding=✬same✬))
+model.add(Conv2D(128, (3,3), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
 model.add(Dropout(0.4))
-model.add(Dense(1, activation=✬sigmoid✬))
+model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 # define the standalone generator model
 def define_generator(latent_dim):
@@ -526,13 +526,13 @@ model.add(Dense(n_nodes, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((7, 7, 128)))
 # upsample to 14x14
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # upsample to 28x28
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same'))
 model.add(LeakyReLU(alpha=0.2))
 # generate
-model.add(Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬))
+model.add(Conv2D(1, (7,7), activation='tanh', padding='same'))
 return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
@@ -550,7 +550,7 @@ model.add(generator)
 model.add(discriminator)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 # load fashion mnist images
 def load_real_samples():
@@ -559,7 +559,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -603,11 +603,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
@@ -615,13 +615,13 @@ d_loss2, _ = d_model.train_on_batch(X_fake, y_fake)
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # save the generator model
-g_model.save(✬generator.h5✬)
+g_model.save('generator.h5')
 # size of the latent space
 latent_dim = 100
 # create the discriminator
@@ -707,12 +707,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬generator.h5✬)
+model = load_model('generator.h5')
 # generate images
 latent_points = generate_latent_points(100, 100)
 # generate images
@@ -783,22 +783,22 @@ in_image = Input(shape=in_shape)
 # concat label as a channel
 merge = Concatenate()([in_image, li])
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(merge)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(merge)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # dropout
 fe = Dropout(0.4)(fe)
 # output
-out_layer = Dense(1, activation=✬sigmoid✬)(fe)
+out_layer = Dense(1, activation='sigmoid')(fe)
 # define model
 model = Model([in_image, in_label], out_layer)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 
 ```
@@ -850,13 +850,13 @@ gen = Reshape((7, 7, 128))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 # upsample to 14x14
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(merge)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(merge)
 gen = LeakyReLU(alpha=0.2)(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # output
-out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
+out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
 # define model
 model = Model([in_lat, in_label], out_layer)
 return model
@@ -901,7 +901,7 @@ gan_output = d_model([gen_output, gen_label])
 model = Model([gen_noise, gen_label], gan_output)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 
 ```
@@ -938,7 +938,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return [X, trainy]
@@ -998,11 +998,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 [X_real, labels_real], y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch([X_real, labels_real], y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 [X_fake, labels], y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch([X_fake, labels], y_fake)
@@ -1010,13 +1010,13 @@ d_loss2, _ = d_model.train_on_batch([X_fake, labels], y_fake)
 [z_input, labels_input] = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch([z_input, labels_input], y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # save the generator model
-g_model.save(✬cgan_generator.h5✬)
+g_model.save('cgan_generator.h5')
 
 ```
 
@@ -1078,22 +1078,22 @@ in_image = Input(shape=in_shape)
 # concat label as a channel
 merge = Concatenate()([in_image, li])
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(merge)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(merge)
 fe = LeakyReLU(alpha=0.2)(fe)
 # downsample
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same')(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # dropout
 fe = Dropout(0.4)(fe)
 # output
-out_layer = Dense(1, activation=✬sigmoid✬)(fe)
+out_layer = Dense(1, activation='sigmoid')(fe)
 # define model
 model = Model([in_image, in_label], out_layer)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 # define the standalone generator model
 def define_generator(latent_dim, n_classes=10):
@@ -1120,13 +1120,13 @@ gen = Reshape((7, 7, 128))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 # upsample to 14x14
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(merge)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(merge)
 gen = LeakyReLU(alpha=0.2)(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬)(gen)
+gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # output
-out_layer = Conv2D(1, (7,7), activation=✬tanh✬, padding=✬same✬)(gen)
+out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
 # define model
 model = Model([in_lat, in_label], out_layer)
 return model
@@ -1144,7 +1144,7 @@ gan_output = d_model([gen_output, gen_label])
 model = Model([gen_noise, gen_label], gan_output)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt)
+model.compile(loss='binary_crossentropy', optimizer=opt)
 return model
 # load fashion mnist images
 def load_real_samples():
@@ -1153,7 +1153,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return [X, trainy]
@@ -1199,11 +1199,11 @@ half_batch = int(n_batch / 2)
 for i in range(n_epochs):
 # enumerate batches over the training set
 for j in range(bat_per_epo):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 [X_real, labels_real], y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 d_loss1, _ = d_model.train_on_batch([X_real, labels_real], y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 [X_fake, labels], y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 d_loss2, _ = d_model.train_on_batch([X_fake, labels], y_fake)
@@ -1211,13 +1211,13 @@ d_loss2, _ = d_model.train_on_batch([X_fake, labels], y_fake)
 [z_input, labels_input] = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 g_loss = gan_model.train_on_batch([z_input, labels_input], y_gan)
 # summarize loss on this batch
-print(✬>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f✬ %
+print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # save the generator model
-g_model.save(✬cgan_generator.h5✬)
+g_model.save('cgan_generator.h5')
 # size of the latent space
 latent_dim = 100
 # create the discriminator
@@ -1275,12 +1275,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬cgan_generator.h5✬)
+model = load_model('cgan_generator.h5')
 # generate images
 
 ### 17.7. Extensions

@@ -310,28 +310,28 @@ in_lat = Input(shape=(gen_input_size,))
 # foundation for 7x7 image
 n_nodes = 512 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 gen = Reshape((7, 7, 512))(gen)
 # normal
-gen = Conv2D(128, (4,4), padding=✬same✬, kernel_initializer=init)(gen)
+gen = Conv2D(128, (4,4), padding='same', kernel_initializer=init)(gen)
 
 ### 18.4. How to Develop an InfoGAN for MNIST
 
 370
 
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 14x14
-gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
 # tanh output
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model(in_lat, out_layer)
 return model
@@ -367,10 +367,10 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.1)(d)
 # downsample to 7x7
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 
 ### 18.4. How to Develop an InfoGAN for MNIST
 
@@ -379,23 +379,23 @@ d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=ini
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 # normal
-d = Conv2D(256, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), padding='same', kernel_initializer=init)(d)
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 # flatten feature maps
 d = Flatten()(d)
 # real/fake output
-out_classifier = Dense(1, activation=✬sigmoid✬)(d)
+out_classifier = Dense(1, activation='sigmoid')(d)
 # define d model
 d_model = Model(in_image, out_classifier)
 # compile d model
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 # create q model layers
 q = Dense(128)(d)
 q = BatchNormalization()(q)
 q = LeakyReLU(alpha=0.1)(q)
 # q model output
-out_codes = Dense(n_cat, activation=✬softmax✬)(q)
+out_codes = Dense(n_cat, activation='softmax')(q)
 # define q model
 q_model = Model(in_image, out_codes)
 return d_model, q_model
@@ -428,7 +428,7 @@ q_output = q_model(g_model.output)
 model = Model(g_model.input, [d_output, q_output])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬categorical_crossentropy✬], optimizer=opt)
+model.compile(loss=['binary_crossentropy', 'categorical_crossentropy'], optimizer=opt)
 return model
 
 ```
@@ -456,30 +456,30 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.1)(d)
 # downsample to 7x7
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 # normal
-d = Conv2D(256, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), padding='same', kernel_initializer=init)(d)
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 # flatten feature maps
 d = Flatten()(d)
 # real/fake output
-out_classifier = Dense(1, activation=✬sigmoid✬)(d)
+out_classifier = Dense(1, activation='sigmoid')(d)
 # define d model
 d_model = Model(in_image, out_classifier)
 # compile d model
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 # create q model layers
 q = Dense(128)(d)
 q = BatchNormalization()(q)
 q = LeakyReLU(alpha=0.1)(q)
 # q model output
-out_codes = Dense(n_cat, activation=✬softmax✬)(q)
+out_codes = Dense(n_cat, activation='softmax')(q)
 # define q model
 q_model = Model(in_image, out_codes)
 return d_model, q_model
@@ -494,23 +494,23 @@ in_lat = Input(shape=(gen_input_size,))
 # foundation for 7x7 image
 n_nodes = 512 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 gen = Reshape((7, 7, 512))(gen)
 # normal
-gen = Conv2D(128, (4,4), padding=✬same✬, kernel_initializer=init)(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Conv2D(128, (4,4), padding='same', kernel_initializer=init)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 14x14
-gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
 # tanh output
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model(in_lat, out_layer)
 return model
@@ -526,7 +526,7 @@ q_output = q_model(g_model.output)
 model = Model(g_model.input, [d_output, q_output])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬categorical_crossentropy✬], optimizer=opt)
+model.compile(loss=['binary_crossentropy', 'categorical_crossentropy'], optimizer=opt)
 return model
 # number of values for the categorical control code
 n_cat = 10
@@ -547,7 +547,7 @@ gan_model = define_gan(g_model, d_model, q_model)
 374
 
 # plot the model
-plot_model(gan_model, to_file=✬gan_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -620,7 +620,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 print(X.shape)
@@ -670,20 +670,20 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
 # save the gan model
-filename3 = ✬gan_model_%04d.h5✬ % (step+1)
+filename3 = 'gan_model_%04d.h5' % (step+1)
 gan_model.save(filename3)
-print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
+print('>Saved: %s, %s, and %s' % (filename1, filename2, filename3))
 
 ```
 
@@ -717,11 +717,11 @@ n_steps = bat_per_epo * n_epochs
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_steps):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator and q model weights
 d_loss1 = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_cat, half_batch)
 # update discriminator model weights
 d_loss2 = d_model.train_on_batch(X_fake, y_fake)
@@ -732,8 +732,8 @@ y_gan = ones((n_batch, 1))
 # update the g via the d and q error
 _,g_1,g_2 = gan_model.train_on_batch(z_input, [y_gan, cat_codes])
 # summarize loss on this batch
-print(✬>%d, d[%.3f,%.3f], g[%.3f] q[%.3f]✬ % (i+1, d_loss1, d_loss2, g_1, g_2))
-# evaluate the model performance every ✬epoch✬
+print('>%d, d[%.3f,%.3f], g[%.3f] q[%.3f]' % (i+1, d_loss1, d_loss2, g_1, g_2))
+# evaluate the model performance every 'epoch'
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, gan_model, latent_dim, n_cat)
 
@@ -799,32 +799,32 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.1)(d)
 # downsample to 7x7
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 
 ### 18.4. How to Develop an InfoGAN for MNIST
 # normal
-d = Conv2D(256, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), padding='same', kernel_initializer=init)(d)
 d = LeakyReLU(alpha=0.1)(d)
 d = BatchNormalization()(d)
 # flatten feature maps
 d = Flatten()(d)
 # real/fake output
-out_classifier = Dense(1, activation=✬sigmoid✬)(d)
+out_classifier = Dense(1, activation='sigmoid')(d)
 # define d model
 d_model = Model(in_image, out_classifier)
 # compile d model
-d_model.compile(loss=✬binary_crossentropy✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+d_model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.0002, beta_1=0.5))
 # create q model layers
 q = Dense(128)(d)
 q = BatchNormalization()(q)
 q = LeakyReLU(alpha=0.1)(q)
 # q model output
-out_codes = Dense(n_cat, activation=✬softmax✬)(q)
+out_codes = Dense(n_cat, activation='softmax')(q)
 # define q model
 q_model = Model(in_image, out_codes)
 return d_model, q_model
@@ -837,23 +837,23 @@ in_lat = Input(shape=(gen_input_size,))
 # foundation for 7x7 image
 n_nodes = 512 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 gen = Reshape((7, 7, 512))(gen)
 # normal
-gen = Conv2D(128, (4,4), padding=✬same✬, kernel_initializer=init)(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Conv2D(128, (4,4), padding='same', kernel_initializer=init)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 14x14
-gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = BatchNormalization()(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
 # tanh output
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model(in_lat, out_layer)
 return model
@@ -873,7 +873,7 @@ q_output = q_model(g_model.output)
 model = Model(g_model.input, [d_output, q_output])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬categorical_crossentropy✬], optimizer=opt)
+model.compile(loss=['binary_crossentropy', 'categorical_crossentropy'], optimizer=opt)
 return model
 # load images
 def load_real_samples():
@@ -882,7 +882,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 print(X.shape)
@@ -933,20 +933,20 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
 # save the gan model
-filename3 = ✬gan_model_%04d.h5✬ % (step+1)
+filename3 = 'gan_model_%04d.h5' % (step+1)
 gan_model.save(filename3)
-print(✬>Saved: %s, %s, and %s✬ % (filename1, filename2, filename3))
+print('>Saved: %s, %s, and %s' % (filename1, filename2, filename3))
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_cat, n_epochs=100,
 n_batch=64):
@@ -958,11 +958,11 @@ n_steps = bat_per_epo * n_epochs
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_steps):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = generate_real_samples(dataset, half_batch)
 # update discriminator and q model weights
 d_loss1 = d_model.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_cat, half_batch)
 # update discriminator model weights
 d_loss2 = d_model.train_on_batch(X_fake, y_fake)
@@ -973,8 +973,8 @@ y_gan = ones((n_batch, 1))
 # update the g via the d and q error
 _,g_1,g_2 = gan_model.train_on_batch(z_input, [y_gan, cat_codes])
 # summarize loss on this batch
-print(✬>%d, d[%.3f,%.3f], g[%.3f] q[%.3f]✬ % (i+1, d_loss1, d_loss2, g_1, g_2))
-# evaluate the model performance every ✬epoch✬
+print('>%d, d[%.3f,%.3f], g[%.3f] q[%.3f]' % (i+1, d_loss1, d_loss2, g_1, g_2))
+# evaluate the model performance every 'epoch'
 
 382
 
@@ -1094,12 +1094,12 @@ for i in range(n_examples):
 # define subplot
 pyplot.subplot(sqrt(n_examples), sqrt(n_examples), 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬model_93700.h5✬)
+model = load_model('model_93700.h5')
 # number of values for the categorical control code
 n_cat = 10
 # size of the latent space
@@ -1178,12 +1178,12 @@ for i in range(n_examples):
 # define subplot
 pyplot.subplot(sqrt(n_examples), sqrt(n_examples), 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬model_93700.h5✬)
+model = load_model('model_93700.h5')
 # number of categorical control codes
 n_cat = 10
 # size of the latent space

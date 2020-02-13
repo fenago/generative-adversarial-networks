@@ -209,10 +209,10 @@ random activations, which we would expect to be a large number.
 ...
 # fid between act1 and act1
 fid = calculate_fid(act1, act1)
-print(✬FID (same): %.3f✬ % fid)
+print('FID (same): %.3f' % fid)
 # fid between act1 and act2
 fid = calculate_fid(act1, act2)
-print(✬FID (different): %.3f✬ % fid)
+print('FID (different): %.3f' % fid)
 
 ```
 
@@ -259,10 +259,10 @@ sqrt
 
 271
 
-print(✬FID (same): %.3f✬ % fid)
+print('FID (same): %.3f' % fid)
 # fid between act1 and act2
 fid = calculate_fid(act1, act2)
-print(✬FID (different): %.3f✬ % fid)
+print('FID (different): %.3f' % fid)
 
 ```
 
@@ -301,7 +301,7 @@ e.g. the input shape=(299,299,3) argument. Therefore, the inception model can be
 as follows:
 ...
 # prepare the inception v3 model
-model = InceptionV3(include_top=False, pooling=✬avg✬, input_shape=(299,299,3))
+model = InceptionV3(include_top=False, pooling='avg', input_shape=(299,299,3))
 
 ```
 
@@ -388,8 +388,8 @@ We can then convert the integer pixel values to floating point values and scale 
 required size of 299 × 299 pixels.
 ...
 # convert integer to floating point values
-images1 = images1.astype(✬float32✬)
-images2 = images2.astype(✬float32✬)
+images1 = images1.astype('float32')
+images2 = images2.astype('float32')
 # resize images
 images1 = scale_images(images1, (299,299,3))
 images2 = scale_images(images2, (299,299,3))
@@ -409,10 +409,10 @@ the two collections of images.
 ...
 # fid between images1 and images1
 fid = calculate_fid(model, images1, images1)
-print(✬FID (same): %.3f✬ % fid)
+print('FID (same): %.3f' % fid)
 # fid between images1 and images2
 fid = calculate_fid(model, images1, images2)
-print(✬FID (different): %.3f✬ % fid)
+print('FID (different): %.3f' % fid)
 
 ```
 
@@ -470,29 +470,29 @@ sqrt
 * covmean)
 
 # prepare the inception v3 model
-model = InceptionV3(include_top=False, pooling=✬avg✬, input_shape=(299,299,3))
+model = InceptionV3(include_top=False, pooling='avg', input_shape=(299,299,3))
 # define two fake collections of images
 images1 = randint(0, 255, 10*32*32*3)
 images1 = images1.reshape((10,32,32,3))
 images2 = randint(0, 255, 10*32*32*3)
 images2 = images2.reshape((10,32,32,3))
-print(✬Prepared✬, images1.shape, images2.shape)
+print('Prepared', images1.shape, images2.shape)
 # convert integer to floating point values
-images1 = images1.astype(✬float32✬)
-images2 = images2.astype(✬float32✬)
+images1 = images1.astype('float32')
+images2 = images2.astype('float32')
 # resize images
 images1 = scale_images(images1, (299,299,3))
 images2 = scale_images(images2, (299,299,3))
-print(✬Scaled✬, images1.shape, images2.shape)
+print('Scaled', images1.shape, images2.shape)
 # pre-process images
 images1 = preprocess_input(images1)
 images2 = preprocess_input(images2)
 # fid between images1 and images1
 fid = calculate_fid(model, images1, images1)
-print(✬FID (same): %.3f✬ % fid)
+print('FID (same): %.3f' % fid)
 # fid between images1 and images2
 fid = calculate_fid(model, images1, images2)
-print(✬FID (different): %.3f✬ % fid)
+print('FID (different): %.3f' % fid)
 
 ```
 
@@ -598,25 +598,25 @@ sqrt
 * covmean)
 
 # prepare the inception v3 model
-model = InceptionV3(include_top=False, pooling=✬avg✬, input_shape=(299,299,3))
+model = InceptionV3(include_top=False, pooling='avg', input_shape=(299,299,3))
 # load cifar10 images
 (images1, _), (images2, _) = cifar10.load_data()
 shuffle(images1)
 images1 = images1[:10000]
-print(✬Loaded✬, images1.shape, images2.shape)
+print('Loaded', images1.shape, images2.shape)
 # convert integer to floating point values
-images1 = images1.astype(✬float32✬)
-images2 = images2.astype(✬float32✬)
+images1 = images1.astype('float32')
+images2 = images2.astype('float32')
 # resize images
 images1 = scale_images(images1, (299,299,3))
 images2 = scale_images(images2, (299,299,3))
-print(✬Scaled✬, images1.shape, images2.shape)
+print('Scaled', images1.shape, images2.shape)
 # pre-process images
 images1 = preprocess_input(images1)
 images2 = preprocess_input(images2)
 # calculate fid
 fid = calculate_fid(model, images1, images2)
-print(✬FID: %.3f✬ % fid)
+print('FID: %.3f' % fid)
 
 ```
 

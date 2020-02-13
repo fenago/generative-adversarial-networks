@@ -265,7 +265,7 @@ can be specified via setting the interpolation argument to ‘bilinear’. For e
 ```
 ...
 # example of using bilinear interpolation when upsampling
-model.add(UpSampling2D(interpolation=✬bilinear✬))
+model.add(UpSampling2D(interpolation='bilinear'))
 
 ```
 
@@ -309,7 +309,7 @@ image we require.
 ```
 ...
 # fill in detail in the upsampled feature maps
-model.add(Conv2D(1, (3,3), padding=✬same✬))
+model.add(Conv2D(1, (3,3), padding='same'))
 
 ```
 
@@ -331,7 +331,7 @@ model.add(Reshape((5, 5, 128)))
 # double input from 128 5x5 to 1 10x10 feature map
 model.add(UpSampling2D())
 # fill in detail in the upsampled feature maps and output a single image
-model.add(Conv2D(1, (3,3), padding=✬same✬))
+model.add(Conv2D(1, (3,3), padding='same'))
 # summarize model
 model.summary()
 
@@ -721,7 +721,7 @@ output shape; for example:
 ```
 ...
 # example of using padding to ensure that the output are only doubled
-model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬, input_shape=(2, 2, 1)))
+model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding='same', input_shape=(2, 2, 1)))
 
 ```
 
@@ -759,7 +759,7 @@ to ‘same’ to ensure the output dimensions are 10 × 10 as required.
 ```
 ...
 # double input from 128 5x5 to 1 10x10 feature map
-model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding='same'))
 
 ```
 
@@ -778,7 +778,7 @@ model.add(Dense(128 * 5 * 5, input_dim=100))
 # reshape vector of activations into 128 feature maps with 5x5
 model.add(Reshape((5, 5, 128)))
 # double input from 128 5x5 to 1 10x10 feature map
-model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding=✬same✬))
+model.add(Conv2DTranspose(1, (3,3), strides=(2,2), padding='same'))
 # summarize model
 model.summary()
 

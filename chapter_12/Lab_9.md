@@ -298,7 +298,7 @@ classified. This can be achieved by converting the pixel values from integers to
 values and then calling the preprocess input() function for the images.
 ...
 # convert from uint8 to float32
-processed = images.astype(✬float32✬)
+processed = images.astype('float32')
 # pre-process raw images for inception v3 model
 processed = preprocess_input(processed)
 
@@ -352,7 +352,7 @@ def calculate_inception_score(images, n_split=10, eps=1E-16):
 # load inception v3 model
 model = InceptionV3()
 # convert from uint8 to float32
-processed = images.astype(✬float32✬)
+processed = images.astype('float32')
 # pre-process raw images for inception v3 model
 processed = preprocess_input(processed)
 # predict class probabilities for images
@@ -391,7 +391,7 @@ We can test this function with 50 artificial images with the value 1.0 for all p
 ...
 # pretend to load images
 images = ones((50, 299, 299, 3))
-print(✬loaded✬, images.shape)
+print('loaded', images.shape)
 
 ```
 
@@ -412,7 +412,7 @@ def calculate_inception_score(images, n_split=10, eps=1E-16):
 # load inception v3 model
 model = InceptionV3()
 # convert from uint8 to float32
-processed = images.astype(✬float32✬)
+processed = images.astype('float32')
 # pre-process raw images for inception v3 model
 processed = preprocess_input(processed)
 # predict class probabilities for images
@@ -446,10 +446,10 @@ is_avg, is_std = mean(scores), std(scores)
 return is_avg, is_std
 # pretend to load images
 images = ones((50, 299, 299, 3))
-print(✬loaded✬, images.shape)
+print('loaded', images.shape)
 # calculate inception score
 is_avg, is_std = calculate_inception_score(images)
-print(✬score✬, is_avg, is_std)
+print('score', is_avg, is_std)
 
 ```
 
@@ -516,7 +516,7 @@ pre-process them, and use the model to predict the conditional class probabiliti
 ix_start, ix_end = i * n_part, (i+1) * n_part
 subset = images[ix_start:ix_end]
 # convert from uint8 to float32
-subset = subset.astype(✬float32✬)
+subset = subset.astype('float32')
 # scale images to the required size
 subset = scale_images(subset, (299,299,3))
 # pre-process images, scale to [-1,1]
@@ -572,7 +572,7 @@ for i in range(n_split):
 ix_start, ix_end = i * n_part, (i+1) * n_part
 subset = images[ix_start:ix_end]
 # convert from uint8 to float32
-subset = subset.astype(✬float32✬)
+subset = subset.astype('float32')
 # scale images to the required size
 subset = scale_images(subset, (299,299,3))
 # pre-process images, scale to [-1,1]
@@ -598,10 +598,10 @@ return is_avg, is_std
 (images, _), (_, _) = cifar10.load_data()
 # shuffle images
 shuffle(images)
-print(✬loaded✬, images.shape)
+print('loaded', images.shape)
 # calculate inception score
 is_avg, is_std = calculate_inception_score(images)
-print(✬score✬, is_avg, is_std)
+print('score', is_avg, is_std)
 
 ```
 

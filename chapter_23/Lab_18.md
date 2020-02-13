@@ -164,14 +164,14 @@ src_list.append(sat_img)
 tar_list.append(map_img)
 return [asarray(src_list), asarray(tar_list)]
 # dataset path
-path = ✬maps/train/✬
+path = 'maps/train/'
 # load dataset
 [src_images, tar_images] = load_images(path)
-print(✬Loaded: ✬, src_images.shape, tar_images.shape)
+print('Loaded: ', src_images.shape, tar_images.shape)
 # save as compressed numpy array
-filename = ✬maps_256.npz✬
+filename = 'maps_256.npz'
 savez_compressed(filename, src_images, tar_images)
-print(✬Saved dataset: ✬, filename)
+print('Saved dataset: ', filename)
 
 ```
 
@@ -189,15 +189,15 @@ turn. We can then plot some images pairs to confirm the data has been handled co
 from numpy import load
 from matplotlib import pyplot
 # load the face dataset
-data = load(✬maps_256.npz✬)
-src_images, tar_images = data[✬arr_0✬], data[✬arr_1✬]
-print(✬Loaded: ✬, src_images.shape, tar_images.shape)
+data = load('maps_256.npz')
+src_images, tar_images = data['arr_0'], data['arr_1']
+print('Loaded: ', src_images.shape, tar_images.shape)
 # plot source images
 n_samples = 3
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + i)
-pyplot.axis(✬off✬)
-pyplot.imshow(src_images[i].astype(✬uint8✬))
+pyplot.axis('off')
+pyplot.imshow(src_images[i].astype('uint8'))
 # plot target image
 for i in range(n_samples):
 
@@ -206,8 +206,8 @@ for i in range(n_samples):
 488
 
 pyplot.subplot(2, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
-pyplot.imshow(tar_images[i].astype(✬uint8✬))
+pyplot.axis('off')
+pyplot.imshow(tar_images[i].astype('uint8'))
 pyplot.show()
 
 ```
@@ -274,14 +274,14 @@ in_target_image = Input(shape=image_shape)
 # concatenate images channel-wise
 merged = Concatenate()([in_src_image, in_target_image])
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(merged)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 
@@ -290,21 +290,21 @@ d = LeakyReLU(alpha=0.2)(d)
 490
 
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-d = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
-patch_out = Activation(✬sigmoid✬)(d)
+d = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
+patch_out = Activation('sigmoid')(d)
 # define model
 model = Model([in_src_image, in_target_image], patch_out)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, loss_weights=[0.5])
+model.compile(loss='binary_crossentropy', optimizer=opt, loss_weights=[0.5])
 return model
 
 ```
@@ -329,7 +329,7 @@ def define_encoder_block(layer_in, n_filters, batchnorm=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add downsampling layer
-g = Conv2D(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2D(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # conditionally add batch normalization
 if batchnorm:
@@ -347,7 +347,7 @@ init = RandomNormal(stddev=0.02)
 491
 
 # add upsampling layer
-g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # add batch normalization
 g = BatchNormalization()(g, training=True)
@@ -357,7 +357,7 @@ g = Dropout(0.5)(g, training=True)
 # merge with skip connection
 g = Concatenate()([g, skip_in])
 # relu activation
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 return g
 # define the standalone generator model
 def define_generator(image_shape=(256,256,3)):
@@ -374,8 +374,8 @@ e5 = define_encoder_block(e4, 512)
 e6 = define_encoder_block(e5, 512)
 e7 = define_encoder_block(e6, 512)
 # bottleneck, no batch norm and relu
-b = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(e7)
-b = Activation(✬relu✬)(b)
+b = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(e7)
+b = Activation('relu')(b)
 # decoder model
 d1 = decoder_block(b, e7, 512)
 d2 = decoder_block(d1, e6, 512)
@@ -385,8 +385,8 @@ d5 = decoder_block(d4, e3, 256, dropout=False)
 d6 = decoder_block(d5, e2, 128, dropout=False)
 d7 = decoder_block(d6, e1, 64, dropout=False)
 # output
-g = Conv2DTranspose(3, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d7)
-out_image = Activation(✬tanh✬)(g)
+g = Conv2DTranspose(3, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d7)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -436,7 +436,7 @@ dis_out = d_model([in_src, gen_out])
 model = Model(in_src, [dis_out, gen_out])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
+model.compile(loss=['binary_crossentropy', 'mae'], optimizer=opt, loss_weights=[1,100])
 return model
 
 ```
@@ -449,7 +449,7 @@ def load_real_samples(filename):
 # load the compressed arrays
 data = load(filename)
 # unpack the arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -473,7 +473,7 @@ trainA, trainB = dataset
 ix = randint(0, trainA.shape[0], n_samples)
 # retrieve selected images
 X1, X2 = trainA[ix], trainB[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return [X1, X2], y
 
@@ -486,7 +486,7 @@ returned with the label class = 0 to indicate to the discriminator that they are
 def generate_fake_samples(g_model, samples, patch_shape):
 # generate fake instance
 X = g_model.predict(samples)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
@@ -520,26 +520,26 @@ X_fakeB = (X_fakeB + 1) / 2.0
 
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_realA[i])
 # plot generated target image
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_fakeB[i])
 # plot real target image
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + n_samples*2 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_realB[i])
 # save plot to file
-filename1 = ✬plot_%06d.png✬ % (step+1)
+filename1 = 'plot_%06d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%06d.h5✬ % (step+1)
+filename2 = 'model_%06d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
@@ -590,7 +590,7 @@ d_loss2 = d_model.train_on_batch([X_realA, X_fakeB], y_fake)
 # update the generator
 g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 # summarize performance
-print(✬>%d, d1[%.3f] d2[%.3f] g[%.3f]✬ % (i+1, d_loss1, d_loss2, g_loss))
+print('>%d, d1[%.3f] d2[%.3f] g[%.3f]' % (i+1, d_loss1, d_loss2, g_loss))
 # summarize model performance
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, dataset)
@@ -628,41 +628,41 @@ in_target_image = Input(shape=image_shape)
 # concatenate images channel-wise
 merged = Concatenate()([in_src_image, in_target_image])
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(merged)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 
 ### 23.4. How to Develop and Train a Pix2Pix Model
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-d = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
-patch_out = Activation(✬sigmoid✬)(d)
+d = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
+patch_out = Activation('sigmoid')(d)
 # define model
 model = Model([in_src_image, in_target_image], patch_out)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, loss_weights=[0.5])
+model.compile(loss='binary_crossentropy', optimizer=opt, loss_weights=[0.5])
 return model
 # define an encoder block
 def define_encoder_block(layer_in, n_filters, batchnorm=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add downsampling layer
-g = Conv2D(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2D(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # conditionally add batch normalization
 if batchnorm:
@@ -675,7 +675,7 @@ def decoder_block(layer_in, skip_in, n_filters, dropout=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add upsampling layer
-g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # add batch normalization
 g = BatchNormalization()(g, training=True)
@@ -685,7 +685,7 @@ g = Dropout(0.5)(g, training=True)
 # merge with skip connection
 g = Concatenate()([g, skip_in])
 # relu activation
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 
 496
 
@@ -709,8 +709,8 @@ e5 = define_encoder_block(e4, 512)
 e6 = define_encoder_block(e5, 512)
 e7 = define_encoder_block(e6, 512)
 # bottleneck, no batch norm and relu
-b = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(e7)
-b = Activation(✬relu✬)(b)
+b = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(e7)
+b = Activation('relu')(b)
 # decoder model
 d1 = decoder_block(b, e7, 512)
 d2 = decoder_block(d1, e6, 512)
@@ -720,8 +720,8 @@ d5 = decoder_block(d4, e3, 256, dropout=False)
 d6 = decoder_block(d5, e2, 128, dropout=False)
 d7 = decoder_block(d6, e1, 64, dropout=False)
 # output
-g = Conv2DTranspose(3, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d7)
-out_image = Activation(✬tanh✬)(g)
+g = Conv2DTranspose(3, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d7)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -739,7 +739,7 @@ dis_out = d_model([in_src, gen_out])
 model = Model(in_src, [dis_out, gen_out])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
+model.compile(loss=['binary_crossentropy', 'mae'], optimizer=opt, loss_weights=[1,100])
 return model
 # load and prepare training images
 def load_real_samples(filename):
@@ -748,7 +748,7 @@ data = load(filename)
 # unpack the arrays
 
 ### 23.4. How to Develop and Train a Pix2Pix Model
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -761,14 +761,14 @@ trainA, trainB = dataset
 ix = randint(0, trainA.shape[0], n_samples)
 # retrieve selected images
 X1, X2 = trainA[ix], trainB[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return [X1, X2], y
 # generate a batch of images, returns images and targets
 def generate_fake_samples(g_model, samples, patch_shape):
 # generate fake instance
 X = g_model.predict(samples)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 # generate samples and save as a plot and save the model
@@ -784,20 +784,20 @@ X_fakeB = (X_fakeB + 1) / 2.0
 # plot real source images
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_realA[i])
 # plot generated target image
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_fakeB[i])
 # plot real target image
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + n_samples*2 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_realB[i])
 # save plot to file
-filename1 = ✬plot_%06d.png✬ % (step+1)
+filename1 = 'plot_%06d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
@@ -808,9 +808,9 @@ pyplot.close()
 
 499
 
-filename2 = ✬model_%06d.h5✬ % (step+1)
+filename2 = 'model_%06d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 # train pix2pix models
 def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=1):
 # determine the output square shape of the discriminator
@@ -834,13 +834,13 @@ d_loss2 = d_model.train_on_batch([X_realA, X_fakeB], y_fake)
 # update the generator
 g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 # summarize performance
-print(✬>%d, d1[%.3f] d2[%.3f] g[%.3f]✬ % (i+1, d_loss1, d_loss2, g_loss))
+print('>%d, d1[%.3f] d2[%.3f] g[%.3f]' % (i+1, d_loss1, d_loss2, g_loss))
 # summarize model performance
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, dataset)
 # load image data
-dataset = load_real_samples(✬maps_256.npz✬)
-print(✬Loaded✬, dataset[0].shape, dataset[1].shape)
+dataset = load_real_samples('maps_256.npz')
+print('Loaded', dataset[0].shape, dataset[1].shape)
 # define input shape based on the loaded dataset
 image_shape = dataset[0].shape[1:]
 # define the models
@@ -930,7 +930,7 @@ def load_real_samples(filename):
 # load the compressed arrays
 data = load(filename)
 # unpack the arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 
 ### 23.5. How to Translate Images With a Pix2Pix Model
 
@@ -946,15 +946,15 @@ return [X1, X2]
 This function can be called as follows:
 ...
 # load dataset
-[X1, X2] = load_real_samples(✬maps_256.npz✬)
-print(✬Loaded✬, X1.shape, X2.shape)
+[X1, X2] = load_real_samples('maps_256.npz')
+print('Loaded', X1.shape, X2.shape)
 
 ```
 
 Next, we can load the saved Keras model.
 ...
 # load model
-model = load_model(✬model_109600.h5✬)
+model = load_model('model_109600.h5')
 
 ```
 
@@ -981,13 +981,13 @@ def plot_images(src_img, gen_img, tar_img):
 images = vstack((src_img, gen_img, tar_img))
 # scale from [-1,1] to [0,1]
 images = (images + 1) / 2.0
-titles = [✬Source✬, ✬Generated✬, ✬Expected✬]
+titles = ['Source', 'Generated', 'Expected']
 # plot images row by row
 for i in range(len(images)):
 # define subplot
 pyplot.subplot(1, 3, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(images[i])
 
@@ -1021,7 +1021,7 @@ def load_real_samples(filename):
 # load the compressed arrays
 data = load(filename)
 # unpack the arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -1031,28 +1031,28 @@ def plot_images(src_img, gen_img, tar_img):
 images = vstack((src_img, gen_img, tar_img))
 # scale from [-1,1] to [0,1]
 images = (images + 1) / 2.0
-titles = [✬Source✬, ✬Generated✬, ✬Expected✬]
+titles = ['Source', 'Generated', 'Expected']
 # plot images row by row
 for i in range(len(images)):
 # define subplot
 pyplot.subplot(1, 3, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(images[i])
 # show title
 pyplot.title(titles[i])
 pyplot.show()
 # load dataset
-[X1, X2] = load_real_samples(✬maps_256.npz✬)
-print(✬Loaded✬, X1.shape, X2.shape)
+[X1, X2] = load_real_samples('maps_256.npz')
+print('Loaded', X1.shape, X2.shape)
 # load model
 
 ### 23.5. How to Translate Images With a Pix2Pix Model
 
 505
 
-model = load_model(✬model_109600.h5✬)
+model = load_model('model_109600.h5')
 # select random example
 ix = randint(0, len(X1), 1)
 src_image, tar_image = X1[ix], X2[ix]
@@ -1117,8 +1117,8 @@ return pixels
 We can then load our cropped satellite image.
 ...
 # load source image
-src_image = load_image(✬satellite.jpg✬)
-print(✬Loaded✬, src_image.shape)
+src_image = load_image('satellite.jpg')
+print('Loaded', src_image.shape)
 
 ```
 
@@ -1126,7 +1126,7 @@ As before, we can load our saved Pix2Pix generator model and generate a translat
 loaded image.
 ...
 # load model
-model = load_model(✬model_109600.h5✬)
+model = load_model('model_109600.h5')
 # generate image from source
 gen_image = model.predict(src_image)
 
@@ -1138,7 +1138,7 @@ Finally, we can scale the pixel values back to the range [0,1] and plot the resu
 gen_image = (gen_image + 1) / 2.0
 # plot the image
 pyplot.imshow(gen_image[0])
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.show()
 
 ```
@@ -1168,17 +1168,17 @@ pixels = (pixels - 127.5) / 127.5
 pixels = expand_dims(pixels, 0)
 return pixels
 # load source image
-src_image = load_image(✬satellite.jpg✬)
-print(✬Loaded✬, src_image.shape)
+src_image = load_image('satellite.jpg')
+print('Loaded', src_image.shape)
 # load model
-model = load_model(✬model_109600.h5✬)
+model = load_model('model_109600.h5')
 # generate image from source
 gen_image = model.predict(src_image)
 # scale from [-1,1] to [0,1]
 gen_image = (gen_image + 1) / 2.0
 # plot the image
 pyplot.imshow(gen_image[0])
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.show()
 
 ```
@@ -1211,7 +1211,7 @@ def load_real_samples(filename):
 # load the compressed arrays
 data = load(filename)
 # unpack the arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5

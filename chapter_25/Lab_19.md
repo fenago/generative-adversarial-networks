@@ -255,30 +255,30 @@ init = RandomNormal(stddev=0.02)
 # source image input
 in_image = Input(shape=image_shape)
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-patch_out = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+patch_out = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
 # define model
 model = Model(in_image, patch_out)
 # compile model
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
 return model
 # define image shape
 image_shape = (256,256,3)
@@ -295,7 +295,7 @@ https://github.com/junyanz/CycleGAN/blob/master/models/architectures.lua#L338
 532
 
 # plot the model
-plot_model(model, to_file=✬discriminator_model_plot.png✬, show_shapes=True,
+plot_model(model, to_file='discriminator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -412,11 +412,11 @@ def resnet_block(n_filters, input_layer):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # first layer convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(input_layer)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(input_layer)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # second convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
 # concatenate merge channel-wise with input layer
 g = Concatenate()([g, input_layer])
@@ -441,32 +441,32 @@ in_image = Input(shape=image_shape)
 
 535
 
-g = Conv2D(64, (7,7), padding=✬same✬, kernel_initializer=init)(in_image)
+g = Conv2D(64, (7,7), padding='same', kernel_initializer=init)(in_image)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d128
-g = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d256
-g = Conv2D(256, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(256, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # R256
 for _ in range(n_resnet):
 g = resnet_block(256, g)
 # u128
-g = Conv2DTranspose(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # u64
-g = Conv2DTranspose(64, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(64, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # c7s1-3
-g = Conv2D(3, (7,7), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(3, (7,7), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-out_image = Activation(✬tanh✬)(g)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -490,11 +490,11 @@ def resnet_block(n_filters, input_layer):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # first layer convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(input_layer)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(input_layer)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # second convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
 
 ### 25.4. How to Implement the CycleGAN Generator Model
@@ -511,32 +511,32 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=image_shape)
 # c7s1-64
-g = Conv2D(64, (7,7), padding=✬same✬, kernel_initializer=init)(in_image)
+g = Conv2D(64, (7,7), padding='same', kernel_initializer=init)(in_image)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d128
-g = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d256
-g = Conv2D(256, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(256, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # R256
 for _ in range(n_resnet):
 g = resnet_block(256, g)
 # u128
-g = Conv2DTranspose(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # u64
-g = Conv2DTranspose(64, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(64, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # c7s1-3
-g = Conv2D(3, (7,7), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(3, (7,7), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-out_image = Activation(✬tanh✬)(g)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -545,7 +545,7 @@ model = define_generator()
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬generator_model_plot.png✬, show_shapes=True,
+plot_model(model, to_file='generator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -594,7 +594,7 @@ discriminator model and the other generator model. This can be achieved by marki
 weights of the other models as not trainable in the context of the composite model to ensure we
 are only updating the intended generator.
 ...
-# ensure the model we✬re updating is trainable
+# ensure the model we're updating is trainable
 g_model_1.trainable = True
 # mark discriminator as not trainable
 d_model.trainable = False
@@ -673,7 +673,7 @@ the forward and backward cycle loss is weighted using a parameter called lambda 
 fraction of the lambda parameter and is set to 0.5 × 10 or 5 in the official Torch implementation.
 ...
 # compile model with weighting of least squares loss and L1 loss
-model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10], optimizer=opt)
+model.compile(loss=['mse', 'mae', 'mae', 'mae'], loss_weights=[1, 5, 10, 10], optimizer=opt)
 
 ```
 
@@ -681,7 +681,7 @@ We can tie all of this together and define the function define composite model()
 creating a composite model for training a given generator model.
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
-# ensure the model we✬re updating is trainable
+# ensure the model we're updating is trainable
 g_model_1.trainable = True
 # mark discriminator as not trainable
 d_model.trainable = False
@@ -704,7 +704,7 @@ model = Model([input_gen, input_id], [output_d, output_id, output_f, output_b])
 # define optimization algorithm configuration
 opt = Adam(lr=0.0002, beta_1=0.5)
 # compile model with weighting of least squares loss and L1 loss
-model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10],
+model.compile(loss=['mse', 'mae', 'mae', 'mae'], loss_weights=[1, 5, 10, 10],
 optimizer=opt)
 return model
 
@@ -771,43 +771,43 @@ init = RandomNormal(stddev=0.02)
 # source image input
 in_image = Input(shape=image_shape)
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 
 ### 25.5. How to Implement Composite Models and Loss
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-patch_out = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+patch_out = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
 # define model
 model = Model(in_image, patch_out)
 # compile model
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
 return model
 # generator a resnet block
 def resnet_block(n_filters, input_layer):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # first layer convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(input_layer)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(input_layer)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # second convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
 # concatenate merge channel-wise with input layer
 g = Concatenate()([g, input_layer])
@@ -819,17 +819,17 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=image_shape)
 # c7s1-64
-g = Conv2D(64, (7,7), padding=✬same✬, kernel_initializer=init)(in_image)
+g = Conv2D(64, (7,7), padding='same', kernel_initializer=init)(in_image)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d128
-g = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d256
-g = Conv2D(256, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(256, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # R256
 
 541
@@ -841,23 +841,23 @@ g = Activation(✬relu✬)(g)
 for _ in range(n_resnet):
 g = resnet_block(256, g)
 # u128
-g = Conv2DTranspose(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # u64
-g = Conv2DTranspose(64, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(64, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # c7s1-3
-g = Conv2D(3, (7,7), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(3, (7,7), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-out_image = Activation(✬tanh✬)(g)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
-# ensure the model we✬re updating is trainable
+# ensure the model we're updating is trainable
 g_model_1.trainable = True
 # mark discriminator as not trainable
 d_model.trainable = False
@@ -880,7 +880,7 @@ model = Model([input_gen, input_id], [output_d, output_id, output_f, output_b])
 # define optimization algorithm configuration
 opt = Adam(lr=0.0002, beta_1=0.5)
 # compile model with weighting of least squares loss and L1 loss
-model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10],
+model.compile(loss=['mse', 'mae', 'mae', 'mae'], loss_weights=[1, 5, 10, 10],
 optimizer=opt)
 return model
 # input shape
@@ -919,7 +919,7 @@ def generate_real_samples(dataset, n_samples, patch_shape):
 ix = randint(0, dataset.shape[0], n_samples)
 # retrieve selected images
 X = dataset[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return X, y
 
@@ -931,7 +931,7 @@ Similarly, we need a function to generate a batch of fake images and the associa
 def generate_fake_samples(g_model, dataset, patch_shape):
 # generate fake instance
 X = g_model.predict(dataset)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
@@ -990,7 +990,7 @@ if len(pool) < max_size:
 pool.append(image)
 selected.append(image)
 elif random() < 0.5:
-# use image, but don✬t add it to the pool
+# use image, but don't add it to the pool
 selected.append(image)
 else:
 # replace an existing image and use replaced image
@@ -1052,7 +1052,7 @@ At the end of the training run, we can then report the current loss for the disc
 models on real and fake images and of each generator model.
 ...
 # summarize performance
-print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
+print('>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]' % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 
 ```
@@ -1105,7 +1105,7 @@ X_realB, X_realA, X_realB])
 dB_loss1 = d_model_B.train_on_batch(X_realB, y_realB)
 dB_loss2 = d_model_B.train_on_batch(X_fakeB, y_fakeB)
 # summarize performance
-print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
+print('>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]' % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 
 ```

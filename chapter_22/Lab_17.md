@@ -237,22 +237,22 @@ in_target_image = Input(shape=image_shape)
 # concatenate images channel-wise
 merged = Concatenate()([in_src_image, in_target_image])
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(merged)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 
 ### 22.3. How to Implement the PatchGAN Discriminator Model
 
@@ -261,13 +261,13 @@ d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-d = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
-patch_out = Activation(✬sigmoid✬)(d)
+d = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
+patch_out = Activation('sigmoid')(d)
 # define model
 model = Model([in_src_image, in_target_image], patch_out)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, loss_weights=[0.5])
+model.compile(loss='binary_crossentropy', optimizer=opt, loss_weights=[0.5])
 return model
 # define image shape
 image_shape = (256,256,3)
@@ -276,7 +276,7 @@ model = define_discriminator(image_shape)
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬discriminator_model_plot.png✬, show_shapes=True,
+plot_model(model, to_file='discriminator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -429,7 +429,7 @@ def define_encoder_block(layer_in, n_filters, batchnorm=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add downsampling layer
-g = Conv2D(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2D(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # conditionally add batch normalization
 if batchnorm:
@@ -447,7 +447,7 @@ init = RandomNormal(stddev=0.02)
 
 474
 
-g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # add batch normalization
 g = BatchNormalization()(g, training=True)
@@ -457,7 +457,7 @@ g = Dropout(0.5)(g, training=True)
 # merge with skip connection
 g = Concatenate()([g, skip_in])
 # relu activation
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 return g
 # define the standalone generator model
 def define_generator(image_shape=(256,256,3)):
@@ -474,8 +474,8 @@ e5 = define_encoder_block(e4, 512)
 e6 = define_encoder_block(e5, 512)
 e7 = define_encoder_block(e6, 512)
 # bottleneck, no batch norm and relu
-b = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(e7)
-b = Activation(✬relu✬)(b)
+b = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(e7)
+b = Activation('relu')(b)
 # decoder model: CD512-CD1024-CD1024-C1024-C1024-C512-C256-C128
 d1 = decoder_block(b, e7, 512)
 d2 = decoder_block(d1, e6, 512)
@@ -485,8 +485,8 @@ d5 = decoder_block(d4, e3, 256, dropout=False)
 d6 = decoder_block(d5, e2, 128, dropout=False)
 d7 = decoder_block(d6, e1, 64, dropout=False)
 # output
-g = Conv2DTranspose(3, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d7)
-out_image = Activation(✬tanh✬)(g)
+g = Conv2DTranspose(3, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d7)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -497,7 +497,7 @@ model = define_generator(image_shape)
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬generator_model_plot.png✬, show_shapes=True,
+plot_model(model, to_file='generator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
@@ -576,7 +576,7 @@ dis_out = d_model([in_src, gen_out])
 model = Model(in_src, [dis_out, gen_out])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
+model.compile(loss=['binary_crossentropy', 'mae'], optimizer=opt, loss_weights=[1,100])
 return model
 
 ```
@@ -610,39 +610,39 @@ merged = Concatenate()([in_src_image, in_target_image])
 # C64
 
 ### 22.5. How to Implement Adversarial and L1 Loss
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(merged)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-d = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
-patch_out = Activation(✬sigmoid✬)(d)
+d = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
+patch_out = Activation('sigmoid')(d)
 # define model
 model = Model([in_src_image, in_target_image], patch_out)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, loss_weights=[0.5])
+model.compile(loss='binary_crossentropy', optimizer=opt, loss_weights=[0.5])
 return model
 # define an encoder block
 def define_encoder_block(layer_in, n_filters, batchnorm=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add downsampling layer
-g = Conv2D(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2D(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # conditionally add batch normalization
 if batchnorm:
@@ -655,7 +655,7 @@ def decoder_block(layer_in, skip_in, n_filters, dropout=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # add upsampling layer
-g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding=✬same✬,
+g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
 # add batch normalization
 g = BatchNormalization()(g, training=True)
@@ -672,7 +672,7 @@ g = Concatenate()([g, skip_in])
 478
 
 # relu activation
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 return g
 # define the standalone generator model
 def define_generator(image_shape=(256,256,3)):
@@ -689,8 +689,8 @@ e5 = define_encoder_block(e4, 512)
 e6 = define_encoder_block(e5, 512)
 e7 = define_encoder_block(e6, 512)
 # bottleneck, no batch norm and relu
-b = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(e7)
-b = Activation(✬relu✬)(b)
+b = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(e7)
+b = Activation('relu')(b)
 # decoder model: CD512-CD1024-CD1024-C1024-C1024-C512-C256-C128
 d1 = decoder_block(b, e7, 512)
 d2 = decoder_block(d1, e6, 512)
@@ -700,8 +700,8 @@ d5 = decoder_block(d4, e3, 256, dropout=False)
 d6 = decoder_block(d5, e2, 128, dropout=False)
 d7 = decoder_block(d6, e1, 64, dropout=False)
 # output
-g = Conv2DTranspose(3, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d7)
-out_image = Activation(✬tanh✬)(g)
+g = Conv2DTranspose(3, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d7)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -719,7 +719,7 @@ dis_out = d_model([in_src, gen_out])
 model = Model(in_src, [dis_out, gen_out])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬mae✬], optimizer=opt, loss_weights=[1,100])
+model.compile(loss=['binary_crossentropy', 'mae'], optimizer=opt, loss_weights=[1,100])
 return model
 # define image shape
 image_shape = (256,256,3)
@@ -736,7 +736,7 @@ gan_model = define_gan(g_model, d_model, image_shape)
 # summarize the model
 gan_model.summary()
 # plot the model
-plot_model(gan_model, to_file=✬gan_model_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(gan_model, to_file='gan_model_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -799,7 +799,7 @@ trainA, trainB = dataset
 ix = randint(0, trainA.shape[0], n_samples)
 # retrieve selected images
 X1, X2 = trainA[ix], trainB[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return [X1, X2], y
 
@@ -811,7 +811,7 @@ Similarly, we need a function to generate a batch of fake images and the associa
 def generate_fake_samples(g_model, samples, patch_shape):
 # generate fake instance
 X = g_model.predict(samples)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
@@ -892,7 +892,7 @@ d_loss2 = d_model.train_on_batch([X_realA, X_fakeB], y_fake)
 # update the generator
 g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 # summarize performance
-print(✬>%d, d1[%.3f] d2[%.3f] g[%.3f]✬ % (i+1, d_loss1, d_loss2, g_loss))
+print('>%d, d1[%.3f] d2[%.3f] g[%.3f]' % (i+1, d_loss1, d_loss2, g_loss))
 
 ```
 

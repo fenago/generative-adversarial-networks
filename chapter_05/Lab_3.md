@@ -200,7 +200,7 @@ from keras.models import Sequential
 from keras.layers import Conv2D
 # define model
 model = Sequential()
-model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,64,3)))
+model.add(Conv2D(64, (3,3), strides=(2,2), padding='same', input_shape=(64,64,3)))
 # summarize model
 model.summary()
 
@@ -247,7 +247,7 @@ from keras.models import Sequential
 from keras.layers import Conv2DTranspose
 # define model
 model = Sequential()
-model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬, input_shape=(64,64,3)))
+model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding='same', input_shape=(64,64,3)))
 # summarize model
 model.summary()
 
@@ -292,7 +292,7 @@ from keras.layers import Conv2D
 from keras.layers import LeakyReLU
 # define model
 model = Sequential()
-model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,64,3)))
+model.add(Conv2D(64, (3,3), strides=(2,2), padding='same', input_shape=(64,64,3)))
 model.add(LeakyReLU(0.2))
 # summarize model
 model.summary()
@@ -341,7 +341,7 @@ from keras.layers import BatchNormalization
 from keras.layers import LeakyReLU
 # define model
 model = Sequential()
-model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,64,3)))
+model.add(Conv2D(64, (3,3), strides=(2,2), padding='same', input_shape=(64,64,3)))
 model.add(BatchNormalization())
 model.add(LeakyReLU(0.2))
 # summarize model
@@ -393,7 +393,7 @@ from keras.initializers import RandomNormal
 # define model
 model = Sequential()
 init = RandomNormal(mean=0.0, stddev=0.02)
-model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init, input_shape=(64,64,3)))
 
 ```
@@ -416,10 +416,10 @@ from keras.layers import Conv2D
 from keras.optimizers import Adam
 # define model
 model = Sequential()
-model.add(Conv2D(64, (3,3), strides=(2,2), padding=✬same✬, input_shape=(64,64,3)))
+model.add(Conv2D(64, (3,3), strides=(2,2), padding='same', input_shape=(64,64,3)))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=✬binary_crossentropy✬, optimizer=opt, metrics=[✬accuracy✬])
+model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 
 ```
 
@@ -441,7 +441,7 @@ from numpy.random import randint
 # scale image data from [0,255] to [-1,1]
 def scale_images(images):
 # convert from unit8 to float32
-images = images.astype(✬float32✬)
+images = images.astype('float32')
 # scale from [0,255] to [-1,1]
 images = (images - 127.5) / 127.5
 return images
@@ -540,13 +540,13 @@ code when training your discriminator model.
 
 ```
 ...
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 X_real, y_real = 
 ```
 ...
 # update discriminator model weights
 discriminator.train_on_batch(X_real, y_real)
-# generate ✬fake✬ examples
+# generate 'fake' examples
 X_fake, y_fake = 
 ```
 ...
@@ -573,7 +573,7 @@ from numpy.random import random
 # example of smoothing class=1 to [0.7, 1.2]
 def smooth_positive_labels(y):
 return y - 0.3 + (random(y.shape) * 0.5)
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 n_samples = 1000
 y = ones((n_samples, 1))
 # smooth labels
@@ -603,7 +603,7 @@ from numpy.random import random
 # example of smoothing class=0 to [0.0, 0.3]
 def smooth_negative_labels(y):
 return y + random(y.shape) * 0.3
-# generate ✬fake✬ class labels (0)
+# generate 'fake' class labels (0)
 n_samples = 1000
 y = zeros((n_samples, 1))
 # smooth labels
@@ -645,7 +645,7 @@ flip_ix = choice([i for i in range(y.shape[0])], size=n_select)
 # invert the labels in place
 y[flip_ix] = 1 - y[flip_ix]
 return y
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 n_samples = 1000
 y = ones((n_samples, 1))
 ```
@@ -655,7 +655,7 @@ y = ones((n_samples, 1))
 y = noisy_labels(y, 0.05)
 # summarize labels
 print(y.sum())
-# generate ✬fake✬ class labels (0)
+# generate 'fake' class labels (0)
 y = zeros((n_samples, 1))
 # flip labels with 5% probability
 y = noisy_labels(y, 0.05)

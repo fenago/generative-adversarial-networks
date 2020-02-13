@@ -121,21 +121,21 @@ pixels = img_to_array(pixels)
 data_list.append(pixels)
 return asarray(data_list)
 # dataset path
-path = ✬horse2zebra/✬
+path = 'horse2zebra/'
 # load dataset A
-dataA1 = load_images(path + ✬trainA/✬)
-dataAB = load_images(path + ✬testA/✬)
+dataA1 = load_images(path + 'trainA/')
+dataAB = load_images(path + 'testA/')
 dataA = vstack((dataA1, dataAB))
-print(✬Loaded dataA: ✬, dataA.shape)
+print('Loaded dataA: ', dataA.shape)
 # load dataset B
-dataB1 = load_images(path + ✬trainB/✬)
-dataB2 = load_images(path + ✬testB/✬)
+dataB1 = load_images(path + 'trainB/')
+dataB2 = load_images(path + 'testB/')
 dataB = vstack((dataB1, dataB2))
-print(✬Loaded dataB: ✬, dataB.shape)
+print('Loaded dataB: ', dataB.shape)
 # save as compressed numpy array
-filename = ✬horse2zebra_256.npz✬
+filename = 'horse2zebra_256.npz'
 savez_compressed(filename, dataA, dataB)
-print(✬Saved dataset: ✬, filename)
+print('Saved dataset: ', filename)
 
 ```
 
@@ -155,9 +155,9 @@ the image data correctly. The complete example is listed below.
 from numpy import load
 from matplotlib import pyplot
 # load the face dataset
-data = load(✬horse2zebra_256.npz✬)
-dataA, dataB = data[✬arr_0✬], data[✬arr_1✬]
-print(✬Loaded: ✬, dataA.shape, dataB.shape)
+data = load('horse2zebra_256.npz')
+dataA, dataB = data['arr_0'], data['arr_1']
+print('Loaded: ', dataA.shape, dataB.shape)
 # plot source images
 n_samples = 3
 
@@ -167,13 +167,13 @@ n_samples = 3
 
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + i)
-pyplot.axis(✬off✬)
-pyplot.imshow(dataA[i].astype(✬uint8✬))
+pyplot.axis('off')
+pyplot.imshow(dataA[i].astype('uint8'))
 # plot target image
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
-pyplot.imshow(dataB[i].astype(✬uint8✬))
+pyplot.axis('off')
+pyplot.imshow(dataB[i].astype('uint8'))
 pyplot.show()
 
 ```
@@ -242,7 +242,7 @@ init = RandomNormal(stddev=0.02)
 # source image input
 in_image = Input(shape=image_shape)
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 
 ### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 
@@ -250,27 +250,27 @@ d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init
 
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-patch_out = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+patch_out = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
 # define model
 model = Model(in_image, patch_out)
 # compile model
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
 return model
 
 ```
@@ -292,11 +292,11 @@ def resnet_block(n_filters, input_layer):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # first layer convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(input_layer)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(input_layer)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # second convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
 # concatenate merge channel-wise with input layer
 g = Concatenate()([g, input_layer])
@@ -320,32 +320,32 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=image_shape)
 # c7s1-64
-g = Conv2D(64, (7,7), padding=✬same✬, kernel_initializer=init)(in_image)
+g = Conv2D(64, (7,7), padding='same', kernel_initializer=init)(in_image)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d128
-g = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d256
-g = Conv2D(256, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(256, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # R256
 for _ in range(n_resnet):
 g = resnet_block(256, g)
 # u128
-g = Conv2DTranspose(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # u64
-g = Conv2DTranspose(64, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(64, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # c7s1-3
-g = Conv2D(3, (7,7), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(3, (7,7), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-out_image = Activation(✬tanh✬)(g)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -397,7 +397,7 @@ loss as described in the paper, and the identity loss is always used with a weig
 the cycle loss (5-times), matching the official implementation source code.
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
-# ensure the model we✬re updating is trainable
+# ensure the model we're updating is trainable
 g_model_1.trainable = True
 # mark discriminator as not trainable
 d_model.trainable = False
@@ -425,7 +425,7 @@ model = Model([input_gen, input_id], [output_d, output_id, output_f, output_b])
 # define optimization algorithm configuration
 opt = Adam(lr=0.0002, beta_1=0.5)
 # compile model with weighting of least squares loss and L1 loss
-model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10],
+model.compile(loss=['mse', 'mae', 'mae', 'mae'], loss_weights=[1, 5, 10, 10],
 optimizer=opt)
 return model
 
@@ -446,7 +446,7 @@ def load_real_samples(filename):
 # load the dataset
 data = load(filename)
 # unpack arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -473,7 +473,7 @@ ix = randint(0, dataset.shape[0], n_samples)
 
 # retrieve selected images
 X = dataset[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return X, y
 
@@ -488,7 +488,7 @@ that they are fake or generated (target = 0.0).
 def generate_fake_samples(g_model, dataset, patch_shape):
 # generate fake instance
 X = g_model.predict(dataset)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 
@@ -504,12 +504,12 @@ format, including the training iteration number in the filename.
 # save the generator models to file
 def save_models(step, g_model_AtoB, g_model_BtoA):
 # save the first generator model
-filename1 = ✬g_model_AtoB_%06d.h5✬ % (step+1)
+filename1 = 'g_model_AtoB_%06d.h5' % (step+1)
 g_model_AtoB.save(filename1)
 # save the second generator model
-filename2 = ✬g_model_BtoA_%06d.h5✬ % (step+1)
+filename2 = 'g_model_BtoA_%06d.h5' % (step+1)
 g_model_BtoA.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
@@ -534,15 +534,15 @@ X_out = (X_out + 1) / 2.0
 # plot real images
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_in[i])
 # plot translated image
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_out[i])
 # save plot to file
-filename1 = ✬%s_generated_plot_%06d.png✬ % (name, (step+1))
+filename1 = '%s_generated_plot_%06d.png' % (name, (step+1))
 pyplot.savefig(filename1)
 pyplot.close()
 
@@ -564,7 +564,7 @@ if len(pool) < max_size:
 pool.append(image)
 selected.append(image)
 elif random() < 0.5:
-# use image, but don✬t add it to the pool
+# use image, but don't add it to the pool
 selected.append(image)
 else:
 # replace an existing image and use replaced image
@@ -634,19 +634,19 @@ X_realB, X_realA, X_realB])
 dB_loss1 = d_model_B.train_on_batch(X_realB, y_realB)
 dB_loss2 = d_model_B.train_on_batch(X_fakeB, y_fakeB)
 # summarize performance
-print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
+print('>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]' % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 # evaluate the model performance every so often
 if (i+1) % (bat_per_epo * 1) == 0:
 # plot A->B translation
-summarize_performance(i, g_model_AtoB, trainA, ✬AtoB✬)
+summarize_performance(i, g_model_AtoB, trainA, 'AtoB')
 # plot B->A translation
 
 ### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 
 561
 
-summarize_performance(i, g_model_BtoA, trainB, ✬BtoA✬)
+summarize_performance(i, g_model_BtoA, trainB, 'BtoA')
 if (i+1) % (bat_per_epo * 5) == 0:
 # save the models
 save_models(i, g_model_AtoB, g_model_BtoA)
@@ -680,26 +680,26 @@ init = RandomNormal(stddev=0.02)
 # source image input
 in_image = Input(shape=image_shape)
 # C64
-d = Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
-d = Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C256
-d = Conv2D(256, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # C512
-d = Conv2D(512, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
-d = Conv2D(512, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 d = InstanceNormalization(axis=-1)(d)
 d = LeakyReLU(alpha=0.2)(d)
 # patch output
-patch_out = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
+patch_out = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
 # define model
 
 ### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
@@ -708,18 +708,18 @@ patch_out = Conv2D(1, (4,4), padding=✬same✬, kernel_initializer=init)(d)
 
 model = Model(in_image, patch_out)
 # compile model
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5), loss_weights=[0.5])
 return model
 # generator a resnet block
 def resnet_block(n_filters, input_layer):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 # first layer convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(input_layer)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(input_layer)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # second convolutional layer
-g = Conv2D(n_filters, (3,3), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(n_filters, (3,3), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
 # concatenate merge channel-wise with input layer
 g = Concatenate()([g, input_layer])
@@ -731,32 +731,32 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=image_shape)
 # c7s1-64
-g = Conv2D(64, (7,7), padding=✬same✬, kernel_initializer=init)(in_image)
+g = Conv2D(64, (7,7), padding='same', kernel_initializer=init)(in_image)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d128
-g = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # d256
-g = Conv2D(256, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(256, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # R256
 for _ in range(n_resnet):
 g = resnet_block(256, g)
 # u128
-g = Conv2DTranspose(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # u64
-g = Conv2DTranspose(64, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2DTranspose(64, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-g = Activation(✬relu✬)(g)
+g = Activation('relu')(g)
 # c7s1-3
-g = Conv2D(3, (7,7), padding=✬same✬, kernel_initializer=init)(g)
+g = Conv2D(3, (7,7), padding='same', kernel_initializer=init)(g)
 g = InstanceNormalization(axis=-1)(g)
-out_image = Activation(✬tanh✬)(g)
+out_image = Activation('tanh')(g)
 # define model
 model = Model(in_image, out_image)
 return model
@@ -765,7 +765,7 @@ return model
 
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
-# ensure the model we✬re updating is trainable
+# ensure the model we're updating is trainable
 g_model_1.trainable = True
 # mark discriminator as not trainable
 d_model.trainable = False
@@ -788,7 +788,7 @@ model = Model([input_gen, input_id], [output_d, output_id, output_f, output_b])
 # define optimization algorithm configuration
 opt = Adam(lr=0.0002, beta_1=0.5)
 # compile model with weighting of least squares loss and L1 loss
-model.compile(loss=[✬mse✬, ✬mae✬, ✬mae✬, ✬mae✬], loss_weights=[1, 5, 10, 10],
+model.compile(loss=['mse', 'mae', 'mae', 'mae'], loss_weights=[1, 5, 10, 10],
 optimizer=opt)
 return model
 # load and prepare training images
@@ -796,7 +796,7 @@ def load_real_samples(filename):
 # load the dataset
 data = load(filename)
 # unpack arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -807,14 +807,14 @@ def generate_real_samples(dataset, n_samples, patch_shape):
 ix = randint(0, dataset.shape[0], n_samples)
 # retrieve selected images
 X = dataset[ix]
-# generate ✬real✬ class labels (1)
+# generate 'real' class labels (1)
 y = ones((n_samples, patch_shape, patch_shape, 1))
 return X, y
 # generate a batch of images, returns images and targets
 def generate_fake_samples(g_model, dataset, patch_shape):
 # generate fake instance
 X = g_model.predict(dataset)
-# create ✬fake✬ class labels (0)
+# create 'fake' class labels (0)
 
 563
 
@@ -824,12 +824,12 @@ return X, y
 # save the generator models to file
 def save_models(step, g_model_AtoB, g_model_BtoA):
 # save the first generator model
-filename1 = ✬g_model_AtoB_%06d.h5✬ % (step+1)
+filename1 = 'g_model_AtoB_%06d.h5' % (step+1)
 g_model_AtoB.save(filename1)
 # save the second generator model
-filename2 = ✬g_model_BtoA_%06d.h5✬ % (step+1)
+filename2 = 'g_model_BtoA_%06d.h5' % (step+1)
 g_model_BtoA.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, trainX, name, n_samples=5):
 # select a sample of input images
@@ -842,15 +842,15 @@ X_out = (X_out + 1) / 2.0
 # plot real images
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_in[i])
 # plot translated image
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + n_samples + i)
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 pyplot.imshow(X_out[i])
 # save plot to file
-filename1 = ✬%s_generated_plot_%06d.png✬ % (name, (step+1))
+filename1 = '%s_generated_plot_%06d.png' % (name, (step+1))
 pyplot.savefig(filename1)
 pyplot.close()
 # update image pool for fake images
@@ -862,7 +862,7 @@ if len(pool) < max_size:
 pool.append(image)
 selected.append(image)
 elif random() < 0.5:
-# use image, but don✬t add it to the pool
+# use image, but don't add it to the pool
 selected.append(image)
 else:
 # replace an existing image and use replaced image
@@ -913,20 +913,20 @@ X_realB, X_realA, X_realB])
 dB_loss1 = d_model_B.train_on_batch(X_realB, y_realB)
 dB_loss2 = d_model_B.train_on_batch(X_fakeB, y_fakeB)
 # summarize performance
-print(✬>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]✬ % (i+1, dA_loss1,dA_loss2,
+print('>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]' % (i+1, dA_loss1,dA_loss2,
 dB_loss1,dB_loss2, g_loss1,g_loss2))
 # evaluate the model performance every so often
 if (i+1) % (bat_per_epo * 1) == 0:
 # plot A->B translation
-summarize_performance(i, g_model_AtoB, trainA, ✬AtoB✬)
+summarize_performance(i, g_model_AtoB, trainA, 'AtoB')
 # plot B->A translation
-summarize_performance(i, g_model_BtoA, trainB, ✬BtoA✬)
+summarize_performance(i, g_model_BtoA, trainB, 'BtoA')
 if (i+1) % (bat_per_epo * 5) == 0:
 # save the models
 save_models(i, g_model_AtoB, g_model_BtoA)
 # load image data
-dataset = load_real_samples(✬horse2zebra_256.npz✬)
-print(✬Loaded✬, dataset[0].shape, dataset[1].shape)
+dataset = load_real_samples('horse2zebra_256.npz')
+print('Loaded', dataset[0].shape, dataset[1].shape)
 # define input shape based on the loaded dataset
 image_shape = dataset[0].shape[1:]
 # generator: A -> B
@@ -1036,8 +1036,8 @@ is to load the dataset. We can use the same load real samples() function as we d
 the previous section.
 ...
 # load dataset
-A_data, B_data = load_real_samples(✬horse2zebra_256.npz✬)
-print(✬Loaded✬, A_data.shape, B_data.shape)
+A_data, B_data = load_real_samples('horse2zebra_256.npz')
+print('Loaded', A_data.shape, B_data.shape)
 
 ```
 
@@ -1054,9 +1054,9 @@ loading each generator model. This can be achieved by specifying a dictionary ma
 layer name to the object and passing this as an argument to the load model() Keras function.
 ...
 # load the models
-cust = {✬InstanceNormalization✬: InstanceNormalization}
-model_AtoB = load_model(✬g_model_AtoB_089025.h5✬, cust)
-model_BtoA = load_model(✬g_model_BtoA_089025.h5✬, cust)
+cust = {'InstanceNormalization': InstanceNormalization}
+model_AtoB = load_model('g_model_AtoB_089025.h5', cust)
+model_BtoA = load_model('g_model_BtoA_089025.h5', cust)
 
 ```
 
@@ -1088,7 +1088,7 @@ this.
 # plot the image, the translation, and the reconstruction
 def show_plot(imagesX, imagesY1, imagesY2):
 images = vstack((imagesX, imagesY1, imagesY2))
-titles = [✬Real✬, ✬Generated✬, ✬Reconstructed✬]
+titles = ['Real', 'Generated', 'Reconstructed']
 # scale from [-1,1] to [0,1]
 images = (images + 1) / 2.0
 # plot images row by row
@@ -1096,7 +1096,7 @@ for i in range(len(images)):
 # define subplot
 pyplot.subplot(1, len(images), 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(images[i])
 # title
@@ -1140,7 +1140,7 @@ def load_real_samples(filename):
 # load the dataset
 data = load(filename)
 # unpack arrays
-X1, X2 = data[✬arr_0✬], data[✬arr_1✬]
+X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
 X2 = (X2 - 127.5) / 127.5
@@ -1155,7 +1155,7 @@ return X
 # plot the image, the translation, and the reconstruction
 def show_plot(imagesX, imagesY1, imagesY2):
 images = vstack((imagesX, imagesY1, imagesY2))
-titles = [✬Real✬, ✬Generated✬, ✬Reconstructed✬]
+titles = ['Real', 'Generated', 'Reconstructed']
 # scale from [-1,1] to [0,1]
 
 ### 26.5. How to Perform Image Translation with CycleGAN
@@ -1168,19 +1168,19 @@ for i in range(len(images)):
 # define subplot
 pyplot.subplot(1, len(images), 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(images[i])
 # title
 pyplot.title(titles[i])
 pyplot.show()
 # load dataset
-A_data, B_data = load_real_samples(✬horse2zebra_256.npz✬)
-print(✬Loaded✬, A_data.shape, B_data.shape)
+A_data, B_data = load_real_samples('horse2zebra_256.npz')
+print('Loaded', A_data.shape, B_data.shape)
 # load the models
-cust = {✬InstanceNormalization✬: InstanceNormalization}
-model_AtoB = load_model(✬g_model_AtoB_089025.h5✬, cust)
-model_BtoA = load_model(✬g_model_BtoA_089025.h5✬, cust)
+cust = {'InstanceNormalization': InstanceNormalization}
+model_AtoB = load_model('g_model_AtoB_089025.h5', cust)
+model_BtoA = load_model('g_model_BtoA_089025.h5', cust)
 # plot A->B->A
 A_real = select_sample(A_data, 1)
 B_generated = model_AtoB.predict(A_real)
@@ -1249,10 +1249,10 @@ return pixels
 We can then load our selected image as well as the AtoB generator model, as we did before.
 ...
 # load the image
-image_src = load_image(✬horse2zebra/trainA/n02381460_541.jpg✬)
+image_src = load_image('horse2zebra/trainA/n02381460_541.jpg')
 # load the model
-cust = {✬InstanceNormalization✬: InstanceNormalization}
-model_AtoB = load_model(✬g_model_AtoB_089025.h5✬, cust)
+cust = {'InstanceNormalization': InstanceNormalization}
+model_AtoB = load_model('g_model_AtoB_089025.h5', cust)
 
 ```
 
@@ -1294,10 +1294,10 @@ pixels = expand_dims(pixels, 0)
 pixels = (pixels - 127.5) / 127.5
 return pixels
 # load the image
-image_src = load_image(✬horse2zebra/trainA/n02381460_541.jpg✬)
+image_src = load_image('horse2zebra/trainA/n02381460_541.jpg')
 # load the model
-cust = {✬InstanceNormalization✬: InstanceNormalization}
-model_AtoB = load_model(✬g_model_AtoB_100895.h5✬, cust)
+cust = {'InstanceNormalization': InstanceNormalization}
+model_AtoB = load_model('g_model_AtoB_100895.h5', cust)
 # translate image
 image_tar = model_AtoB.predict(image_src)
 # scale from [-1,1] to [0,1]

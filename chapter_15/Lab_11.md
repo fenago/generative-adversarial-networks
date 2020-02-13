@@ -144,19 +144,19 @@ init = RandomNormal(stddev=0.02)
 # define model
 model = Sequential()
 # downsample to 14x14
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 input_shape=in_shape))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 7x7
-model.add(Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init))
+model.add(Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
-model.add(Dense(1, activation=✬linear✬, kernel_initializer=init))
+model.add(Dense(1, activation='linear', kernel_initializer=init))
 # compile model with L2 loss
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 
 ```
@@ -175,7 +175,7 @@ model = Sequential()
 n_nodes = 256 * 7 * 7
 model.add(Dense(n_nodes, kernel_initializer=init, input_dim=latent_dim))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 model.add(Reshape((7, 7, 256)))
 # upsample to 14x14
 
@@ -183,18 +183,18 @@ model.add(Reshape((7, 7, 256)))
 
 292
 
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 # upsample to 28x28
-model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 # output 28x28x1
-model.add(Conv2D(1, (7,7), padding=✬same✬, kernel_initializer=init))
-model.add(Activation(✬tanh✬))
+model.add(Conv2D(1, (7,7), padding='same', kernel_initializer=init))
+model.add(Activation('tanh'))
 return model
 
 ```
@@ -220,7 +220,7 @@ model.add(generator)
 # add the discriminator
 model.add(discriminator)
 # compile model with L2 loss
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 
 ```
@@ -241,7 +241,7 @@ X = expand_dims(trainX, axis=-1)
 
 293
 
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -312,17 +312,17 @@ for i in range(10 * 10):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%06d.png✬ % (step+1)
+filename1 = 'generated_plot_%06d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%06d.h5✬ % (step+1)
+filename2 = 'model_%06d.h5' % (step+1)
 g_model.save(filename2)
-print(✬Saved %s and %s✬ % (filename1, filename2))
+print('Saved %s and %s' % (filename1, filename2))
 
 ```
 
@@ -332,14 +332,14 @@ models. Creating and saving the plot of learning curves is implemented in the pl
 function.
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
-pyplot.plot(d1_hist, label=✬dloss1✬)
-pyplot.plot(d2_hist, label=✬dloss2✬)
-pyplot.plot(g_hist, label=✬gloss✬)
+pyplot.plot(d1_hist, label='dloss1')
+pyplot.plot(d2_hist, label='dloss2')
+pyplot.plot(g_hist, label='gloss')
 pyplot.legend()
-filename = ✬plot_line_plot_loss.png✬
+filename = 'plot_line_plot_loss.png'
 pyplot.savefig(filename)
 pyplot.close()
-print(✬Saved %s✬ % (filename))
+print('Saved %s' % (filename))
 
 ```
 
@@ -374,17 +374,17 @@ X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model
 d_loss1 = d_model.train_on_batch(X_real, y_real)
 d_loss2 = d_model.train_on_batch(X_fake, y_fake)
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 z_input = generate_latent_points(latent_dim, n_batch)
 y_real2 = ones((n_batch, 1))
 g_loss = gan_model.train_on_batch(z_input, y_real2)
 # summarize loss on this batch
-print(✬>%d, d1=%.3f, d2=%.3f g=%.3f✬ % (i+1, d_loss1, d_loss2, g_loss))
+print('>%d, d1=%.3f, d2=%.3f g=%.3f' % (i+1, d_loss1, d_loss2, g_loss))
 # record history
 d1_hist.append(d_loss1)
 d2_hist.append(d_loss2)
 g_hist.append(g_loss)
-# evaluate the model performance every ✬epoch✬
+# evaluate the model performance every 'epoch'
 if (i+1) % (bat_per_epo * 1) == 0:
 summarize_performance(i, g_model, latent_dim)
 # create line plot of training history
@@ -422,19 +422,19 @@ init = RandomNormal(stddev=0.02)
 # define model
 model = Sequential()
 # downsample to 14x14
-model.add(Conv2D(64, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init,
+model.add(Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init,
 input_shape=in_shape))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # downsample to 7x7
-model.add(Conv2D(128, (4,4), strides=(2,2), padding=✬same✬, kernel_initializer=init))
+model.add(Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init))
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
 # classifier
 model.add(Flatten())
-model.add(Dense(1, activation=✬linear✬, kernel_initializer=init))
+model.add(Dense(1, activation='linear', kernel_initializer=init))
 # compile model with L2 loss
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 # define the standalone generator model
 def define_generator(latent_dim):
@@ -446,21 +446,21 @@ model = Sequential()
 n_nodes = 256 * 7 * 7
 model.add(Dense(n_nodes, kernel_initializer=init, input_dim=latent_dim))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 model.add(Reshape((7, 7, 256)))
 # upsample to 14x14
-model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 # upsample to 28x28
-model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding=✬same✬,
+model.add(Conv2DTranspose(64, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 model.add(BatchNormalization())
-model.add(Activation(✬relu✬))
+model.add(Activation('relu'))
 # output 28x28x1
-model.add(Conv2D(1, (7,7), padding=✬same✬, kernel_initializer=init))
-model.add(Activation(✬tanh✬))
+model.add(Conv2D(1, (7,7), padding='same', kernel_initializer=init))
+model.add(Activation('tanh'))
 return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
@@ -477,7 +477,7 @@ model.add(generator)
 # add the discriminator
 model.add(discriminator)
 # compile model with L2 loss
-model.compile(loss=✬mse✬, optimizer=Adam(lr=0.0002, beta_1=0.5))
+model.compile(loss='mse', optimizer=Adam(lr=0.0002, beta_1=0.5))
 return model
 # load mnist images
 def load_real_samples():
@@ -486,7 +486,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 return X
@@ -530,27 +530,27 @@ pyplot.subplot(10, 10, 1 + i)
 
 ### 15.3. How to Develop an LSGAN for MNIST
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%06d.png✬ % (step+1)
+filename1 = 'generated_plot_%06d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%06d.h5✬ % (step+1)
+filename2 = 'model_%06d.h5' % (step+1)
 g_model.save(filename2)
-print(✬Saved %s and %s✬ % (filename1, filename2))
+print('Saved %s and %s' % (filename1, filename2))
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
-pyplot.plot(d1_hist, label=✬dloss1✬)
-pyplot.plot(d2_hist, label=✬dloss2✬)
-pyplot.plot(g_hist, label=✬gloss✬)
+pyplot.plot(d1_hist, label='dloss1')
+pyplot.plot(d2_hist, label='dloss2')
+pyplot.plot(g_hist, label='gloss')
 pyplot.legend()
-filename = ✬plot_line_plot_loss.png✬
+filename = 'plot_line_plot_loss.png'
 pyplot.savefig(filename)
 pyplot.close()
-print(✬Saved %s✬ % (filename))
+print('Saved %s' % (filename))
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=20, n_batch=64):
 # calculate the number of batches per training epoch
@@ -569,17 +569,17 @@ X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model
 d_loss1 = d_model.train_on_batch(X_real, y_real)
 d_loss2 = d_model.train_on_batch(X_fake, y_fake)
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 z_input = generate_latent_points(latent_dim, n_batch)
 y_real2 = ones((n_batch, 1))
 g_loss = gan_model.train_on_batch(z_input, y_real2)
 # summarize loss on this batch
-print(✬>%d, d1=%.3f, d2=%.3f g=%.3f✬ % (i+1, d_loss1, d_loss2, g_loss))
+print('>%d, d1=%.3f, d2=%.3f g=%.3f' % (i+1, d_loss1, d_loss2, g_loss))
 # record history
 d1_hist.append(d_loss1)
 d2_hist.append(d_loss2)
 g_hist.append(g_loss)
-# evaluate the model performance every ✬epoch✬
+# evaluate the model performance every 'epoch'
 if (i+1) % (bat_per_epo * 1) == 0:
 summarize_performance(i, g_model, latent_dim)
 # create line plot of training history
@@ -710,12 +710,12 @@ for i in range(n * n):
 # define subplot
 pyplot.subplot(n, n, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬model_018740.h5✬)
+model = load_model('model_018740.h5')
 # generate images
 latent_points = generate_latent_points(100, 100)
 # generate images

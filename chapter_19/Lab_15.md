@@ -187,21 +187,21 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-fe = Conv2D(32, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+fe = Conv2D(32, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(64, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(64, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # downsample to 7x7
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(256, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(256, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
@@ -215,7 +215,7 @@ The main difference is that the model has two output layers. The first is a sing
 the sigmoid activation for predicting the realness of the image.
 ...
 # real/fake output
-out1 = Dense(1, activation=✬sigmoid✬)(fe)
+out1 = Dense(1, activation='sigmoid')(fe)
 
 ```
 
@@ -223,7 +223,7 @@ The second is multiple nodes, one for each class, using the softmax activation f
 predict the class label of the given image.
 ...
 # class label output
-out2 = Dense(n_classes, activation=✬softmax✬)(fe)
+out2 = Dense(n_classes, activation='softmax')(fe)
 
 ### 19.4. How to Define AC-GAN Models
 
@@ -246,7 +246,7 @@ categorical cross-entropy loss function. This will have the identical effect of 
 cross-entropy but avoids the step of having to manually one hot encode the target labels. When
 compiling the model, we can inform Keras to use the two different loss functions for the two
 output layers by specifying a list of function names as strings; for example:
-loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬]
+loss=['binary_crossentropy', 'sparse_categorical_crossentropy']
 
 ```
 
@@ -255,7 +255,7 @@ rate and modest momentum, as is recommended for DCGANs.
 ...
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 
 ```
@@ -271,11 +271,11 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-fe = Conv2D(32, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+fe = Conv2D(32, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(64, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(64, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
@@ -285,26 +285,26 @@ fe = Dropout(0.5)(fe)
 
 399
 
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(256, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(256, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # real/fake output
-out1 = Dense(1, activation=✬sigmoid✬)(fe)
+out1 = Dense(1, activation='sigmoid')(fe)
 # class label output
-out2 = Dense(n_classes, activation=✬softmax✬)(fe)
+out2 = Dense(n_classes, activation='softmax')(fe)
 # define model
 model = Model(in_image, [out1, out2])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 return model
 
@@ -330,16 +330,16 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-fe = Conv2D(32, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+fe = Conv2D(32, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(64, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(64, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # downsample to 7x7
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
 
 ### 19.4. How to Define AC-GAN Models
 
@@ -349,21 +349,21 @@ fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(256, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(256, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 # real/fake output
-out1 = Dense(1, activation=✬sigmoid✬)(fe)
+out1 = Dense(1, activation='sigmoid')(fe)
 # class label output
-out2 = Dense(n_classes, activation=✬softmax✬)(fe)
+out2 = Dense(n_classes, activation='softmax')(fe)
 # define model
 model = Model(in_image, [out1, out2])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 return model
 # define the discriminator model
@@ -371,7 +371,7 @@ model = define_discriminator()
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬discriminator_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -430,7 +430,7 @@ in_lat = Input(shape=(latent_dim,))
 # foundation for 7x7 image
 n_nodes = 384 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = Reshape((7, 7, 384))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
@@ -444,18 +444,18 @@ is a single feature map or grayscale image with the shape 28 × 28 and pixel val
 1] given the choice of a Tanh activation function. We use ReLU activation for the upsampling
 layers instead of LeakyReLU given the suggestion in the AC-GAN paper.
 # upsample to 14x14
-gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(merge)
 gen = BatchNormalization()(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 
 ### 19.4. How to Define AC-GAN Models
 
 403
 
 # upsample to 28x28
-gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding=✬same✬, kernel_initializer=init)(gen)
-out_layer = Activation(✬tanh✬)(gen)
+gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same', kernel_initializer=init)(gen)
+out_layer = Activation('tanh')(gen)
 
 ```
 
@@ -480,19 +480,19 @@ in_lat = Input(shape=(latent_dim,))
 # foundation for 7x7 image
 n_nodes = 384 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = Reshape((7, 7, 384))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 # upsample to 14x14
-gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(merge)
 gen = BatchNormalization()(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model([in_lat, in_label], out_layer)
 return model
@@ -542,19 +542,19 @@ in_lat = Input(shape=(latent_dim,))
 # foundation for 7x7 image
 n_nodes = 384 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = Reshape((7, 7, 384))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 # upsample to 14x14
-gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(merge)
 gen = BatchNormalization()(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model([in_lat, in_label], out_layer)
 return model
@@ -565,7 +565,7 @@ model = define_generator(latent_dim)
 # summarize the model
 model.summary()
 # plot the model
-plot_model(model, to_file=✬generator_plot.png✬, show_shapes=True, show_layer_names=True)
+plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
 
@@ -622,7 +622,7 @@ gan_output = d_model(g_model.output)
 model = Model(g_model.input, gan_output)
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 return model
 
@@ -647,7 +647,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 
@@ -740,17 +740,17 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
@@ -788,11 +788,11 @@ n_steps = bat_per_epo * n_epochs
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_steps):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 [X_real, labels_real], y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 _,d_r1,d_r2 = d_model.train_on_batch(X_real, [y_real, labels_real])
-# generate ✬fake✬ examples
+# generate 'fake' examples
 [X_fake, labels_fake], y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 _,d_f,d_f2 = d_model.train_on_batch(X_fake, [y_fake, labels_fake])
@@ -800,12 +800,12 @@ _,d_f,d_f2 = d_model.train_on_batch(X_fake, [y_fake, labels_fake])
 [z_input, z_labels] = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 _,g_1,g_2 = gan_model.train_on_batch([z_input, z_labels], [y_gan, z_labels])
 # summarize loss on this batch
-print(✬>%d, dr[%.3f,%.3f], df[%.3f,%.3f], g[%.3f,%.3f]✬ % (i+1, d_r1,d_r2, d_f,d_f2,
+print('>%d, dr[%.3f,%.3f], df[%.3f,%.3f], g[%.3f,%.3f]' % (i+1, d_r1,d_r2, d_f,d_f2,
 g_1,g_2))
-# evaluate the model performance every ✬epoch✬
+# evaluate the model performance every 'epoch'
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, latent_dim)
 
@@ -865,21 +865,21 @@ init = RandomNormal(stddev=0.02)
 # image input
 in_image = Input(shape=in_shape)
 # downsample to 14x14
-fe = Conv2D(32, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(in_image)
+fe = Conv2D(32, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(64, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(64, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # downsample to 7x7
-fe = Conv2D(128, (3,3), strides=(2,2), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # normal
-fe = Conv2D(256, (3,3), padding=✬same✬, kernel_initializer=init)(fe)
+fe = Conv2D(256, (3,3), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
@@ -891,14 +891,14 @@ fe = Flatten()(fe)
 411
 
 # real/fake output
-out1 = Dense(1, activation=✬sigmoid✬)(fe)
+out1 = Dense(1, activation='sigmoid')(fe)
 # class label output
-out2 = Dense(n_classes, activation=✬softmax✬)(fe)
+out2 = Dense(n_classes, activation='softmax')(fe)
 # define model
 model = Model(in_image, [out1, out2])
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 return model
 # define the standalone generator model
@@ -919,19 +919,19 @@ in_lat = Input(shape=(latent_dim,))
 # foundation for 7x7 image
 n_nodes = 384 * 7 * 7
 gen = Dense(n_nodes, kernel_initializer=init)(in_lat)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 gen = Reshape((7, 7, 384))(gen)
 # merge image gen and label input
 merge = Concatenate()([gen, li])
 # upsample to 14x14
-gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(merge)
 gen = BatchNormalization()(gen)
-gen = Activation(✬relu✬)(gen)
+gen = Activation('relu')(gen)
 # upsample to 28x28
-gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding=✬same✬,
+gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(gen)
-out_layer = Activation(✬tanh✬)(gen)
+out_layer = Activation('tanh')(gen)
 # define model
 model = Model([in_lat, in_label], out_layer)
 return model
@@ -947,7 +947,7 @@ model = Model(g_model.input, gan_output)
 
 ### 19.5. How to Develop an AC-GAN for Fashion-MNIST
 opt = Adam(lr=0.0002, beta_1=0.5)
-model.compile(loss=[✬binary_crossentropy✬, ✬sparse_categorical_crossentropy✬],
+model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
 return model
 # load images
@@ -957,7 +957,7 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-X = X.astype(✬float32✬)
+X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 print(X.shape, trainy.shape)
@@ -1009,17 +1009,17 @@ for i in range(100):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(X[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(X[i, :, :, 0], cmap='gray_r')
 # save plot to file
-filename1 = ✬generated_plot_%04d.png✬ % (step+1)
+filename1 = 'generated_plot_%04d.png' % (step+1)
 pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
-filename2 = ✬model_%04d.h5✬ % (step+1)
+filename2 = 'model_%04d.h5' % (step+1)
 g_model.save(filename2)
-print(✬>Saved: %s and %s✬ % (filename1, filename2))
+print('>Saved: %s and %s' % (filename1, filename2))
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=64):
 # calculate the number of batches per training epoch
@@ -1030,11 +1030,11 @@ n_steps = bat_per_epo * n_epochs
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
 for i in range(n_steps):
-# get randomly selected ✬real✬ samples
+# get randomly selected 'real' samples
 [X_real, labels_real], y_real = generate_real_samples(dataset, half_batch)
 # update discriminator model weights
 _,d_r1,d_r2 = d_model.train_on_batch(X_real, [y_real, labels_real])
-# generate ✬fake✬ examples
+# generate 'fake' examples
 [X_fake, labels_fake], y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
 # update discriminator model weights
 _,d_f,d_f2 = d_model.train_on_batch(X_fake, [y_fake, labels_fake])
@@ -1042,12 +1042,12 @@ _,d_f,d_f2 = d_model.train_on_batch(X_fake, [y_fake, labels_fake])
 [z_input, z_labels] = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
 y_gan = ones((n_batch, 1))
-# update the generator via the discriminator✬s error
+# update the generator via the discriminator's error
 _,g_1,g_2 = gan_model.train_on_batch([z_input, z_labels], [y_gan, z_labels])
 # summarize loss on this batch
-print(✬>%d, dr[%.3f,%.3f], df[%.3f,%.3f], g[%.3f,%.3f]✬ % (i+1, d_r1,d_r2, d_f,d_f2,
+print('>%d, dr[%.3f,%.3f], df[%.3f,%.3f], g[%.3f,%.3f]' % (i+1, d_r1,d_r2, d_f,d_f2,
 g_1,g_2))
-# evaluate the model performance every ✬epoch✬
+# evaluate the model performance every 'epoch'
 if (i+1) % (bat_per_epo * 10) == 0:
 summarize_performance(i, g_model, latent_dim)
 # size of the latent space
@@ -1161,12 +1161,12 @@ for i in range(n_examples):
 # define subplot
 pyplot.subplot(sqrt(n_examples), sqrt(n_examples), 1 + i)
 # turn off axis
-pyplot.axis(✬off✬)
+pyplot.axis('off')
 # plot raw pixel data
-pyplot.imshow(examples[i, :, :, 0], cmap=✬gray_r✬)
+pyplot.imshow(examples[i, :, :, 0], cmap='gray_r')
 pyplot.show()
 # load model
-model = load_model(✬model_93700.h5✬)
+model = load_model('model_93700.h5')
 latent_dim = 100
 n_examples = 100 # must be a square
 n_class = 7 # sneaker
