@@ -15,9 +15,9 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
-### Chapter 26
-How to Develop the CycleGAN
-End-to-End
+
+## How to Develop the CycleGAN End-to-End
+
 The Cycle Generative Adversarial Network, or CycleGAN, is an approach to training a deep
 convolutional neural network for image-to-image translation tasks. Unlike other GAN models
 for image translation, the CycleGAN does not require a dataset of paired images. For example,
@@ -27,6 +27,7 @@ of a translation model on problems where training datasets may not exist, such a
 paintings to photographs. In this tutorial, you will discover how to develop a CycleGAN model
 to translate photos of horses to zebras, and back again. After completing this tutorial, you will
 know:
+
 - How to load and prepare the horses to zebras image translation dataset for modeling.
 - How to train a pair of CycleGAN generator models for translating horses to zebras and
 zebras to horses.
@@ -34,25 +35,19 @@ zebras to horses.
 
 Let’s get started.
 
-26.1
 
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into four parts; they are:
+
 1. What Is the CycleGAN?
 2. How to Prepare the Horses to Zebras Dataset
 3. How to Develop a CycleGAN to Translate Horses to Zebras
 4. How to Perform Image Translation with CycleGAN
 
-549
 
-### 26.2. What Is the CycleGAN?
 
-26.2
-
-550
-
-What Is the CycleGAN?
+## What Is the CycleGAN?
 
 The CycleGAN model was described by Jun-Yan Zhu, et al. in their 2017 paper titled Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks (introduced
 in Chapter 24). The benefit of the CycleGAN model is that it can be trained without paired
@@ -64,9 +59,8 @@ The paper provides a good description of the models and training process, althou
 Torch implementation was used as the definitive description for each model and training process
 and provides the basis for the model implementations described below.
 
-26.3
 
-How to Prepare the Horses to Zebras Dataset
+## How to Prepare the Horses to Zebras Dataset
 
 One of the impressive examples of the CycleGAN in the paper was to transform photographs of
 horses to zebras, and the reverse, zebras to horses. The authors of the paper referred to this as
@@ -75,10 +69,13 @@ and oranges. In this tutorial, we will develop a CycleGAN from scratch for image
 translation (or object transfiguration) from horses to zebras and the reverse. We will refer to
 this dataset as horses2zebra. The zip file for this dataset about 111 megabytes and can be
 downloaded from the CycleGAN webpage:
+
 - Download Horses to Zebras Dataset (111 megabytes).1
 
 Download the dataset into your current working directory. You will see the following directory
 structure:
+
+```
 horse2zebra
 testA
 testB
@@ -93,6 +90,8 @@ The photographs are square with the shape 256 × 256 and have filenames like n02
 The example below will load all photographs from the train and test folders and create an array
 of images for category A and another for category B. Both arrays are then saved to a new file in
 compressed NumPy array format.
+
+```
 # example of preparing the horses and zebra dataset
 from os import listdir
 from numpy import asarray
@@ -103,9 +102,6 @@ from keras.preprocessing.image import load_img
 
 https://people.eecs.berkeley.edu/~taesung_park/CycleGAN/datasets/horse2zebra.zip
 
-### 26.3. How to Prepare the Horses to Zebras Dataset
-
-551
 
 from numpy import savez_compressed
 # load all images in a directory into memory
@@ -143,6 +139,8 @@ Running the example first loads all images into memory, showing that there are 1
 in category A (horses) and 1,474 in category B (zebras). The arrays are then saved in compressed
 NumPy format with the filename horse2zebra 256.npz. This data file is about 570 megabytes,
 larger than the raw images as we are storing pixel values as 32-bit floating point values.
+
+```
 Loaded dataA: (1187, 256, 256, 3)
 Loaded dataB: (1474, 256, 256, 3)
 Saved dataset: horse2zebra_256.npz
@@ -151,6 +149,8 @@ Saved dataset: horse2zebra_256.npz
 
 We can then load the dataset and plot some of the photos to confirm that we are handling
 the image data correctly. The complete example is listed below.
+
+```
 # load and plot the prepared dataset
 from numpy import load
 from matplotlib import pyplot
@@ -161,9 +161,6 @@ print('Loaded: ', dataA.shape, dataB.shape)
 # plot source images
 n_samples = 3
 
-### 26.3. How to Prepare the Horses to Zebras Dataset
-
-552
 
 for i in range(n_samples):
 pyplot.subplot(2, n_samples, 1 + i)
@@ -180,6 +177,8 @@ pyplot.show()
 
 Running the example first loads the dataset, confirming the number of examples and shape
 of the color images match our expectations.
+
+```
 Loaded: (1187, 256, 256, 3) (1474, 256, 256, 3)
 
 ```
@@ -187,18 +186,13 @@ Loaded: (1187, 256, 256, 3) (1474, 256, 256, 3)
 A plot is created showing a row of three images from the horse photo dataset (dataA) and a
 row of three images from the zebra dataset (dataB).
 
-![](../images/-.jpg)
+![](../images/569-143.jpg)
 
 Now that we have prepared the dataset for modeling, we can develop the CycleGAN generator
 models that can translate photos from one category to the other, and the reverse.
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 
-26.4
-
-553
-
-How to Develop a CycleGAN to Translate Horse
+## How to Develop a CycleGAN to Translate Horse
 to Zebra
 
 In this section, we will develop the CycleGAN model for translating photos of horses to zebras
@@ -235,6 +229,8 @@ as input and outputs a patch of predictions. The model is optimized using least 
 have half (0.5) the usual effect. The authors of CycleGAN paper recommend this weighting
 of model updates to slow down changes to the discriminator, relative to the generator model
 during training.
+
+```
 # define the discriminator model
 def define_discriminator(image_shape):
 # weight initialization
@@ -244,9 +240,6 @@ in_image = Input(shape=image_shape)
 # C64
 d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(in_image)
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-554
 
 d = LeakyReLU(alpha=0.2)(d)
 # C128
@@ -287,6 +280,8 @@ This is implemented in the resnet block() function that creates two Convolution-
 blocks with 3 × 3 filters and 1 × 1 stride and without a ReLU activation after the second block,
 matching the official Torch implementation in the build conv block() function. Same padding
 is used instead of reflection padded recommended in the paper for simplicity.
+
+```
 # generator a resnet block
 def resnet_block(n_filters, input_layer):
 # weight initialization
@@ -302,9 +297,6 @@ g = InstanceNormalization(axis=-1)(g)
 g = Concatenate()([g, input_layer])
 return g
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-555
 
 ```
 
@@ -313,6 +305,8 @@ images. This can easily be changed to the 6-resnet block version by setting the 
 argument to (128 × 128 × 3) and n resnet function argument to 6. Importantly, the model
 outputs pixel values with the shape as the input and pixel values are in the range [-1, 1], typical
 for GAN generator models.
+
+```
 # define the standalone generator model
 def define_generator(image_shape, n_resnet=9):
 # weight initialization
@@ -359,14 +353,11 @@ for generated images marked as real, called adversarial loss. As such, they are 
 generate images that better fit into the target domain. The generator models are also updated
 based on how effective they are at the regeneration of a source image when used with the other
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-556
-
 generator model, called cycle loss. Finally, a generator model is expected to output an image
 without translation when provided an example from the target domain, called identity loss.
 Altogether, each generator model is optimized via the combination of four outputs with four
 loss functions:
+
 - Adversarial loss (L2 or mean squared error).
 - Identity loss (L1 or mean absolute error).
 - Forward cycle loss (L1 or mean absolute error).
@@ -395,6 +386,8 @@ main generator model are updated for the composite model and this is done via th
 sum of all loss functions. The cycle loss is given more weight (10-times) than the adversarial
 loss as described in the paper, and the identity loss is always used with a weighting half that of
 the cycle loss (5-times), matching the official implementation source code.
+
+```
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
 # ensure the model we're updating is trainable
@@ -409,10 +402,6 @@ gen1_out = g_model_1(input_gen)
 output_d = d_model(gen1_out)
 # identity element
 input_id = Input(shape=image_shape)
-
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-557
 
 output_id = g_model_1(input_id)
 # forward cycle
@@ -441,6 +430,8 @@ the target values of 1.0 for real and 0.0 for fake. Defining the models is the h
 CycleGAN; the rest is standard GAN training and is relatively straightforward. Next, we can
 load our paired images dataset in compressed NumPy array format. This will return a list of
 two NumPy arrays: the first for source images and the second for corresponding target images.
+
+```
 # load and prepare training images
 def load_real_samples(filename):
 # load the dataset
@@ -462,14 +453,13 @@ images, as well as the target for the PatchGAN discriminator model indicating th
 real (target = 1.0). As such, the shape of the PatchGAN output is also provided, which in the
 case of 256 × 256 images will be 16, or a 16 × 16 × 1 activation map, defined by the patch shape
 function argument.
+
+```
 # select a batch of random samples, returns images and target
 def generate_real_samples(dataset, n_samples, patch_shape):
 # choose random instances
 ix = randint(0, dataset.shape[0], n_samples)
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-558
 
 # retrieve selected images
 X = dataset[ix]
@@ -484,6 +474,8 @@ each training iteration. The generate fake samples() function below generates th
 given a generator model and the sample of real images from the source domain. Again, target
 values for each generated image are provided with the correct shape of the PatchGAN, indicating
 that they are fake or generated (target = 0.0).
+
+```
 # generate a batch of images, returns images and targets
 def generate_fake_samples(g_model, dataset, patch_shape):
 # generate fake instance
@@ -501,6 +493,8 @@ periodically during training, such as every one or five training epochs. We can 
 generated images at the end of training and use the image quality to choose a final model. The
 save models() function below will save each generator model to the current directory in H5
 format, including the training iteration number in the filename.
+
+```
 # save the generator models to file
 def save_models(step, g_model_AtoB, g_model_BtoA):
 # save the first generator model
@@ -517,6 +511,8 @@ The summarize performance() function below uses a given generator model to gener
 translated versions of a few randomly selected source photographs and saves the plot to file.
 The source images are plotted on the first row and the generated images are plotted on the
 second row. Again, the plot filename includes the training iteration number.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, trainX, name, n_samples=5):
 # select a sample of input images
@@ -525,9 +521,6 @@ X_in, _ = generate_real_samples(trainX, n_samples, 0)
 X_out, _ = generate_fake_samples(g_model, X_in, 0)
 # scale all pixels from [-1,1] to [0,1]
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-559
 
 X_in = (X_in + 1) / 2.0
 X_out = (X_out + 1) / 2.0
@@ -555,6 +548,8 @@ an image pool of 50 generated images for each discriminator model that is first 
 and probabilistically either adds new images to the pool by replacing an existing image or
 uses a generated image directly. We can implement this as a Python list of images for each
 discriminator and use the update image pool() function below to maintain each pool list.
+
+```
 # update image pool for fake images
 def update_image_pool(pool, images, max_size=50):
 selected = list()
@@ -583,9 +578,6 @@ horses dataset has 1,187 images, one epoch is defined as 1,187 batches and the s
 of training iterations. Images are generated using both generators each epoch and models are
 saved every five epochs or (1187 × 5) 5,935 training iterations.
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-560
 
 The order of model updates is implemented to match the official Torch implementation.
 First, a batch of real images from each domain is selected, then a batch of fake images for
@@ -595,6 +587,8 @@ model, followed by the Discriminator-A model (horses). Then the Generator-B (hor
 composite model and Discriminator-B (zebras) models are updated. Loss for each of the updated
 models is then reported at the end of the training iteration. Importantly, only the weighted
 average loss used to update each generator is reported.
+
+```
 # train cyclegan models
 def train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_BtoA,
 dataset):
@@ -642,9 +636,6 @@ if (i+1) % (bat_per_epo * 1) == 0:
 summarize_performance(i, g_model_AtoB, trainA, 'AtoB')
 # plot B->A translation
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-561
 
 summarize_performance(i, g_model_BtoA, trainB, 'BtoA')
 if (i+1) % (bat_per_epo * 5) == 0:
@@ -655,6 +646,8 @@ save_models(i, g_model_AtoB, g_model_BtoA)
 
 Tying all of this together, the complete example of training a CycleGAN model to translate
 photos of horses to zebras and zebras to horses is listed below.
+
+```
 # example of training a cyclegan on the horse2zebra dataset
 from random import random
 from numpy import load
@@ -702,9 +695,6 @@ d = LeakyReLU(alpha=0.2)(d)
 patch_out = Conv2D(1, (4,4), padding='same', kernel_initializer=init)(d)
 # define model
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-562
 
 model = Model(in_image, patch_out)
 # compile model
@@ -761,7 +751,6 @@ out_image = Activation('tanh')(g)
 model = Model(in_image, out_image)
 return model
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 
 # define a composite model for updating generators by adversarial and cycle loss
 def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
@@ -816,9 +805,7 @@ def generate_fake_samples(g_model, dataset, patch_shape):
 X = g_model.predict(dataset)
 # create 'fake' class labels (0)
 
-563
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 y = zeros((len(X), patch_shape, patch_shape, 1))
 return X, y
 # save the generator models to file
@@ -872,9 +859,7 @@ pool[ix] = image
 return asarray(selected)
 # train cyclegan models
 
-564
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
 def train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_BtoA,
 dataset):
 # define properties of the training run
@@ -931,11 +916,6 @@ print('Loaded', dataset[0].shape, dataset[1].shape)
 image_shape = dataset[0].shape[1:]
 # generator: A -> B
 
-565
-
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-566
 
 g_model_AtoB = define_generator(image_shape)
 # generator: B -> A
@@ -963,6 +943,8 @@ and backward cycle loss (g). If loss for the discriminator goes to zero and stay
 time, consider re-starting the training run as it is an example of a training failure.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1, dA[2.284,0.678] dB[1.422,0.918] g[18.747,18.452]
 >2, dA[2.129,1.226] dB[1.039,1.331] g[19.469,22.831]
 >3, dA[1.644,3.909] dB[1.097,1.680] g[19.192,23.757]
@@ -978,9 +960,11 @@ Consider running the example a few times and compare the average performance.
 
 ```
 
-dataset.
+
 Plots of generated images are saved at the end of every epoch or after every 1,187 training
 iterations and the iteration number is used in the filename.
+
+```
 AtoB_generated_plot_001187.png
 AtoB_generated_plot_002374.png
 ...
@@ -990,12 +974,10 @@ BtoA_generated_plot_002374.png
 ```
 
 
-### 26.4. How to Develop a CycleGAN to Translate Horse to Zebra
-
-567
-
 Models are saved after every five epochs or (1187 × 5) 5,935 training iterations, and again
 the iteration number is used in the filenames.
+
+```
 g_model_AtoB_053415.h5
 g_model_AtoB_059350.h5
 ...
@@ -1008,32 +990,30 @@ The plots of generated images can be used to choose a model and more training it
 may not necessarily mean better quality generated images. Horses to Zebras translation starts
 to become reliable after about 50 epochs.
 
-![](../images/-.jpg)
+![](../images/584-144.jpg)
 
-Zebras (bottom row) After 53,415 Training Iterations.
+
 The translation from Zebras to Horses appears to be more challenging for the model to learn,
 although somewhat plausible translations also begin to be generated after 50 to 60 epochs. I
 suspect that better quality results could be achieved with an additional 100 training epochs with
 weight decay, as is used in the paper, and perhaps with a data generator that systematically
 works through each dataset rather than randomly sampling.
 
-### 26.5. How to Perform Image Translation with CycleGAN
 
-568
+![](../images/585-145.jpg)
 
-![](../images/-.jpg)
 
-Horses (bottom row) After 90,212 Training Iterations.
 Now that we have fit our CycleGAN generators, we can use them to translate photographs
 in an ad hoc manner.
 
-26.5
 
-How to Perform Image Translation with CycleGAN
+## How to Perform Image Translation with CycleGAN
 
 The saved generator models can be loaded and used for ad hoc image translation. The first step
 is to load the dataset. We can use the same load real samples() function as we developed in
 the previous section.
+
+```
 ...
 # load dataset
 A_data, B_data = load_real_samples('horse2zebra_256.npz')
@@ -1046,12 +1026,11 @@ generation. In this case, we will use the model saved around epoch 89 (training 
 Our generator models used a custom layer from the keras contrib library, specifically the
 InstanceNormalization layer. Therefore, we need to specify how to load this layer when
 
-### 26.5. How to Perform Image Translation with CycleGAN
-
-569
 
 loading each generator model. This can be achieved by specifying a dictionary mapping of the
 layer name to the object and passing this as an argument to the load model() Keras function.
+
+```
 ...
 # load the models
 cust = {'InstanceNormalization': InstanceNormalization}
@@ -1062,6 +1041,8 @@ model_BtoA = load_model('g_model_BtoA_089025.h5', cust)
 
 We can use the select sample() function that we developed in the previous section to
 select a random photo from the dataset.
+
+```
 # select a random sample of images from the dataset
 def select_sample(dataset, n_samples):
 # choose random instances
@@ -1074,6 +1055,8 @@ return X
 
 Next, we can use the Generator-AtoB model, first by selecting a random image from DomainA (horses) as input, using Generator-AtoB to translate it to Domain-B (zebras), then use the
 Generator-BtoA model to reconstruct the original image (horse).
+
+```
 ...
 # select input and generate translated images
 A_real = select_sample(A_data, 1)
@@ -1085,6 +1068,8 @@ A_reconstructed = model_BtoA.predict(B_generated)
 We can then plot the three photos side by side as the original or real photo, the translated
 photo, and the reconstruction of the original photo. The show plot() function below implements
 this.
+
+```
 # plot the image, the translation, and the reconstruction
 def show_plot(imagesX, imagesY1, imagesY2):
 images = vstack((imagesX, imagesY1, imagesY2))
@@ -1103,13 +1088,13 @@ pyplot.imshow(images[i])
 pyplot.title(titles[i])
 pyplot.show()
 
-### 26.5. How to Perform Image Translation with CycleGAN
 
-570
 
 ```
 
 We can then call this function to plot our real and generated photos.
+
+```
 ...
 show_plot(A_real, B_generated, A_reconstructed)
 
@@ -1118,6 +1103,8 @@ show_plot(A_real, B_generated, A_reconstructed)
 This is a good test of both models, however, we can also perform the same operation in
 reverse. Specifically, a real photo from Domain-B (zebra) translated to Domain-A (horse), then
 reconstructed as Domain-B (zebra).
+
+```
 ...
 # plot B->A->B
 B_real = select_sample(B_data, 1)
@@ -1128,6 +1115,8 @@ show_plot(B_real, A_generated, B_reconstructed)
 ```
 
 Tying all of this together, the complete example is listed below.
+
+```
 # example of using saved cyclegan models for image translation
 from keras.models import load_model
 from numpy import load
@@ -1158,9 +1147,6 @@ images = vstack((imagesX, imagesY1, imagesY2))
 titles = ['Real', 'Generated', 'Reconstructed']
 # scale from [-1,1] to [0,1]
 
-### 26.5. How to Perform Image Translation with CycleGAN
-
-571
 
 images = (images + 1) / 2.0
 # plot images row by row
@@ -1197,25 +1183,21 @@ show_plot(B_real, A_generated, B_reconstructed)
 Running the example first selects a random photo of a horse, translates it, and then tries to
 reconstruct the original photo.
 
-### 26.5. How to Perform Image Translation with CycleGAN
 
-572
 
-![](../images/-.jpg)
+![](../images/589-146.jpg)
 
-a Horse Using CycleGAN.
+
 Then a similar process is performed in reverse, selecting a random photo of a zebra, translating
 it to a horse, then reconstructing the original photo of the zebra.
 
-### 26.5. How to Perform Image Translation with CycleGAN
 
-573
+![](../images/590-147.jpg)
 
-![](../images/-.jpg)
 
-a Zebra Using CycleGAN.
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 The models are not perfect, especially the zebra to horse model, so you may want to
 generate many translated examples to review. It also seems that both models are more effective
 when reconstructing an image, which is interesting as they are essentially performing the same
@@ -1224,15 +1206,14 @@ loss is not strong enough during training. We may also want to use a generator m
 standalone way on individual photograph files. First, we can select a photo from the training
 dataset. In this case, we will use horse2zebra/trainA/n02381460 541.jpg.
 
-### 26.5. How to Perform Image Translation with CycleGAN
 
-574
-
-![](../images/-.jpg)
+![](../images/591-148.jpg)
 
 We can develop a function to load this image and scale it to the preferred size of 256 × 256,
 scale pixel values to the range [-1,1], and convert the array of pixels to a single sample. The
 load image() function below implements this.
+
+```
 def load_image(filename, size=(256,256)):
 # load and resize the image
 pixels = load_img(filename, target_size=size)
@@ -1247,6 +1228,8 @@ return pixels
 ```
 
 We can then load our selected image as well as the AtoB generator model, as we did before.
+
+```
 ...
 # load the image
 image_src = load_image('horse2zebra/trainA/n02381460_541.jpg')
@@ -1258,6 +1241,8 @@ model_AtoB = load_model('g_model_AtoB_089025.h5', cust)
 
 We can then translate the loaded image, scale the pixel values back to the expected range,
 and plot the result.
+
+```
 ...
 # translate image
 image_tar = model_AtoB.predict(image_src)
@@ -1265,9 +1250,6 @@ image_tar = model_AtoB.predict(image_src)
 image_tar = (image_tar + 1) / 2.0
 # plot the translated image
 
-### 26.5. How to Perform Image Translation with CycleGAN
-
-575
 
 pyplot.imshow(image_tar[0])
 pyplot.show()
@@ -1275,6 +1257,8 @@ pyplot.show()
 ```
 
 Tying this all together, the complete example is listed below.
+
+```
 # example of using saved cyclegan models for image translation
 from numpy import expand_dims
 from keras.models import load_model
@@ -1311,18 +1295,16 @@ pyplot.show()
 Running the example loads the selected image, loads the generator model, translates the
 photograph of a horse to a zebra, and plots the results.
 
-### 26.6. Extensions
 
-576
-
-![](../images/-.jpg)
+![](../images/593-149.jpg)
 
 
-26.6
 
-Extensions
+
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
+
 - Smaller Image Size. Update the example to use a smaller image size, such as 128 × 128,
 and adjust the size of the generator model to use 6 ResNet layers as is used in the
 CycleGAN paper.
@@ -1332,26 +1314,20 @@ the identity mapping and compare results.
 
 If you explore any of these extensions, I’d love to know.
 
-26.7
 
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-26.7.1
 
-Papers
+## Papers
 
 - Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks, 2017.
 https://arxiv.org/abs/1703.10593
 
-### 26.8. Summary
 
-26.7.2
 
-577
-
-Projects
+## Projects
 
 - CycleGAN Project (official), GitHub.
 https://github.com/junyanz/CycleGAN/
@@ -1360,9 +1336,9 @@ https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
 - CycleGAN Project Page (official).
 https://junyanz.github.io/CycleGAN/
 
-26.7.3
 
-API
+
+## API
 
 - Keras Datasets API.
 https://keras.io/datasets/
@@ -1375,19 +1351,34 @@ https://keras.io/getting-started/faq/#how-can-i-freeze-keras-layers
 - Keras Contrib Project.
 https://github.com/keras-team/keras-contrib
 
-Articles
+## Articles
 
 - CycleGAN Dataset.
 https://people.eecs.berkeley.edu/~taesung_park/CycleGAN/datasets
 
 
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to develop a CycleGAN model to translate photos of horses
 to zebras, and back again. Specifically, you learned:
+
 - How to load and prepare the horses to zebra image translation dataset for modeling.
 - How to train a pair of CycleGAN generator models for translating horses to zebra and
 zebra to horses.
 - How to load saved CycleGAN models and use them to translate photographs.
+
+## Part VII
+## Advanced GANs
+
+## Overview
+
+In this part you will discover some of the more interesting state-of-the-art GAN models that
+are capable of generating large photorealistic images. These are models that have only been
+described in the last few years. After reading the chapters in this part, you will know:
+
+- How to leverage what works well in GAN and scale them up in the BigGAN (Chapter 27).
+- How to support the generation large images with the Progressive Growing GAN (Chapter 28).
+- How to give fine-grained control over the generation of large images with the StyleGAN
+(Chapter 29)
 

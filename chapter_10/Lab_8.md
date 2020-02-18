@@ -15,9 +15,8 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
-### Chapter 10
-How to Identify and Diagnose GAN
-Failure Modes
+## How to Identify and Diagnose GAN Failure Modes
+
 GANs are difficult to train. The reason they are difficult to train is that both the generator
 model and the discriminator model are trained simultaneously in a zero sum game. This means
 that improvements to one model come at the expense of the other model. The goal of training
@@ -33,7 +32,8 @@ normal convergence looks like and what to expect more generally. We will then im
 models in different ways and explore a range of failure modes that you may encounter when
 training GAN models. These scenarios will help you to develop an intuition for what to look for
 or expect when a GAN model is failing to train, and ideas for what you could do about it.
-After completing this tutorial, you will know:
+After completing this tutorial, you will know: 
+
 - How to identify a stable GAN training process from the generator and discriminator loss
 over time.
 - How to identify a mode collapse by reviewing both learning curves and generated images.
@@ -42,24 +42,16 @@ discriminator loss over time.
 
 Let’s get started.
 
-10.1
-
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into three parts; they are:
+
 1. How To Identify a Stable GAN
-207
-
-### 10.2. How To Train a Stable GAN
-
-208
-
 2. How To Identify a Mode Collapse
 3. How To Identify Convergence Failure
 
-10.2
 
-How To Train a Stable GAN
+## How To Train a Stable GAN
 
 In this section, we will train a stable GAN to generate images of a handwritten digit. Specifically,
 we will use the digit ‘8’ from the MNIST handwritten digit dataset. The results of this model
@@ -74,6 +66,8 @@ descent with a learning rate of 0.0002 and a momentum of 0.5 The define discrimi
 function below implements this, defining and compiling the discriminator model and returning
 it. The input shape of the image is parameterized as a default function argument to make it
 clear.
+
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
 # weight initialization
@@ -106,15 +100,13 @@ latent space and provide sufficient activations that can be reshaped into many c
 times, doubling the size and quadrupling the area of the activations each time using transpose
 convolutional layers. The model uses best practices such as the LeakyReLU activation, a kernel
 
-### 10.2. How To Train a Stable GAN
-
-209
-
 size that is a factor of the stride size, and a hyperbolic tangent (Tanh) activation function in
 the output layer.
 The define generator() function below defines the generator model, but intentionally does
 not compile it as it is not trained directly, then returns the model. The size of the latent space
 is parameterized as a function argument.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 # weight initialization
@@ -153,6 +145,8 @@ This larger GAN model takes as input a point in the latent space, uses the gener
 to generate an image, which is fed as input to the discriminator model, then output or classified
 as real or fake. The define gan() function below implements this, taking the already defined
 generator and discriminator models as input.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
 # make weights in the discriminator not trainable
@@ -162,10 +156,6 @@ model = Sequential()
 # add generator
 model.add(generator)
 # add the discriminator
-
-### 10.2. How To Train a Stable GAN
-
-210
 
 model.add(discriminator)
 # compile model
@@ -182,6 +172,8 @@ images are selected (about 5,000) that belong to class 8, e.g. are a handwritten
 number eight. Then the pixel values must be scaled to the range [-1,1] to match the output of
 the generator model. The load real samples() function below implements this, returning the
 loaded and scaled subset of the MNIST training dataset ready for modeling.
+
+```
 # load mnist images
 def load_real_samples():
 # load dataset
@@ -205,6 +197,8 @@ dataset each time. The generate real samples() function below implements this, t
 prepared dataset as an argument, selecting and returning a random sample of digit images, and
 their corresponding class label for the discriminator, specifically class = 1 indicating that they
 are real images.
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # choose random instances
@@ -222,10 +216,7 @@ space, specifically Gaussian distributed random variables. The generate latent p
 function implements this, taking the size of the latent space as an argument and the number of
 points required, and returning them as a batch of input samples for the generator model.
 
-### 10.2. How To Train a Stable GAN
-
-211
-
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
 # generate points in the latent space
@@ -242,6 +233,8 @@ the generator model and size of the latent space as arguments, then generating p
 latent space and using them as input to the generator model. The function returns the generated
 images and their corresponding class label for the discriminator model, specifically class = 0 to
 indicate they are fake or generated.
+
+```
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n_samples):
 # generate points in latent space
@@ -260,6 +253,8 @@ subjectively evaluate them. The summarize performance() function below takes the
 model at a given point during training and uses it to generate 100 images in a 10 × 10 grid that
 are then plotted and saved to file. The model is also saved to file at this time, in case we would
 like to use it later to generate more images.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, latent_dim, n_samples=100):
 # prepare fake examples
@@ -280,9 +275,6 @@ pyplot.close()
 # save the generator model
 g_model.save('results_baseline/model_%03d.h5' % (step+1))
 
-### 10.2. How To Train a Stable GAN
-
-212
 
 ```
 
@@ -291,6 +283,8 @@ model over time. The loss and classification accuracy for the discriminator for 
 samples can be tracked for each model update, as can the loss for the generator for each update.
 These can then be used to create line plots of loss and accuracy at the end of the training run.
 The plot history() function below implements this and saves the results to file.
+
+```
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist, a1_hist, a2_hist):
 # plot loss
@@ -314,7 +308,6 @@ We are now ready to fit the GAN model. The model is fit for 10 training epochs, 
 arbitrary, as the model begins generating plausible number-8 digits after perhaps the first few
 epochs. A batch size of 128 samples is used, and each training epoch involves 5851
 or about 45
-128
 batches of real and fake samples and updates to the model. The model is therefore trained for
 10 epochs of 45 batches, or 450 iterations. First, the discriminator model is updated for a half
 batch of real samples, then a half batch of fake samples, together forming one batch of weight
@@ -327,6 +320,8 @@ default arguments. The generator model is saved at the end of training. The perf
 the discriminator and generator models is reported each iteration. Sample images are generated
 and saved every epoch, and line plots of model performance are created and saved at the end of
 the run.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch=128):
 # calculate the number of batches per epoch
@@ -336,10 +331,6 @@ n_steps = bat_per_epo * n_epochs
 # calculate the number of samples in half a batch
 half_batch = int(n_batch / 2)
 # prepare lists for storing stats each iteration
-
-### 10.2. How To Train a Stable GAN
-
-213
 
 d1_hist, d2_hist, g_hist, a1_hist, a2_hist = list(), list(), list(), list(), list()
 # manually enumerate epochs
@@ -401,9 +392,6 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 Tying all of this together, the complete example is listed below.
 
 ```
-
-### 10.2. How To Train a Stable GAN
-
 # example of training a stable gan for generating a handwritten digit
 from os import makedirs
 from numpy import expand_dims
@@ -458,11 +446,6 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((7, 7, 128)))
 # upsample to 14x14
 
-214
-
-### 10.2. How To Train a Stable GAN
-
-215
 
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
@@ -571,12 +554,6 @@ def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch
 # calculate the number of batches per epoch
 bat_per_epo = int(dataset.shape[0] / n_batch)
 
-216
-
-### 10.2. How To Train a Stable GAN
-
-217
-
 # calculate the total iterations based on batch and epoch
 n_steps = bat_per_epo * n_epochs
 # calculate the number of samples in half a batch
@@ -633,10 +610,6 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU.
 
-### 10.2. How To Train a Stable GAN
-
-218
-
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 First, the loss and accuracy of the discriminator and loss for the generator model are reported
@@ -647,13 +620,15 @@ The accuracy of the discriminator on both real and generated (fake) images will 
 50%, but should typically hover around 70% to 80%. For both the discriminator and generator,
 behaviors are likely to start off erratic and move around a lot before the model converges to a
 stable equilibrium.
+
+```
 >1, d1=0.859, d2=0.664 g=0.872, a1=37, a2=59
 >2, d1=0.190, d2=1.429 g=0.555, a1=100, a2=10
 >3, d1=0.094, d2=1.467 g=0.597, a1=100, a2=4
 >4, d1=0.097, d2=1.315 g=0.686, a1=100, a2=9
 >5, d1=0.100, d2=1.241 g=0.714, a1=100, a2=9
 
-```
+
 ...
 >446, d1=0.593, d2=0.546 g=1.330, a1=76, a2=82
 >447, d1=0.551, d2=0.739 g=0.981, a1=82, a2=39
@@ -682,51 +657,36 @@ variance. The time scales (e.g. number of iterations or training epochs) for the
 absolute values will vary across problems and types of GAN models, although the plot provides
 a good baseline for what to expect when training a stable GAN model.
 
-### 10.2. How To Train a Stable GAN
 
-219
-
-![](../images/-.jpg)
+![](../images/236-58.jpg)
 
 Finally, we can review samples of generated images. We are generating images using a
-reverse grayscale color map, meaning that the normal white ![](../images/-.jpg)
-
-to a black ![](../images/-.jpg)
-
+reverse grayscale color map, meaning that the normal white figure on a background is inverted
+to a black figure on a white background. This was done to make the generated figures easier to
 review. As we might expect, samples of images generated before epoch 100 are relatively poor
 in quality.
 
-### 10.2. How To Train a Stable GAN
+![](../images/237-59.jpg)
 
-220
-
-![](../images/-.jpg)
-
-Stable GAN.
 Samples of images generated between epochs 100 and 300 are plausible, and perhaps the
 best quality.
 
-### 10.2. How To Train a Stable GAN
 
-221
-
-![](../images/-.jpg)
+![](../images/238-60.jpg)
 
 Stable GAN.
 And samples of generated images after epoch 300 remain plausible, although perhaps have
 more noise, e.g. background noise.
 
-### 10.2. How To Train a Stable GAN
 
-222
+![](../images/239-61.jpg)
 
-![](../images/-.jpg)
 
-Stable GAN.
 These results are important, as it highlights that the quality generated can and does vary
 across the run, even after the training process becomes stable. More training iterations, beyond
 some point of training stability may or may not result in higher quality images. We can
 summarize these observations for stable GAN training as follows:
+
 - Discriminator loss on real and fake images is expected to sit around 0.5.
 - Generator loss on fake images is expected to sit between 0.5 and perhaps 2.0.
 - Discriminator accuracy on real and fake images is expected to sit around 80%.
@@ -739,13 +699,8 @@ Now that we have a stable GAN model, we can look into modifying it to produce so
 specific failure cases. There are two failure cases that are common to see when training GAN
 models on new problems; they are mode collapse and convergence failure.
 
-### 10.3. How To Identify a Mode Collapse
 
-10.3
-
-223
-
-How To Identify a Mode Collapse
+## How To Identify a Mode Collapse
 
 A mode collapse refers to a generator model that is only capable of generating one or a small
 subset of different outcomes, or modes. Here, mode refers to an output distribution, e.g. a
@@ -753,9 +708,12 @@ multi-modal function refers to a function with more than one peak or optima. Wit
 generator model, a mode failure means that the vast number of points in the input latent space
 (e.g. hypersphere of 100 dimensions in many cases) result in one or a small subset of generated
 images.
+
 Mode collapse, also known as the scenario, is a problem that occurs when the
 generator learns to map several different input z values to the same output point.
+
 — NIPS 2016 Tutorial: Generative Adversarial Networks, 2016.
+
 A mode collapse can be identified when reviewing a large sample of generated images. The
 images will show low diversity, with the same identical image or same small subset of identical
 images repeating many times. A mode collapse can also be identified by reviewing the line plot
@@ -797,10 +755,6 @@ from keras.layers import LeakyReLU
 from keras.layers import BatchNormalization
 from keras.initializers import RandomNormal
 from matplotlib import pyplot
-
-### 10.3. How To Identify a Mode Collapse
-
-224
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
@@ -857,7 +811,6 @@ model = Sequential()
 # add generator
 model.add(generator)
 
-### 10.3. How To Identify a Mode Collapse
 # add the discriminator
 model.add(discriminator)
 # compile model
@@ -910,9 +863,7 @@ X, _ = generate_fake_samples(g_model, latent_dim, n_samples)
 # scale from [-1,1] to [0,1]
 X = (X + 1) / 2.0
 
-225
 
-### 10.3. How To Identify a Mode Collapse
 # plot images
 for i in range(10 * 10):
 # define subplot
@@ -968,11 +919,6 @@ X_gan = generate_latent_points(latent_dim, n_batch)
 y_gan = ones((n_batch, 1))
 # update the generator via the discriminator's error
 
-226
-
-### 10.3. How To Identify a Mode Collapse
-
-227
 
 g_loss = gan_model.train_on_batch(X_gan, y_gan)
 # summarize loss on this batch
@@ -1011,13 +957,14 @@ In this case, the loss for the discriminator sits in a sensible range, although 
 generator jumps up and down. The accuracy for the discriminator also shows higher values,
 many around 100%, meaning that for many batches, it has perfect skill at identifying real or
 fake examples, a bad sign for image quality or diversity.
+
+```
 >1, d1=0.963, d2=0.699 g=0.614, a1=28, a2=54
 >2, d1=0.185, d2=5.084 g=0.097, a1=96, a2=0
 >3, d1=0.088, d2=4.861 g=0.065, a1=100, a2=0
 >4, d1=0.077, d2=4.202 g=0.090, a1=100, a2=0
 >5, d1=0.062, d2=3.533 g=0.128, a1=100, a2=0
 
-```
 ...
 >446, d1=0.277, d2=0.261 g=0.684, a1=95, a2=100
 >447, d1=0.201, d2=0.247 g=0.713, a1=96, a2=100
@@ -1027,14 +974,9 @@ fake examples, a bad sign for image quality or diversity.
 
 ```
 
-The ![](../images/-.jpg)
-
+The figure with learning curve and accuracy line plots is created and saved. In the 
 subplot, we can see the loss for the generator (green) oscillating from sensible to high values
 over time, with a period of about 25 model updates (batches). We can also see some small
-
-### 10.3. How To Identify a Mode Collapse
-
-228
 
 oscillations in the loss for the discriminator on real and fake samples (orange and blue). In the
 bottom subplot, we can see that the discriminator’s classification accuracy for identifying fake
@@ -1042,9 +984,9 @@ images remains high throughout the run. This suggests that the generator is poor
 examples in some consistent way that makes it easy for the discriminator to identify the fake
 images.
 
-![](../images/-.jpg)
+![](../images/245-62.jpg)
 
-Collapse.
+
 Reviewing generated images shows the expected feature of mode collapse, namely many
 nearly identical generated examples, regardless of the input point in the latent space. It just so
 happens that we have changed the dimensionality of the latent space to be dramatically small
@@ -1053,23 +995,18 @@ There appear to be only a few types of figure-eights in the image, one leaning l
 right, and one sitting up with a blur. I have drawn boxes around some of the similar examples
 in the image below to make this clearer.
 
-### 10.4. How To Identify Convergence Failure
+![](../images/246-63.jpg)
 
-229
 
-![](../images/-.jpg)
-
-GAN That Has Suffered Mode Collapse.
 A mode collapse is less common during training given the findings from the DCGAN model
 architecture and training configuration. In summary, you can identify a mode collapse as follows:
+
 - The loss for the generator, and probably the discriminator, is expected to oscillate over
 time.
 - The generator model is expected to generate identical output images from different points
 in the latent space.
 
-10.4
-
-How To Identify Convergence Failure
+## How To Identify Convergence Failure
 
 Perhaps the most common failure when training a GAN is a failure to converge. Typically, a
 neural network fails to converge when the model loss does not settle down during the training
@@ -1079,10 +1016,6 @@ that the loss for the discriminator has gone to zero or close to zero. In some c
 the generator may also rise and continue to rise over the same period.
 This type of loss is most commonly caused by the generator outputting garbage images that
 the discriminator can easily identify. This type of failure might happen at the beginning of the
-
-### 10.4. How To Identify Convergence Failure
-
-230
 
 run and continue throughout training, at which point you should halt the training process. For
 some unstable GANs, it is possible for the GAN to fall into this failure mode for a number of
@@ -1140,10 +1073,6 @@ model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
 
-### 10.4. How To Identify Convergence Failure
-
-231
-
 model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 return model
 # define the standalone generator model
@@ -1198,7 +1127,6 @@ X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 
-### 10.4. How To Identify Convergence Failure
 return X
 # # select real samples
 def generate_real_samples(dataset, n_samples):
@@ -1251,9 +1179,7 @@ pyplot.subplot(2, 1, 1)
 pyplot.plot(d_hist, label='dis')
 pyplot.plot(g_hist, label='gen')
 
-232
 
-### 10.4. How To Identify Convergence Failure
 pyplot.legend()
 # plot discriminator accuracy
 pyplot.subplot(2, 1, 2)
@@ -1309,11 +1235,6 @@ generator = define_generator(latent_dim)
 # create the gan
 gan_model = define_gan(generator, discriminator)
 
-233
-
-### 10.4. How To Identify Convergence Failure
-
-234
 
 # load image data
 dataset = load_real_samples()
@@ -1326,6 +1247,8 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 Running the example reports loss and accuracy for each model update. A clear sign of this
 type of failure is the rapid drop of the discriminator loss towards zero, where it remains. This is
 what we see in this case.
+
+```
 >1, d=0.514, g=0.969, a=80
 >2, d=0.475, g=0.395, a=74
 >3, d=0.452, g=0.223, a=69
@@ -1337,7 +1260,7 @@ what we see in this case.
 >9, d=0.071, g=0.167, a=100
 >10, d=0.102, g=0.127, a=100
 
-```
+
 ...
 >446, d=0.000, g=0.001, a=100
 >447, d=0.000, g=0.001, a=100
@@ -1355,25 +1278,17 @@ same period, meaning the model is perfect at identifying real and fake images. T
 is that there is something about fake images that makes them very easy for the discriminator to
 identify.
 
-### 10.4. How To Identify Convergence Failure
 
-235
+![](../images/252-64.jpg)
 
-![](../images/-.jpg)
-
-Convergence Failure.
 Finally, reviewing samples of generated images makes it clear why the discriminator is so
 successful. Samples of images generated at each epoch are all very low quality, showing static,
-perhaps with a faint ![](../images/-.jpg)
+perhaps with a faint figure eight in the background.
 
 
-### 10.4. How To Identify Convergence Failure
 
-236
+![](../images/253-65.jpg)
 
-![](../images/-.jpg)
-
-GAN That Has a Convergence Failure via Combined Updates to the Discriminator.
 It is useful to see another example of this type of failure. In this case, the configuration of
 the Adam optimization algorithm can be modified to use the defaults, which in turn makes the
 updates to the models aggressive and causes a failure for the training process to find a point of
@@ -1387,7 +1302,6 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 ```
 
-the discriminator.
 And the composite GAN model can be compiled as follows:
 
 ```
@@ -1397,13 +1311,9 @@ model.compile(loss='binary_crossentropy', optimizer='adam')
 
 ```
 
-the composite model.
 The full code listing is provided below for completeness.
 
 ```
-
-
-### 10.4. How To Identify Convergence Failure
 
 # example of training an unstable gan for generating a handwritten digit
 from os import makedirs
@@ -1459,11 +1369,6 @@ model.add(Reshape((7, 7, 128)))
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
 
-237
-
-### 10.4. How To Identify Convergence Failure
-
-238
 
 model.add(BatchNormalization())
 model.add(LeakyReLU(alpha=0.2))
@@ -1518,7 +1423,6 @@ x_input = randn(latent_dim * n_samples)
 # reshape into a batch of inputs for the network
 x_input = x_input.reshape(n_samples, latent_dim)
 
-### 10.4. How To Identify Convergence Failure
 return x_input
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n_samples):
@@ -1571,12 +1475,6 @@ bat_per_epo = int(dataset.shape[0] / n_batch)
 # calculate the total iterations based on batch and epoch
 n_steps = bat_per_epo * n_epochs
 # calculate the number of samples in half a batch
-
-239
-
-### 10.4. How To Identify Convergence Failure
-
-240
 
 half_batch = int(n_batch / 2)
 # prepare lists for storing stats each iteration
@@ -1633,17 +1531,13 @@ As we expected, the loss for the discriminator rapidly falls to a value close to
 remains, and classification accuracy for the discriminator on real and fake examples remains at
 100%.
 
-### 10.4. How To Identify Convergence Failure
-
-241
-
+```
 >1, d1=0.728, d2=0.902 g=0.763, a1=54, a2=12
 >2, d1=0.001, d2=4.509 g=0.033, a1=100, a2=0
 >3, d1=0.000, d2=0.486 g=0.542, a1=100, a2=76
 >4, d1=0.000, d2=0.446 g=0.733, a1=100, a2=82
 >5, d1=0.002, d2=0.855 g=0.649, a1=100, a2=46
 
-```
 ...
 >446, d1=0.000, d2=0.000 g=10.410, a1=100, a2=100
 >447, d1=0.000, d2=0.000 g=10.414, a1=100, a2=100
@@ -1653,20 +1547,15 @@ remains, and classification accuracy for the discriminator on real and fake exam
 
 ```
 
-failure.
 A plot of the learning curves and accuracy from training the model with this single change
 is created. The plot shows that this change causes the loss for the discriminator to crash down
 to a value close to zero and remain there. An important difference for this case is that the loss
 for the generator rises quickly and continues to rise for the duration of training.
 
-![](../images/-.jpg)
+![](../images/258-66.jpg)
 
-GAN That Has a Convergence Failure via Aggressive Optimization.
 We can review the properties of a convergence failure as follows:
 
-### 10.5. Further Reading
-
-242
 
 - The loss for the discriminator is expected to rapidly decrease to a value close to zero where
 it remains during training.
@@ -1675,15 +1564,12 @@ during training.
 - The generator is expected to produce extremely low-quality images that are easily identified
 as fake by the discriminator.
 
-10.5
 
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-10.5.1
-
-Papers
+## Papers
 
 - Generative Adversarial Networks, 2014.
 https://arxiv.org/abs/1406.2661
@@ -1693,44 +1579,40 @@ https://arxiv.org/abs/1701.00160
 Networks, 2015.
 https://arxiv.org/abs/1511.06434
 
-10.5.2
 
-Articles
+## Articles
 
 - How to Train a GAN? Tips and tricks to make GANs work.
 https://github.com/soumith/ganhacks
 
-10.6
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to identify stable and unstable GAN training by reviewing
 examples of generated images and plots of metrics recorded during training. Specifically, you
 learned:
+
 - How to identify a stable GAN training process from the generator and discriminator loss
 over time.
 - How to identify a mode collapse by reviewing both learning curves and generated images.
 - How to identify a convergence failure by reviewing learning curves of generator and
 discriminator loss over time.
 
-10.6.1
 
-Next
+## Next
 
 This was the final tutorial in this part. In the next part, you will explore techniques for
 evaluating GAN models.
 
-### Part III
-GAN Evaluation
+## Part III
+## GAN Evaluation
 
-243
 
-### Overview
+## Overview
 In this part you will discover how to evaluate generative adversarial networks based on the
 images that they generate. After reading the chapters in this part, you will know:
+
 - How to use qualitative and quantitative methods to evaluate GAN models (Chapter 11).
 - How to implement and interpret the inception score for evaluating GAN models (Chapter 12).
 - How to implement and interpret the Frechet Inception Distance score for evaluating GAN
 models (Chapter 13).
-
-244

@@ -15,9 +15,8 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
-### Chapter 17
-How to Develop a Conditional GAN
-(cGAN)
+## How to Develop a Conditional GAN (cGAN)
+
 Generative Adversarial Networks, or GANs, are an architecture for training generative models,
 such as deep convolutional neural networks for generating images. Although GAN models are
 capable of generating new random plausible examples for a given dataset, there is no way to
@@ -28,6 +27,7 @@ the conditional generation of images by a generator model. Image generation can 
 on a class label, if available, allowing the targeted generated of images of a given type. In this
 tutorial, you will discover how to develop a conditional generative adversarial network for the
 targeted generation of items of clothing. After completing this tutorial, you will know:
+
 - The limitations of generating random samples with a GAN that can be overcome with a
 conditional generative adversarial network.
 - How to develop and evaluate an unconditional generative adversarial network for generating
@@ -37,11 +37,10 @@ photos of items of clothing.
 
 Let’s get started.
 
-17.1
-
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into five parts; they are:
+
 1. Conditional Generative Adversarial Networks
 2. Fashion-MNIST Clothing Photograph Dataset
 3. Unconditional GAN for Fashion-MNIST
@@ -49,13 +48,8 @@ This tutorial is divided into five parts; they are:
 5. Conditional Clothing Generation
 333
 
-### 17.2. Conditional Generative Adversarial Networks
 
-17.2
-
-334
-
-Conditional Generative Adversarial Networks
+## Conditional Generative Adversarial Networks
 
 A generative adversarial network, or GAN for short, is an architecture for training deep learningbased generative models. The architecture is comprised of a generator and a discriminator
 model. The generator model is responsible for generating new plausible examples that ideally
@@ -70,8 +64,10 @@ has class labels of the corresponding integers, the CIFAR-10 small object photog
 class labels for the corresponding objects in the photographs, and the Fashion-MNIST clothing
 dataset has class labels for the corresponding items of clothing. There are two motivations for
 making use of the class label information in a GAN model.
+
 1. Improve the GAN.
 2. Targeted Image Generation.
+
 Additional information that is correlated with the input images, such as class labels, can be
 used to improve the GAN. This improvement may come in the form of more stable training,
 faster training, and/or generated images that have better quality. Class labels can also be used
@@ -82,11 +78,14 @@ Alternately, a GAN can be trained in such a way that both the generator and the 
 models are conditioned on the class label. This means that when the trained generator model is
 used as a standalone model to generate images in the domain, images of a given type, or class
 label, can be generated.
+
 Generative adversarial nets can be extended to a conditional model if both the
 generator and discriminator are conditioned on some extra information y. [...] We
 can perform the conditioning by feeding y into the both the discriminator and
 generator as additional input layer.
+
 — Conditional Generative Adversarial Nets, 2014.
+
 For example, in the case of MNIST, specific handwritten digits can be generated, such as the
 number 9; in the case of CIFAR-10, specific object photographs can be generated such as frogs;
 and in the case of the Fashion-MNIST dataset, specific items of clothing can be generated, such
@@ -94,21 +93,18 @@ as dress. This type of model is called a Conditional Generative Adversarial Netw
 cGAN for short. The cGAN was first described by Mehdi Mirza and Simon Osindero in their
 2014 paper titled Conditional Generative Adversarial Nets. In the paper, the authors motivate
 the approach based on the desire to direct the image generation process of the generator model.
+
 ... by conditioning the model on additional information it is possible to direct the
 data generation process. Such conditioning could be based on class labels
 
-### 17.2. Conditional Generative Adversarial Networks
-
-335
-
 — Conditional Generative Adversarial Nets, 2014.
+
 Their approach is demonstrated in the MNIST handwritten digit dataset where the class labels
 are one hot encoded and concatenated with the input to both the generator and discriminator
 models. The image below provides a summary of the model architecture.
 
-![](../images/-.jpg)
+![](../images/352-64.jpg)
 
-2014.
 There have been many advancements in the design and training of GAN models, most notably
 the deep convolutional GAN, or DCGAN for short, that outlines the model configuration and
 training procedures that reliably result in the stable training of GAN models for a wide variety
@@ -119,32 +115,31 @@ layer followed by a fully connected layer with a linear activation that scales t
 the size of the image before concatenating it in the model as an additional channel or feature
 map. A version of this recommendation was described in the 2015 paper titled Deep Generative
 Image Models using a Laplacian Pyramid of Adversarial Networks.
+
 ... we also explore a class conditional version of the model, where a vector c encodes
 the label. This is integrated into Gk & Dk by passing it through a linear layer whose
 output is reshaped into a single plane feature map which is then concatenated with
 the 1st layer maps.
 
-### 17.3. Fashion-MNIST Clothing Photograph Dataset
-
-336
-
 — Deep Generative Image Models using a Laplacian Pyramid of Adversarial Networks, 2015.
+
 This recommendation was later added to the GAN Hacks list of heuristic recommendations
 when designing and training GAN models, summarized as:
+
 16: Discrete variables in Conditional GANs
+
 - Use an embedding layer
 - Add as additional channels to images
 - Keep embedding dimensionality low and upsample to match image channel size
 
 — GAN Hacks, 2016.
+
 Although GANs can be conditioned on the class label, so-called class-conditional GANs, they
 can also be conditioned on other inputs, such as an image, in the case where a GAN is used for
 image-to-image translation tasks. In this tutorial, we will develop a GAN, specifically a DCGAN,
 then update it to use class labels in a cGAN, specifically a cDCGAN model architecture.
 
-17.3
-
-Fashion-MNIST Clothing Photograph Dataset
+## Fashion-MNIST Clothing Photograph Dataset
 
 The Fashion-MNIST dataset is proposed as a more challenging replacement dataset for the
 MNIST dataset. It is a dataset comprised of 60,000 small square 28 × 28 pixel grayscale images
@@ -156,6 +151,8 @@ loads the dataset and summarizes the shape of the loaded dataset.
 Note: the first time you load the dataset, Keras will automatically download a compressed
 version of the images and save them under your home directory in ∼/.keras/datasets/. The
 download is fast as the dataset is only about 25 megabytes in its compressed form.
+
+```
 # example of loading the fashion_mnist dataset
 from keras.datasets.fashion_mnist import load_data
 # load the images into memory
@@ -169,21 +166,21 @@ print('Test', testX.shape, testy.shape)
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 60K examples in
 the training set and 10K in the test set and that each image is a square of 28 by 28 pixels.
+
+```
 Train (60000, 28, 28) (60000,)
 Test (10000, 28, 28) (10000,)
 
 ```
 
 
-### 17.3. Fashion-MNIST Clothing Photograph Dataset
-
-337
-
 The images are grayscale with a black background (0 pixel value) and the items of clothing
 are in white (pixel values near 255). This means if the images were plotted, they would be
 mostly black with a white item of clothing in the middle. We can plot some of the images from
 the training dataset using the Matplotlib library with the imshow() function and specify the
 color map via the cmap argument as ‘gray’ to show the pixel values correctly.
+
+```
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap='gray')
@@ -194,6 +191,8 @@ Alternately, the images are easier to review when we reverse the colors and plot
 background as white and the clothing in black. They are easier to view as most of the image is
 now white with the area of interest in black. This can be achieved using a reverse grayscale
 color map, as follows:
+
+```
 ...
 # plot raw pixel data
 pyplot.imshow(trainX[i], cmap='gray_r')
@@ -201,6 +200,8 @@ pyplot.imshow(trainX[i], cmap='gray_r')
 ```
 
 The example below plots the first 100 images from the training dataset in a 10 by 10 square.
+
+```
 # example of loading the fashion_mnist dataset
 from keras.datasets.fashion_mnist import load_data
 from matplotlib import pyplot
@@ -221,11 +222,9 @@ pyplot.show()
 Running the example creates a figure with a plot of 100 images from the MNIST training
 dataset, arranged in a 10 × 10 square.
 
-### 17.4. Unconditional GAN for Fashion-MNIST
 
-338
 
-![](../images/-.jpg)
+![](../images/355-81.jpg)
 
 We will use the images in the training dataset as the basis for training a Generative
 Adversarial Network. Specifically, the generator model will learn how to generate new plausible
@@ -234,9 +233,7 @@ the Fashion-MNIST training dataset and new images output by the generator model.
 a relatively simple problem that does not require a sophisticated generator or discriminator
 model, although it does require the generation of a grayscale output image.
 
-17.4
-
-Unconditional GAN for Fashion-MNIST
+## Unconditional GAN for Fashion-MNIST
 
 In this section, we will develop an unconditional GAN for the Fashion-MNIST dataset. The
 first step is to define the models. The discriminator model takes as input one 28 × 28 grayscale
@@ -249,10 +246,7 @@ this, defining and compiling the discriminator model and returning it. The input
 image is parameterized as a default function argument in case you want to re-use the function
 for your own image data later.
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
-339
-
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
 model = Sequential()
@@ -284,6 +278,8 @@ the output layer.
 The define generator() function below defines the generator model, but intentionally does
 not compile it as it is not trained directly, then returns the model. The size of the latent space
 is parameterized as a function argument.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 model = Sequential()
@@ -307,10 +303,6 @@ return model
 Next, a GAN model can be defined that combines both the generator model and the
 discriminator model into one larger model. This larger model will be used to train the model
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
-340
-
 weights in the generator, using the output and error calculated by the discriminator model. The
 discriminator model is trained separately, and as such, the model weights are marked as not
 trainable in this larger GAN model to ensure that only the weights of the generator model are
@@ -320,6 +312,8 @@ This larger GAN model takes as input a point in the latent space, uses the gener
 to generate an image which is fed as input to the discriminator model, then is output or classified
 as real or fake. The define gan() function below implements this, taking the already-defined
 generator and discriminator models as input.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
 # make weights in the discriminator not trainable
@@ -345,6 +339,8 @@ expected by the convolutional layers of our models. Finally, the pixel values mu
 the range [-1,1] to match the output of the generator model. The load real samples() function
 below implements this, returning the loaded and scaled Fashion-MNIST training dataset ready
 for modeling.
+
+```
 # load fashion mnist images
 def load_real_samples():
 # load dataset
@@ -364,12 +360,10 @@ the GAN model. A simple way to achieve this is to select a random sample of imag
 dataset each time. The generate real samples() function below implements this, taking the
 prepared dataset as an argument, selecting and returning a random sample of Fashion-MNIST
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
-341
-
 images and their corresponding class label for the discriminator, specifically class = 1, indicating
 that they are real images.
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # choose random instances
@@ -386,6 +380,8 @@ Next, we need inputs for the generator model. These are random points from the l
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
 points required and returning them as a batch of input samples for the generator model.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
 # generate points in the latent space
@@ -402,6 +398,8 @@ the generator model and size of the latent space as arguments, then generating p
 latent space and using them as input to the generator model. The function returns the generated
 images and their corresponding class label for the discriminator model, specifically class = 0 to
 indicate they are fake or generated.
+
+```
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n_samples):
 # generate points in latent space
@@ -423,15 +421,13 @@ of real and fake samples and updates to the model. First, the discriminator mode
 for a half batch of real samples, then a half batch of fake samples, together forming one batch of
 weight updates. The generator is then updated via the composite GAN model. Importantly, the
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
-342
-
 class label is set to 1 or real for the fake samples. This has the effect of updating the generator
 toward getting better at generating real samples on the next batch. The train() function
 below implements this, taking the defined models, dataset, and size of the latent dimension as
 arguments and parameterizing the number of epochs and batch size with default arguments.
 The generator model is saved at the end of training.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=128):
 bat_per_epo = int(dataset.shape[0] / n_batch)
@@ -464,6 +460,8 @@ g_model.save('generator.h5')
 
 We can then define the size of the latent space, define all three models, and train them on
 the loaded Fashion-MNIST dataset.
+
+```
 ...
 # size of the latent space
 latent_dim = 100
@@ -482,8 +480,7 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 Tying all of this together, the complete example is listed below.
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
+```
 # example of training an unconditional gan on the fashion mnist dataset
 from numpy import expand_dims
 from numpy import zeros
@@ -537,9 +534,7 @@ return model
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
 
-343
 
-### 17.4. Unconditional GAN for Fashion-MNIST
 # make weights in the discriminator not trainable
 discriminator.trainable = False
 # connect them
@@ -592,11 +587,7 @@ return X, y
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=128):
 bat_per_epo = int(dataset.shape[0] / n_batch)
 
-344
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
-345
 
 half_batch = int(n_batch / 2)
 # manually enumerate epochs
@@ -640,15 +631,17 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,
 is reported after each batch.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 In this case, the discriminator and generator loss both sit around values of about 0.6 to 0.7
 over the course of training.
 
-### 17.4. Unconditional GAN for Fashion-MNIST
-
+```
 ...
 >100,
 >100,
@@ -674,7 +667,7 @@ d2=0.703
 d2=0.699
 d2=0.695
 
-346
+
 
 g=0.693
 g=0.703
@@ -684,11 +677,12 @@ g=0.708
 
 ```
 
-dataset.
 At the end of training, the generator model will be saved to file with the filename generator.h5.
 This model can be loaded and used to generate new random but plausible samples from the
 Fashion-MNIST dataset. The example below loads the saved model and generates 100 random
 items of clothing.
+
+```
 # example of loading the generator model and generating images
 from keras.models import load_model
 from numpy.random import randn
@@ -722,27 +716,23 @@ show_plot(X, 10)
 
 ```
 
-generate images.
+
 Running the example creates a plot of 100 randomly generated items of clothing arranged
 into a 10 × 10 grid.
 
-### 17.5. Conditional GAN for Fashion-MNIST
-
-347
 
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 In this case, we can see an assortment of clothing items such as shoes, sweaters, and pants.
 Most items look quite plausible and could have come from the Fashion-MNIST dataset. They
 are not perfect, however, as there are some sweaters with a single sleeve and shoes that look
 like a mess.
 
-![](../images/-.jpg)
+![](../images/364-82.jpg)
 
 
-17.5
-
-Conditional GAN for Fashion-MNIST
+## Conditional GAN for Fashion-MNIST
 
 In this section, we will develop a conditional GAN for the Fashion-MNIST dataset by updating
 the unconditional GAN developed in the previous section. The best way to design models in
@@ -754,10 +744,6 @@ the input image conditional on the provided class label.
 The class label is then passed through an Embedding layer with the size of 50. This means
 that each of the 10 classes for the Fashion-MNIST dataset (0 through 9) will map to a different
 
-### 17.5. Conditional GAN for Fashion-MNIST
-
-348
-
 50-element vector representation that will be learned by the discriminator model. The output
 of the embedding is then passed to a fully connected layer with a linear activation. Importantly,
 the fully connected layer has enough activations that can be reshaped into one channel of a
@@ -767,6 +753,8 @@ next convolutional layer. The define discriminator() below implements this updat
 the discriminator model. The parameterized shape of the input image is also used after the
 embedding layer to define the number of activations for the fully connected layer to reshape its
 output. The number of classes in the problem is also parameterized in the function and set.
+
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # label input
@@ -808,16 +796,9 @@ shows the two inputs: first the class label that passes through the embedding (l
 image (right), and their concatenation into a two-channel 28 × 28 image or feature map (middle).
 The rest of the model is the same as the discriminator designed in the previous section.
 
-### 17.5. Conditional GAN for Fashion-MNIST
 
-349
+![](../images/366-83.jpg)
 
-![](../images/-.jpg)
-
-
-### 17.5. Conditional GAN for Fashion-MNIST
-
-350
 
 Next, the generator model must be updated to take the class label. This has the effect
 of making the point in the latent space conditional on the provided class label. As in the
@@ -829,6 +810,8 @@ unconditional generator model. The new 7 × 7 feature map is added as one more c
 the existing 128, resulting in 129 feature maps that are then upsampled as in the prior model.
 The define generator() function below implements this, again parameterizing the number of
 classes as we did with the discriminator model.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim, n_classes=10):
 # label input
@@ -869,11 +852,7 @@ input and subsequent resizing (left) and the new class label input and embedding
 then the concatenation of the two sets of feature maps (center). The remainder of the model is
 the same as the unconditional case.
 
-### 17.5. Conditional GAN for Fashion-MNIST
-
-351
-
-![](../images/-.jpg)
+![](../images/368-84.jpg)
 
 Finally, the composite GAN model requires updating. The new GAN model will take a point
 in latent space as input and a class label and generate a prediction of whether input was real or
@@ -881,12 +860,9 @@ fake, as before. Using the functional API to design the model, it is important t
 connect the image generated output from the generator as well as the class label input, both as
 input to the discriminator model. This allows the same class label input to flow down into the
 generator and down into the discriminator. The define gan() function below implements the
-
-### 17.5. Conditional GAN for Fashion-MNIST
-
-352
-
 conditional version of the GAN.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model):
 # make weights in the discriminator not trainable
@@ -906,24 +882,16 @@ return model
 
 ```
 
-the generator.
 The plot below summarizes the composite GAN model. Importantly, it shows the generator
 model in full with the point in latent space and class label as input, and the connection of the
 output of the generator and the same class label as input to the discriminator model (last box
 at the bottom of the plot) and the output of a single class label classification of real or fake.
 
-### 17.5. Conditional GAN for Fashion-MNIST
+![](../images/370-85.jpg)
 
-353
 
-![](../images/-.jpg)
-
-Generative Adversarial Network.
 The hard part of the conversion from unconditional to conditional GAN is done, namely
 
-### 17.5. Conditional GAN for Fashion-MNIST
-
-354
 
 the definition and configuration of the model architecture. Next, all that remains is to
 update the training process to also use class labels. First, the load real samples() and
@@ -931,6 +899,8 @@ generate real samples() functions for loading the dataset and selecting a batch 
 respectively must be updated to make use of the real class labels from the training dataset.
 Importantly, the generate real samples() function now returns images, clothing labels, and
 the class label for the discriminator (class = 1).
+
+```
 # load fashion mnist images
 def load_real_samples():
 # load dataset
@@ -956,11 +926,12 @@ return [X, labels], y
 
 ```
 
-with target classes.
 Next, the generate latent points() function must be updated to also generate an array of
 randomly selected integer class labels to go along with the randomly selected points in the latent
 space. Then the generate fake samples() function must be updated to use these randomly
 generated class labels as input to the generator model when generating new fake images.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples, n_classes=10):
 # generate points in the latent space
@@ -977,19 +948,16 @@ z_input, labels_input = generate_latent_points(latent_dim, n_samples)
 # predict outputs
 images = generator.predict([z_input, labels_input])
 
-### 17.5. Conditional GAN for Fashion-MNIST
-
-355
-
 # create class labels
 y = zeros((n_samples, 1))
 return [images, labels_input], y
 
 ```
 
-using class labels.
 Finally, the train() function must be updated to retrieve and use the class labels in the
 calls to updating the discriminator and generator models.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=128):
 bat_per_epo = int(dataset[0].shape[0] / n_batch)
@@ -1022,6 +990,8 @@ g_model.save('cgan_generator.h5')
 
 Tying all of this together, the complete example of a conditional deep convolutional generative
 adversarial network for the Fashion-MNIST dataset is listed below.
+
+```
 # example of training an conditional gan on the fashion mnist dataset
 from numpy import expand_dims
 from numpy import zeros
@@ -1037,7 +1007,6 @@ from keras.layers import Reshape
 from keras.layers import Flatten
 from keras.layers import Conv2D
 
-### 17.5. Conditional GAN for Fashion-MNIST
 from
 from
 from
@@ -1112,9 +1081,6 @@ in_lat = Input(shape=(latent_dim,))
 n_nodes = 128 * 7 * 7
 gen = Dense(n_nodes)(in_lat)
 
-356
-
-### 17.5. Conditional GAN for Fashion-MNIST
 gen = LeakyReLU(alpha=0.2)(gen)
 gen = Reshape((7, 7, 128))(gen)
 # merge image gen and label input
@@ -1169,9 +1135,6 @@ X, labels = images[ix], labels[ix]
 y = ones((n_samples, 1))
 return [X, labels], y
 
-357
-
-### 17.5. Conditional GAN for Fashion-MNIST
 
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples, n_classes=10):
@@ -1226,12 +1189,6 @@ d_model = define_discriminator()
 g_model = define_generator(latent_dim)
 # create the gan
 
-358
-
-### 17.6. Conditional Clothing Generation
-
-359
-
 gan_model = define_gan(g_model, d_model)
 # load image data
 dataset = load_real_samples()
@@ -1245,14 +1202,15 @@ running the example on GPU hardware if possible. If you need help, you can get s
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 At the end of the run, the model is saved to the file with name cgan generator.h5.
 
-17.6
 
-Conditional Clothing Generation
+## Conditional Clothing Generation
 
 In this section, we will use the trained generator model to conditionally generate new photos of
 items of clothing. We can update our code example for generating new images with the model
 to now generate images conditional on the class label. We can generate 10 examples for each
 class label in columns. The complete example is listed below.
+
+```
 # example of loading the generator model and generating images
 from numpy import asarray
 from numpy.random import randn
@@ -1283,10 +1241,6 @@ pyplot.show()
 model = load_model('cgan_generator.h5')
 # generate images
 
-### 17.7. Extensions
-
-360
-
 latent_points, labels = generate_latent_points(100, 100)
 # specify labels
 labels = asarray([x for _ in range(10) for x in range(10)])
@@ -1299,24 +1253,17 @@ save_plot(X, 10)
 
 ```
 
-images.
 Running the example loads the saved conditional GAN model and uses it to generate 100
 items of clothing. The clothing is organized in columns. From left to right, they are t-shirt,
 trouser, pullover, dress, coat, sandal, shirt, sneaker, bag, and ankle boot. We can see not only are
 the randomly generated items of clothing plausible, but they also match their expected category.
 
-![](../images/-.jpg)
+![](../images/377-86.jpg)
 
 
-17.7
-
-Extensions
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
-
-### 17.8. Further Reading
-
-361
 
 - Latent Space Size. Experiment by varying the size of the latent space and review the
 impact on the quality of generated images.
@@ -1328,15 +1275,11 @@ dimensionality, and review the impact on the quality of generated images.
 
 If you explore any of these extensions, I’d love to know.
 
-17.8
-
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-17.8.1
-
-Papers
+## Papers
 
 - Generative Adversarial Networks, 2014.
 https://arxiv.org/abs/1406.2661
@@ -1352,9 +1295,8 @@ https://arxiv.org/abs/1611.07004
 - Conditional Generative Adversarial Nets For Convolutional Face Generation, 2015.
 https://www.foldl.me/uploads/2015/conditional-gans-face-generation/paper.pdf
 
-17.8.2
 
-API
+## API
 
 - Keras Datasets API..
 https://keras.io/datasets/
@@ -1372,7 +1314,7 @@ https://docs.scipy.org/doc/numpy/reference/routines.random.html
 https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html
 
 
-Articles
+## Articles
 
 - How to Train a GAN? Tips and tricks to make GANs work.
 https://github.com/soumith/ganhacks
@@ -1380,10 +1322,11 @@ https://github.com/soumith/ganhacks
 https://github.com/zalandoresearch/fashion-mnist
 
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to develop a conditional generative adversarial network for
 the targeted generation of items of clothing. Specifically, you learned:
+
 - The limitations of generating random samples with a GAN that can be overcome with a
 conditional generative adversarial network.
 - How to develop and evaluate an unconditional generative adversarial network for generating
@@ -1392,7 +1335,7 @@ photos of items of clothing.
 photos of items of clothing.
 
 
-Next
+## Next
 
 In the next tutorial, you will discover the information maximizing GAN model that adds controls
 over image generation.

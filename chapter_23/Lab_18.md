@@ -16,8 +16,8 @@ You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
 
-### Chapter 23
-How to Develop a Pix2Pix End-to-End
+## How to Develop a Pix2Pix End-to-End
+
 The Pix2Pix Generative Adversarial Network, or GAN, is an approach to training a deep
 convolutional neural network for image-to-image translation tasks. The careful configuration of
 architecture as a type of image-conditional GAN allows for both the generation of large images
@@ -25,6 +25,7 @@ compared to prior GAN models (e.g. such as 256 × 256 pixels) and the capability
 well on a variety of different image-to-image translation tasks. In this tutorial, you will discover
 how to develop a Pix2Pix generative adversarial network for image-to-image translation.
 After completing this tutorial, you will know:
+
 - How to load and prepare the satellite image to Google maps image-to-image translation
 dataset.
 - How to develop a Pix2Pix model for translating satellite photographs to Google Maps
@@ -33,9 +34,9 @@ images.
 
 Let’s get started.
 
-23.1
 
-Tutorial Overview
+
+## Tutorial Overview
 
 This tutorial is divided into five parts; they are:
 1. What Is the Pix2Pix GAN?
@@ -44,15 +45,9 @@ This tutorial is divided into five parts; they are:
 4. How to Translate Images With a Pix2Pix Model
 5. How to Translate Google Maps to Satellite Images
 
-484
 
-### 23.2. What Is the Pix2Pix GAN?
 
-23.2
-
-485
-
-What Is the Pix2Pix GAN?
+## What Is the Pix2Pix GAN?
 
 Pix2Pix is a Generative Adversarial Network, or GAN, model designed for general purpose
 image-to-image translation. The approach was presented by Phillip Isola, et al. in their 2016
@@ -76,21 +71,24 @@ such as converting maps to satellite photographs, black and white photographs to
 sketches of products to product photographs. Now that we are familiar with the Pix2Pix GAN,
 let’s prepare a dataset that we can use with image-to-image translation.
 
-23.3
 
-Satellite to Map Image Translation Dataset
+
+## Satellite to Map Image Translation Dataset
 
 In this tutorial, we will use the so-called maps dataset used in the Pix2Pix paper. This is a
 dataset comprised of satellite images of New York and their corresponding Google maps pages.
 The image translation problem involves converting satellite photos to Google maps format, or
 the reverse, Google maps images to Satellite photos. The dataset is provided on the Pix2Pix
 website and can be downloaded as a 255-megabyte zip file.
+
 - Download Maps Dataset (maps.tar.gz).
 
 1
 
 Download the dataset and unzip it into your current working directory. This will create a
 directory called maps/ with the following structure:
+
+```
 maps
 train
 val
@@ -105,19 +103,18 @@ right.
 
 http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/maps.tar.gz
 
-### 23.3. Satellite to Map Image Translation Dataset
 
-486
+![](../images/503-126.jpg)
 
-![](../images/-.jpg)
 
-Image.
 We can prepare this dataset for training a Pix2Pix GAN model in Keras. We will just work
 with the images in the training dataset. Each image will be loaded, rescaled, and split into
 the satellite and Google Maps elements. The result will be 1,097 color image pairs with the
 width and height of 256 × 256 pixels. The load images() function below implements this. It
 enumerates the list of images in a given directory, loads each with the target size of 256 × 512
 pixels, splits each image into satellite and map elements and returns an array of each.
+
+```
 # load all images in a directory into memory
 def load_images(path, size=(256,512)):
 src_list, tar_list = list(), list()
@@ -138,14 +135,13 @@ return [asarray(src_list), asarray(tar_list)]
 We can call this function with the path to the training dataset. Once loaded, we can save
 the prepared arrays to a new file in compressed format for later use. The complete example is
 listed below.
+
+```
 # load, split and scale the maps dataset ready for training
 from os import listdir
 from numpy import asarray
 from keras.preprocessing.image import img_to_array
 
-### 23.3. Satellite to Map Image Translation Dataset
-
-487
 
 from keras.preprocessing.image import load_img
 from numpy import savez_compressed
@@ -178,6 +174,8 @@ print('Saved dataset: ', filename)
 Running the example loads all images in the training dataset, summarizes their shape to
 ensure the images were loaded correctly, then saves the arrays to a new file called maps 256.npz
 in compressed NumPy array format.
+
+```
 Loaded: (1096, 256, 256, 3) (1096, 256, 256, 3)
 Saved dataset: maps_256.npz
 
@@ -185,6 +183,8 @@ Saved dataset: maps_256.npz
 
 This file can be loaded later via the load() NumPy function and retrieving each array in
 turn. We can then plot some images pairs to confirm the data has been handled correctly.
+
+```
 # load the prepared dataset
 from numpy import load
 from matplotlib import pyplot
@@ -201,9 +201,7 @@ pyplot.imshow(src_images[i].astype('uint8'))
 # plot target image
 for i in range(n_samples):
 
-### 23.3. Satellite to Map Image Translation Dataset
 
-488
 
 pyplot.subplot(2, n_samples, 1 + n_samples + i)
 pyplot.axis('off')
@@ -214,6 +212,8 @@ pyplot.show()
 
 Running this example loads the prepared dataset and summarizes the shape of each array,
 confirming our expectations of a little over one thousand 256 × 256 image pairs.
+
+```
 Loaded: (1096, 256, 256, 3) (1096, 256, 256, 3)
 
 ```
@@ -223,19 +223,14 @@ Google Maps images on the bottom. We can see that satellite images are quite com
 that although the Google Maps images are much simpler, they have color codings for things like
 major roads, water, and parks.
 
-![](../images/-.jpg)
+![](../images/505-127.jpg)
 
-(bottom).
+
 Now that we have prepared the dataset for image translation, we can develop our Pix2Pix
 GAN model.
 
-### 23.4. How to Develop and Train a Pix2Pix Model
 
-23.4
-
-489
-
-How to Develop and Train a Pix2Pix Model
+## How to Develop and Train a Pix2Pix Model
 
 In this section, we will develop the Pix2Pix model for translating satellite photos to Google
 maps images. The same model architecture and configuration described in the paper was used
@@ -263,6 +258,8 @@ are concatenated together and predicts a patch output of predictions. The model 
 using binary cross-entropy, and a weighting is used so that updates to the model have half (0.5)
 the usual effect. The authors of Pix2Pix recommend this weighting of model updates to slow
 down changes to the discriminator, relative to the generator model during training.
+
+```
 # define the discriminator model
 def define_discriminator(image_shape):
 # weight initialization
@@ -285,9 +282,6 @@ d = Conv2D(256, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-490
 
 # C512
 d = Conv2D(512, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
@@ -324,6 +318,8 @@ model. It uses the define encoder block() helper function to create blocks of la
 encoder and the decoder block() function to create blocks of layers for the decoder. The Tanh
 activation function is used in the output layer, meaning that pixel values in the generated image
 will be in the range [-1,1].
+
+```
 # define an encoder block
 def define_encoder_block(layer_in, n_filters, batchnorm=True):
 # weight initialization
@@ -342,9 +338,7 @@ def decoder_block(layer_in, skip_in, n_filters, dropout=True):
 # weight initialization
 init = RandomNormal(stddev=0.02)
 
-### 23.4. How to Develop and Train a Pix2Pix Model
 
-491
 
 # add upsampling layer
 g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
@@ -401,9 +395,7 @@ to minimize the L1 loss or mean absolute error between the generated image and t
 image. The generator is updated via a weighted sum of both the adversarial loss and the L1
 loss, where the authors of the model recommend a weighting of 100 to 1 in favor of the L1 loss.
 
-### 23.4. How to Develop and Train a Pix2Pix Model
 
-492
 
 This is to encourage the generator strongly toward generating plausible translations of the input
 image, and not just plausible images in the target domain.
@@ -422,6 +414,8 @@ implements this, taking the already-defined generator and discriminator models a
 and using the Keras functional API to connect them together into a composite model. Both
 loss functions are specified for the two outputs of the model and the weights used for each are
 specified in the loss weights argument to the compile() function.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model, image_shape):
 # make weights in the discriminator not trainable
@@ -444,6 +438,8 @@ return model
 Next, we can load our paired images dataset in compressed NumPy array format. This will
 return a list of two NumPy arrays: the first for source images and the second for corresponding
 target images.
+
+```
 # load and prepare training images
 def load_real_samples(filename):
 # load the compressed arrays
@@ -458,13 +454,11 @@ return [X1, X2]
 ```
 
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-493
-
 Training the discriminator will require batches of real and fake images. The generate real samples()
 function below will prepare a batch of random pairs of images from the training dataset, and
 the corresponding discriminator label of class = 1 to indicate they are real.
+
+```
 # select a batch of random samples, returns images and target
 def generate_real_samples(dataset, n_samples, patch_shape):
 # unpack dataset
@@ -482,6 +476,8 @@ return [X1, X2], y
 The generate fake samples() function below uses the generator model and a batch of real
 source images to generate an equivalent batch of target images for the discriminator. These are
 returned with the label class = 0 to indicate to the discriminator that they are fake.
+
+```
 # generate a batch of images, returns images and targets
 def generate_fake_samples(g_model, samples, patch_shape):
 # generate fake instance
@@ -502,6 +498,8 @@ selected images in the dataset. The source, generated image, and expected target
 plotted as three rows of images and the plot saved to file. Additionally, the model is saved to an
 H5 formatted file that makes it easier to load later. Both the image and model filenames include
 the training iteration number, allowing us to easily tell them apart at the end of training.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, dataset, n_samples=3):
 # select a sample of input images
@@ -514,9 +512,6 @@ X_realB = (X_realB + 1) / 2.0
 X_fakeB = (X_fakeB + 1) / 2.0
 # plot real source images
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-494
 
 for i in range(n_samples):
 pyplot.subplot(3, n_samples, 1 + i)
@@ -543,7 +538,6 @@ print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
-generator.
 Finally, we can train the generator and discriminator models. The train() function below
 implements this, taking the defined generator, discriminator, composite model, and loaded
 dataset as input. The number of epochs is set at 100 to keep training times down, although
@@ -562,6 +556,8 @@ from the call to train on batch(). We are only interested in the weighted sum sc
 value returned) as it is used to update the model weights. Finally, the loss for each update is
 reported to the console each training iteration and model performance is evaluated every 10
 training epochs.
+
+```
 # train pix2pix model
 def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=1):
 # determine the output square shape of the discriminator
@@ -571,9 +567,6 @@ trainA, trainB = dataset
 # calculate the number of batches per training epoch
 bat_per_epo = int(len(trainA) / n_batch)
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-495
 
 # calculate the number of training iterations
 n_steps = bat_per_epo * n_epochs
@@ -599,6 +592,8 @@ summarize_performance(i, g_model, dataset)
 
 Tying all of this together, the complete code example of training a Pix2Pix GAN to translate
 satellite photos to Google maps images is listed below.
+
+```
 # example of pix2pix gan for satellite to map image-to-image translation
 from numpy import load
 from numpy import zeros
@@ -631,7 +626,7 @@ merged = Concatenate()([in_src_image, in_target_image])
 d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 
-### 23.4. How to Develop and Train a Pix2Pix Model
+
 # C128
 d = Conv2D(128, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(d)
 d = BatchNormalization()(d)
@@ -687,11 +682,6 @@ g = Concatenate()([g, skip_in])
 # relu activation
 g = Activation('relu')(g)
 
-496
-
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-497
 
 return g
 # define the standalone generator model
@@ -747,7 +737,7 @@ def load_real_samples(filename):
 data = load(filename)
 # unpack the arrays
 
-### 23.4. How to Develop and Train a Pix2Pix Model
+
 X1, X2 = data['arr_0'], data['arr_1']
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
@@ -802,11 +792,7 @@ pyplot.savefig(filename1)
 pyplot.close()
 # save the generator model
 
-498
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-499
 
 filename2 = 'model_%06d.h5' % (step+1)
 g_model.save(filename2)
@@ -856,18 +842,19 @@ train(d_model, g_model, gan_model, dataset)
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 The loss is reported each training iteration, including the discriminator loss on real examples
 (d1), discriminator loss on generated or fake examples (d2), and generator loss, which is a
 weighted average of adversarial and L1 loss (g). If loss for the discriminator goes to zero and
 
-### 23.4. How to Develop and Train a Pix2Pix Model
-
-500
 
 stays there for a long time, consider re-starting the training run as it is an example of a training
 failure.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1, d1[0.566] d2[0.520] g[82.266]
 >2, d1[0.469] d2[0.484] g[66.813]
 >3, d1[0.428] d2[0.477] g[79.520]
@@ -891,31 +878,25 @@ files and 10 plots of generated images. After the first 10 epochs, map images ar
 look plausible, although the lines for streets are not entirely straight and images contain some
 blurring. Nevertheless, large structures are in the right places with mostly the right colors.
 
-### 23.4. How to Develop and Train a Pix2Pix Model
 
-501
 
-![](../images/-.jpg)
+![](../images/518-128.jpg)
 
-Epochs.
+
 Generated images after about 50 training epochs begin to look very realistic, and the quality
 appears to remain good for the remainder of the training process. The first generated image
 example below (left column, middle row) includes more useful detail than the real Google Maps
 image.
 
-### 23.5. How to Translate Images With a Pix2Pix Model
 
-502
+![](../images/519-129.jpg)
 
-![](../images/-.jpg)
 
-Training Epochs.
 Now that we have developed and trained the Pix2Pix model, we can explore how they can
 be used in a standalone manner.
 
-23.5
 
-How to Translate Images With a Pix2Pix Model
+## How to Translate Images With a Pix2Pix Model
 
 Training the Pix2Pix model results in many saved models and samples of generated images for
 each. More training epochs does not necessarily mean a better quality model. Therefore, we
@@ -925,6 +906,8 @@ after 10 0epochs or 109,600 training iterations. A good starting point is to loa
 use it to make ad hoc translations of source images in the training dataset. First, we can load
 the training dataset. We can use the same function named load real samples() for loading
 the dataset as was used when training the model.
+
+```
 # load and prepare training images
 def load_real_samples(filename):
 # load the compressed arrays
@@ -932,9 +915,6 @@ data = load(filename)
 # unpack the arrays
 X1, X2 = data['arr_0'], data['arr_1']
 
-### 23.5. How to Translate Images With a Pix2Pix Model
-
-503
 
 # scale from [0,255] to [-1,1]
 X1 = (X1 - 127.5) / 127.5
@@ -944,6 +924,8 @@ return [X1, X2]
 ```
 
 This function can be called as follows:
+
+```
 ...
 # load dataset
 [X1, X2] = load_real_samples('maps_256.npz')
@@ -952,6 +934,8 @@ print('Loaded', X1.shape, X2.shape)
 ```
 
 Next, we can load the saved Keras model.
+
+```
 ...
 # load model
 model = load_model('model_109600.h5')
@@ -959,6 +943,8 @@ model = load_model('model_109600.h5')
 ```
 
 Next, we can choose a random image pair from the training dataset to use as an example.
+
+```
 ...
 # select random example
 ix = randint(0, len(X1), 1)
@@ -968,6 +954,8 @@ src_image, tar_image = X1[ix], X2[ix]
 
 We can provide the source satellite image as input to the model and use it to predict a
 Google Maps image.
+
+```
 ...
 # generate image from source
 gen_image = model.predict(src_image)
@@ -976,6 +964,8 @@ gen_image = model.predict(src_image)
 
 Finally, we can plot the source, generated image, and the expected target image. The
 plot images() function below implements this, providing a nice title above each image.
+
+```
 # plot source, generated and target images
 def plot_images(src_img, gen_img, tar_img):
 images = vstack((src_img, gen_img, tar_img))
@@ -991,9 +981,7 @@ pyplot.axis('off')
 # plot raw pixel data
 pyplot.imshow(images[i])
 
-### 23.5. How to Translate Images With a Pix2Pix Model
 
-504
 
 # show title
 pyplot.title(titles[i])
@@ -1002,6 +990,8 @@ pyplot.show()
 ```
 
 This function can be called with each of our source, generated, and target images.
+
+```
 ...
 # plot all three images
 plot_images(src_image, gen_image, tar_image)
@@ -1010,6 +1000,8 @@ plot_images(src_image, gen_image, tar_image)
 
 Tying all of this together, the complete example of performing an ad hoc image-to-image
 translation with an example from the training dataset is listed below.
+
+```
 # example of loading a pix2pix model and using it for image to image translation
 from keras.models import load_model
 from numpy import load
@@ -1048,9 +1040,6 @@ pyplot.show()
 print('Loaded', X1.shape, X2.shape)
 # load model
 
-### 23.5. How to Translate Images With a Pix2Pix Model
-
-505
 
 model = load_model('model_109600.h5')
 # select random example
@@ -1065,41 +1054,38 @@ plot_images(src_image, gen_image, tar_image)
 
 Running the example will select a random image from the training dataset, translate it to a
 Google Maps, and plot the result compared to the expected image.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 In this case, we can see that the generated image captures large roads with orange and
 yellow as well as green park areas. The generated image is not perfect but is very close to the
 expected image.
 
-![](../images/-.jpg)
+![](../images/522-130.jpg)
 
-Model.
 
-### 23.5. How to Translate Images With a Pix2Pix Model
-
-506
 
 We may also want to use the model to translate a given standalone image. We can select
 an image from the validation dataset under maps/val/ and crop the satellite element of the
 image. This can then be saved and used as input to the model. In this case, we will use
 maps/val/1.jpg.
 
-![](../images/-.jpg)
+![](../images/523-131.jpg)
 
 We can use an image program to create a rough crop of the satellite element of this image
 to use as input and save the file as satellite.jpg in the current working directory.
 
-![](../images/-.jpg)
+![](../images/523-132.jpg)
 
 We must load the image as a NumPy array of pixels with the size of 256 × 256, rescale the
 
-### 23.5. How to Translate Images With a Pix2Pix Model
-
-507
 
 pixel values to the range [-1,1], and then expand the single image dimensions to represent one
 input sample. The load image() function below implements this, returning image pixels that
 can be provided directly to a loaded Pix2Pix model.
+
+```
 # load an image
 def load_image(filename, size=(256,256)):
 # load image with the preferred size
@@ -1115,6 +1101,8 @@ return pixels
 ```
 
 We can then load our cropped satellite image.
+
+```
 ...
 # load source image
 src_image = load_image('satellite.jpg')
@@ -1124,6 +1112,8 @@ print('Loaded', src_image.shape)
 
 As before, we can load our saved Pix2Pix generator model and generate a translation of the
 loaded image.
+
+```
 ...
 # load model
 model = load_model('model_109600.h5')
@@ -1133,6 +1123,8 @@ gen_image = model.predict(src_image)
 ```
 
 Finally, we can scale the pixel values back to the range [0,1] and plot the result.
+
+```
 ...
 # scale from [-1,1] to [0,1]
 gen_image = (gen_image + 1) / 2.0
@@ -1145,6 +1137,8 @@ pyplot.show()
 
 Tying this all together, the complete example of performing an ad hoc image translation
 with a single image file is listed below.
+
+```
 # example of loading a pix2pix model and using it for one-off image translation
 from keras.models import load_model
 from keras.preprocessing.image import img_to_array
@@ -1152,9 +1146,6 @@ from keras.preprocessing.image import load_img
 from numpy import expand_dims
 from matplotlib import pyplot
 
-### 23.5. How to Translate Images With a Pix2Pix Model
-
-508
 
 # load an image
 def load_image(filename, size=(256,256)):
@@ -1188,17 +1179,12 @@ result. The generated image appears to be a reasonable translation of the source
 streets do not appear to be straight lines and the detail of the buildings is a bit lacking. Perhaps
 with further training or choice of a different model, higher-quality images could be generated.
 
-### 23.6. How to Translate Google Maps to Satellite Images
 
-509
 
-![](../images/-.jpg)
+![](../images/526-133.jpg)
 
-Model.
 
-23.6
-
-How to Translate Google Maps to Satellite Images
+## How to Translate Google Maps to Satellite Images
 
 Now that we are familiar with how to develop and use a Pix2Pix model for translating satellite
 images to Google maps, we can also explore the reverse. That is, we can develop a Pix2Pix
@@ -1206,6 +1192,8 @@ model to translate Google Maps images to plausible satellite images. This requir
 model invent (or hallucinate) plausible buildings, roads, parks, and more. We can use the same
 code to train the model with one small difference. We can change the order of the datasets
 returned from the load real samples() function; for example:
+
+```
 # load and prepare training images
 def load_real_samples(filename):
 # load the compressed arrays
@@ -1218,23 +1206,25 @@ X2 = (X2 - 127.5) / 127.5
 # return in reverse order
 return [X2, X1]
 
-### 23.6. How to Translate Google Maps to Satellite Images
-
-510
 
 ```
 
 The order of X1 and X2 is reversed in this version of the function. This means that the model
 will take Google Maps images as input and learn to generate satellite images. The complete
 example is omitted here for brevity. Run the example as before.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 As before, the loss of the model is reported each training iteration. If loss for the discriminator
 goes to zero and stays there for a long time, consider re-starting the training run as it is an
 example of a training failure.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1, d1[0.442] d2[0.650] g[49.790]
 >2, d1[0.317] d2[0.478] g[56.476]
 >3, d1[0.376] d2[0.450] g[48.114]
@@ -1250,34 +1240,27 @@ Consider running the example a few times and compare the average performance.
 
 ```
 
-with reverse order.
+
 It is harder to judge the quality of generated satellite images, nevertheless, plausible images
 are generated after just 10 epochs.
 
-### 23.6. How to Translate Google Maps to Satellite Images
 
-511
+![](../images/528-134.jpg)
 
-![](../images/-.jpg)
 
-Epochs.
 As before, image quality will improve and will continue to vary over the training process. A
 final model can be chosen based on generated image quality, not total training epochs. The
 model appears to have little difficulty in generating reasonable water, parks, roads, and more.
 
-### 23.7. Extensions
 
-512
+![](../images/529-135.jpg)
 
-![](../images/-.jpg)
 
-Training Epochs.
 
-23.7
-
-Extensions
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
+
 - Standalone Satellite. Develop an example of translating standalone Google Maps
 images to satellite images, as we did for satellite to Google Maps images.
 - New Image. Locate a satellite image for an entirely new location and translate it to a
@@ -1289,21 +1272,16 @@ in the Pix2Pix paper and evaluate whether it results in better quality generated
 
 If you explore any of these extensions, I’d love to know.
 
-### 23.8. Further Reading
 
-23.8
-
-513
-
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-23.8.1
 
-Official
+## Official
 
 - Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 https://arxiv.org/abs/1611.07004
 - Image-to-Image Translation with Conditional Adversarial Nets, Homepage.
 https://phillipi.github.io/pix2pix/
@@ -1316,9 +1294,9 @@ https://affinelayer.com/pixsrv/
 - Pix2Pix Datasets
 http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/
 
-23.8.2
 
-API
+
+## API
 
 - Keras Datasets API.
 https://keras.io/datasets/
@@ -1329,25 +1307,21 @@ https://keras.io/layers/convolutional/
 - How can I “freeze” Keras layers?
 https://keras.io/getting-started/faq/#how-can-i-freeze-keras-layers
 
-23.9
 
-Summary
+
+## Summary
 
 In this tutorial, you discovered how to develop a Pix2Pix generative adversarial network for
 image-to-image translation. Specifically, you learned:
+
 - How to load and prepare the satellite image to Google maps image-to-image translation
 dataset.
 - How to develop a Pix2Pix model for translating satellite photographs to Google Maps
 images.
 - How to use the final Pix2Pix generator model to translate ad hoc satellite images.
 
-### 23.9. Summary
 
-23.9.1
-
-514
-
-Next
+## Next
 
 In the next tutorial, you will discover the CycleGAN model architecture for unpaired image-toimage translation.
 

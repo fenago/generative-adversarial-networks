@@ -15,9 +15,8 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
-### Chapter 19
-How to Develop an Auxiliary Classifier
-GAN (AC-GAN)
+## How to Develop an Auxiliary Classifier GAN (AC-GAN)
+
 Generative Adversarial Networks, or GANs, are an architecture for training generative models,
 such as deep convolutional neural networks for generating images. The conditional generative
 adversarial network, or cGAN for short, is a type of GAN that involves the conditional generation
@@ -29,6 +28,7 @@ stabilizing the training process and allowing the generation of large high-quali
 learning a representation in the latent space that is independent of the class label. In this
 tutorial, you will discover how to develop an auxiliary classifier generative adversarial network
 for generating photographs of clothing. After completing this tutorial, you will know:
+
 - The auxiliary classifier GAN is a type of conditional GAN that requires that the discriminator predict the class label of a given image.
 - How to develop generator, discriminator, and composite models for the AC-GAN.
 - How to train, evaluate, and use an AC-GAN to generate photographs of clothing from the
@@ -36,25 +36,18 @@ Fashion-MNIST dataset.
 
 Let’s get started.
 
-19.1
-
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into five parts; they are:
+
 1. Auxiliary Classifier Generative Adversarial Networks
 2. Fashion-MNIST Clothing Photograph Dataset
 3. How to Define AC-GAN Models
 4. How to Develop an AC-GAN for Fashion-MNIST
 5. How to Generate Items of Clothing With a Fit AC-GAN
-393
 
-### 19.2. Auxiliary Classifier Generative Adversarial Networks
 
-19.2
-
-394
-
-Auxiliary Classifier Generative Adversarial Networks
+## Auxiliary Classifier Generative Adversarial Networks
 
 The generative adversarial network is an architecture for training a generative model, typically
 deep convolutional neural networks for generating image. The architecture is comprised of both
@@ -79,9 +72,12 @@ The main difference is in the discriminator model, which is only provided with t
 as input, unlike the conditional GAN that is provided with the image and class label as input.
 The discriminator model must then predict whether the given image is real or fake as before,
 and must also predict the class label of the image.
+
 ... the model [...] is class conditional, but with an auxiliary decoder that is tasked
 with reconstructing class labels.
+
 — Conditional Image Synthesis With Auxiliary Classifier GANs, 2016.
+
 The architecture is described in such a way that the discriminator and auxiliary classifier
 may be considered separate models that share model weights. In practice, the discriminator
 and auxiliary classifier can be implemented as a single neural network model with two outputs.
@@ -90,53 +86,52 @@ realness of the input image and is optimized using binary cross-entropy like a n
 discriminator model. The second output is a probability of the image belonging to each class via
 the softmax activation function, like any given multiclass classification neural network model,
 and is optimized using categorical cross-entropy. To summarize:
+
+
 - Generator Model:
 
 – Input: Random point from the latent space, and the class label.
 – Output: Generated image.
+
 - Discriminator Model:
 
 – Input: Image.
 
-### 19.2. Auxiliary Classifier Generative Adversarial Networks
-
-395
-
 – Output: Probability that the provided image is real, probability of the image
 belonging to each known class.
+
 The plot below summarizes the inputs and outputs of a range of conditional GANs, including
 the AC-GAN, providing some context for the differences.
 
-![](../images/-.jpg)
+![](../images/412-96.jpg)
 
-InfoGAN, and AC-GAN. Taken from an early version of: Conditional Image Synthesis With
-Auxiliary Classifier GANs.
+
 The discriminator seeks to maximize the probability of correctly classifying real and fake
 images (LS) and correctly predicting the class label (LC) of a real or fake image (e.g. LS + LC).
 The generator seeks to minimize the ability of the discriminator to discriminate real and fake
 images whilst also maximizing the ability of the discriminator predicting the class label of real
 and fake images (e.g. LC − LS).
+
 The objective function has two parts: the log-likelihood of the correct source, LS,
 and the log-likelihood of the correct class, LC. [...] D is trained to maximize
 LS + LC while G is trained to maximize LC − LS.
+
 — Conditional Image Synthesis With Auxiliary Classifier GANs, 2016.
+
 The resulting generator learns a latent space representation that is independent of the class
 label, unlike the conditional GAN. The effect of changing the conditional GAN in this way is
 both a more stable training process and the ability of the model to generate higher quality
 images with a larger size than had been previously possible, e.g. 128 × 128 pixels.
+
 ... we demonstrate that adding more structure to the GAN latent space along
 with a specialized cost function results in higher quality samples. [...] Importantly,
 we demonstrate quantitatively that our high resolution samples are not just naive
 resizings of low resolution samples.
+
 — Conditional Image Synthesis With Auxiliary Classifier GANs, 2016.
 
-### 19.3. Fashion-MNIST Clothing Photograph Dataset
 
-19.3
-
-396
-
-Fashion-MNIST Clothing Photograph Dataset
+## Fashion-MNIST Clothing Photograph Dataset
 
 The Fashion-MNIST dataset is proposed as a more challenging replacement dataset for the
 MNIST handwritten digit dataset. It is a dataset comprised of 60,000 small square 28 × 28
@@ -153,25 +148,17 @@ the class label for each. This is a relatively simple problem that does not requ
 generator or discriminator model, although it does require the generation of a grayscale output
 image.
 
-19.4
 
-How to Define AC-GAN Models
+## How to Define AC-GAN Models
 
 In this section, we will develop the generator, discriminator, and composite models for the ACGAN. The appendix of the AC-GAN paper provides suggestions for generator and discriminator
 configurations that we will use as inspiration. The table below summarizes these suggestions for
 the CIFAR-10 dataset, taken from the paper.
 
-![](../images/-.jpg)
+![](../images/413-97.jpg)
 
-from: Conditional Image Synthesis With Auxiliary Classifier GANs.
 
-### 19.4. How to Define AC-GAN Models
-
-19.4.1
-
-397
-
-AC-GAN Discriminator Model
+## AC-GAN Discriminator Model
 
 Let’s start with the discriminator model. The discriminator model must take as input an
 image and predict both the probability of the realness of the image and the probability of the
@@ -181,6 +168,8 @@ can be defined as per the DCGAN architecture. That is, using Gaussian weight ini
 BatchNormalization, LeakyReLU, Dropout, and a 2 × 2 stride for downsampling instead of
 pooling layers. For example, below is the bulk of the discriminator model defined using the
 Keras functional API.
+
+```
 ...
 # weight initialization
 init = RandomNormal(stddev=0.02)
@@ -213,6 +202,8 @@ fe = Flatten()(fe)
 
 The main difference is that the model has two output layers. The first is a single node with
 the sigmoid activation for predicting the realness of the image.
+
+```
 ...
 # real/fake output
 out1 = Dense(1, activation='sigmoid')(fe)
@@ -221,17 +212,17 @@ out1 = Dense(1, activation='sigmoid')(fe)
 
 The second is multiple nodes, one for each class, using the softmax activation function to
 predict the class label of the given image.
+
+```
 ...
 # class label output
 out2 = Dense(n_classes, activation='softmax')(fe)
 
-### 19.4. How to Define AC-GAN Models
-
-398
-
 ```
 
 We can then construct the image with a single input and two outputs.
+
+```
 ...
 # define model
 model = Model(in_image, [out1, out2])
@@ -246,12 +237,16 @@ categorical cross-entropy loss function. This will have the identical effect of 
 cross-entropy but avoids the step of having to manually one hot encode the target labels. When
 compiling the model, we can inform Keras to use the two different loss functions for the two
 output layers by specifying a list of function names as strings; for example:
+
+```
 loss=['binary_crossentropy', 'sparse_categorical_crossentropy']
 
 ```
 
 The model is fit using the Adam version of stochastic gradient descent with a small learning
 rate and modest momentum, as is recommended for DCGANs.
+
+```
 ...
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
@@ -264,6 +259,8 @@ Tying this together, the define discriminator() function will define and compile
 discriminator model for the AC-GAN. The shape of the input images and the number of classes
 are parameterized and set with defaults, allowing them to be easily changed for your own project
 in the future.
+
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1), n_classes=10):
 # weight initialization
@@ -280,10 +277,6 @@ fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # downsample to 7x7
-
-### 19.4. How to Define AC-GAN Models
-
-399
 
 fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
 fe = BatchNormalization()(fe)
@@ -311,6 +304,8 @@ return model
 ```
 
 We can define and summarize this model. The complete example is listed below.
+
+```
 # example of defining the discriminator model
 from keras.models import Model
 from keras.layers import Input
@@ -340,10 +335,6 @@ fe = LeakyReLU(alpha=0.2)(fe)
 fe = Dropout(0.5)(fe)
 # downsample to 7x7
 fe = Conv2D(128, (3,3), strides=(2,2), padding='same', kernel_initializer=init)(fe)
-
-### 19.4. How to Define AC-GAN Models
-
-400
 
 fe = BatchNormalization()(fe)
 fe = LeakyReLU(alpha=0.2)(fe)
@@ -377,26 +368,19 @@ plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer
 
 The model summary was left out for brevity. A plot of the model is created, showing the
 linear processing of the input image and the two clear output layers.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-### 19.4. How to Define AC-GAN Models
 
-401
-
-![](../images/-.jpg)
+![](../images/418-98.jpg)
 
 Now that we have defined our AC-GAN discriminator model, we can develop the generator
 model.
 
-### 19.4. How to Define AC-GAN Models
 
-19.4.2
-
-402
-
-AC-GAN Generator Model
+## AC-GAN Generator Model
 
 The generator model must take a random point from the latent space as input, and the class
 label, then output a generated grayscale image with the shape 28 × 28 × 1. The AC-GAN paper
@@ -407,6 +391,8 @@ recommended is to interpret the class label as an additional channel or feature 
 generator model. This can be achieved by using a learned embedding with an arbitrary number
 of dimensions (e.g. 50), the output of which can be interpreted by a fully connected layer with
 a linear activation resulting in one additional 7 × 7 feature map.
+
+```
 ...
 # label input
 in_label = Input(shape=(1,))
@@ -424,6 +410,8 @@ The point in latent space can be interpreted by a fully connected layer with suf
 activations to create multiple 7 × 7 feature maps, in this case, 384, and provide the basis for a
 low-resolution version of our output image. The 7 × 7 single feature map interpretation of the
 class label can then be channel-wise concatenated, resulting in 385 feature maps.
+
+```
 ...
 # image generator input
 in_lat = Input(shape=(latent_dim,))
@@ -443,15 +431,14 @@ quadrupling the area of the feature maps with each upsampling step. The output o
 is a single feature map or grayscale image with the shape 28 × 28 and pixel values in the range [-1,
 1] given the choice of a Tanh activation function. We use ReLU activation for the upsampling
 layers instead of LeakyReLU given the suggestion in the AC-GAN paper.
+
+```
 # upsample to 14x14
 gen = Conv2DTranspose(192, (5,5), strides=(2,2), padding='same',
 kernel_initializer=init)(merge)
 gen = BatchNormalization()(gen)
 gen = Activation('relu')(gen)
 
-### 19.4. How to Define AC-GAN Models
-
-403
 
 # upsample to 28x28
 gen = Conv2DTranspose(1, (5,5), strides=(2,2), padding='same', kernel_initializer=init)(gen)
@@ -462,6 +449,8 @@ out_layer = Activation('tanh')(gen)
 We can tie all of this together and into the define generator() function defined below
 that will create and return the generator model for the AC-GAN. The model is intentionally
 not compiled as it is not trained directly; instead, it is trained via the discriminator model.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim, n_classes=10):
 # weight initialization
@@ -501,6 +490,8 @@ return model
 
 We can create this model and summarize and plot its structure. The complete example is
 listed below.
+
+```
 # example of defining the generator model
 from keras.models import Model
 from keras.layers import Input
@@ -509,14 +500,13 @@ from keras.layers import Reshape
 from keras.layers import Conv2DTranspose
 from keras.layers import Embedding
 
-### 19.4. How to Define AC-GAN Models
+
 from
 from
 from
 from
 from
 
-404
 
 keras.layers import Concatenate
 keras.layers import Activation
@@ -573,31 +563,24 @@ The model summary was left out for brevity. A plot of the network is created sum
 the input and output shapes for each layer. The plot confirms the two inputs to the network
 and the correct concatenation of the inputs.
 
-### 19.4. How to Define AC-GAN Models
 
-405
-
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+**Note:** 
+Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-![](../images/-.jpg)
+![](../images/422-99.jpg)
 
 Now that we have defined the generator model, we can show how it might be fit.
 
-19.4.3
 
-AC-GAN Composite Model
+## AC-GAN Composite Model
 
 The generator model is not updated directly; instead, it is updated via the discriminator model.
 This can be achieved by creating a composite model that stacks the generator model on top
 of the discriminator model. The input to this composite model is the input to the generator
 model, namely a random point from the latent space and a class label. The generator model
 is connected directly to the discriminator model, which takes the generated image directly as
-
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-406
 
 input. Finally, the discriminator model predicts both the realness of the generated image and
 the class label. As such, the composite model is optimized using two loss functions, one for each
@@ -612,6 +595,8 @@ prevents them from being updated when the composite model is updated. The define
 function below implements this, taking the already defined generator and discriminator models
 as input and defining a new composite model that can be used to update the generator model
 only.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model):
 # make weights in the discriminator not trainable
@@ -630,9 +615,8 @@ return model
 
 Now that we have defined the models used in the AC-GAN, we can fit them on the FashionMNIST dataset.
 
-19.5
 
-How to Develop an AC-GAN for Fashion-MNIST
+## How to Develop an AC-GAN for Fashion-MNIST
 
 The first step is to load and prepare the Fashion-MNIST dataset. We only require the images
 in the training dataset. The images are black and white, therefore we must add an additional
@@ -640,6 +624,8 @@ channel dimension to transform them to be three dimensional, as expected by the 
 layers of our models. Finally, the pixel values must be scaled to the range [-1,1] to match the
 output of the generator model. The load real samples() function below implements this,
 returning the loaded and scaled Fashion-MNIST training dataset ready for modeling.
+
+```
 # load images
 def load_real_samples():
 # load dataset
@@ -651,9 +637,6 @@ X = X.astype('float32')
 # scale from [0,255] to [-1,1]
 X = (X - 127.5) / 127.5
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-407
 
 print(X.shape, trainy.shape)
 return [X, trainy]
@@ -668,6 +651,8 @@ images and clothing class labels. The dataset argument provided to the function 
 comprised of the images and class labels as returned from the load real samples() function.
 The function also returns their corresponding class label for the discriminator, specifically
 class = 1 indicating that they are real images.
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # split into images and labels
@@ -688,6 +673,8 @@ function implements this, taking the size of the latent space as an argument and
 points required, and returning them as a batch of input samples for the generator model. The
 function also returns randomly selected integers in [0,9] inclusively for the 10 class labels in the
 Fashion-MNIST dataset.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples, n_classes=10):
 # generate points in the latent space
@@ -706,11 +693,9 @@ below implements this, taking the generator model and size of the latent space a
 then generating points in the latent space and using them as input to the generator model.
 The function returns the generated images, their corresponding clothing class label, and their
 discriminator class label, specifically class = 0 to indicate they are fake or generated.
+
+```
 # use the generator to generate n fake examples, with class labels
-
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-408
 
 def generate_fake_samples(generator, latent_dim, n_samples):
 # generate points in latent space
@@ -729,6 +714,8 @@ generate a sample of images using the generator model and save the generator mod
 for later use. The summarize performance() function below implements this, generating 100
 images, plotting them, and saving the plot and the generator to file with a filename that includes
 the training step number.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, latent_dim, n_samples=100):
 # prepare fake examples
@@ -754,7 +741,7 @@ print('>Saved: %s and %s' % (filename1, filename2))
 
 ```
 
-generator.
+
 We are now ready to fit the GAN models. The model is fit for 100 training epochs, which is
 arbitrary, as the model begins generating plausible items of clothing after perhaps 20 epochs. A
 batch size of 64 samples is used, and each training epoch involves 60000
@@ -768,9 +755,6 @@ the combined GAN model. Importantly, the class label is set to 1, or real, for t
 This has the effect of updating the generator toward getting better at generating real samples
 on the next batch.
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-409
 
 The discriminator and composite model return three loss values from the call to the
 train on batch() function. The first value is the sum of the loss values and can be ignored, whereas the second value is the loss for the real/fake output layer and the third value is
@@ -778,6 +762,8 @@ the loss for the clothing label classification. The train() function below imple
 the defined models, dataset, and size of the latent dimension as arguments and parameterizing
 the number of epochs and batch size with default arguments. The generator model is saved at
 the end of training.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=64):
 # calculate the number of batches per training epoch
@@ -813,6 +799,8 @@ summarize_performance(i, g_model, latent_dim)
 
 We can then define the size of the latent space, define all three models, and train them on
 the loaded Fashion-MNIST dataset.
+
+```
 ...
 # size of the latent space
 latent_dim = 100
@@ -826,15 +814,13 @@ gan_model = define_gan(generator, discriminator)
 dataset = load_real_samples()
 # train model
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-410
-
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
 Tying all of this together, the complete example is listed below.
+
+```
 # example of fitting an auxiliary classifier gan (ac-gan) on fashion mnsit
 from numpy import zeros
 from numpy import ones
@@ -886,9 +872,6 @@ fe = Dropout(0.5)(fe)
 # flatten feature maps
 fe = Flatten()(fe)
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-411
 
 # real/fake output
 out1 = Dense(1, activation='sigmoid')(fe)
@@ -945,7 +928,7 @@ gan_output = d_model(g_model.output)
 model = Model(g_model.input, gan_output)
 # compile model
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
+
 opt = Adam(lr=0.0002, beta_1=0.5)
 model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=opt)
@@ -998,11 +981,6 @@ def summarize_performance(step, g_model, latent_dim, n_samples=100):
 # scale from [-1,1] to [0,1]
 X = (X + 1) / 2.0
 
-412
-
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-413
 
 # plot images
 for i in range(100):
@@ -1059,9 +1037,6 @@ generator = define_generator(latent_dim)
 # create the gan
 gan_model = define_gan(generator, discriminator)
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
-
-414
 
 # load image data
 dataset = load_real_samples()
@@ -1070,14 +1045,18 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+**Note**: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 The loss is reported each training iteration, including the real/fake and class loss for the
 discriminator on real examples (dr), the discriminator on fake examples (df ), and the generator
 updated via the composite model when generating images (g).
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1,
 >2,
 >3,
@@ -1105,44 +1084,42 @@ g[1.123,3.313]
 
 ```
 
-dataset.
+
 A total of 10 sample images are generated and 10 models saved over the run. Plots of
 generated clothing after 10 iterations already look plausible.
 
-### 19.5. How to Develop an AC-GAN for Fashion-MNIST
 
-![](../images/-.jpg)
+
+![](../images/432-100.jpg)
 
 The images remain reliable throughout the training process.
 
-415
 
-### 19.6. How to Generate Items of Clothing With the AC-GAN
-
-416
-
-![](../images/-.jpg)
+![](../images/433-101.jpg)
 
 
-19.6
-
-How to Generate Items of Clothing With the ACGAN
+## How to Generate Items of Clothing With the ACGAN
 
 In this section, we can load a saved model and use it to generate new items of clothing that
 plausibly could have come from the Fashion-MNIST dataset. The AC-GAN technically does
 not conditionally generate images based on the class label, at least not in the same way as the
 conditional GAN.
+
 AC-GANs learn a representation for z that is independent of class label.
+
 — Conditional Image Synthesis With Auxiliary Classifier GANs, 2016.
+
 Nevertheless, if used in this way, the generated images mostly match the class label. The
 example below loads the model from the end of the run (any saved model would do), and
 generates 100 examples of class 7 (sneaker).
+
+```
 # example of loading the generator model and generating images
 from math import sqrt
 from numpy import asarray
 from numpy.random import randn
 
-### 19.6. How to Generate Items of Clothing With the AC-GAN
+
 from keras.models import load_model
 from matplotlib import pyplot
 # generate points in latent space as input for the generator
@@ -1183,29 +1160,23 @@ save_plot(X, n_examples)
 
 Running the example, in this case, generates 100 very plausible photos of sneakers.
 
-417
 
-### 19.6. How to Generate Items of Clothing With the AC-GAN
 
-418
-
-![](../images/-.jpg)
+![](../images/435-102.jpg)
 
 It may be fun to experiment with other class values. For example, below are 100 generated
 coats (n class=4). Most of the images are coats, although there are a few pants in there,
 showing that the latent space is partially, but not completely, class-conditional.
 
-### 19.7. Extensions
 
-419
-
-![](../images/-.jpg)
+![](../images/436-103.jpg)
 
 
 
-Extensions
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
+
 - Generate Images. Generate images for each clothing class and compare results across
 different saved models (e.g. epoch 10, 20, etc.).
 - Alternate Configuration. Update the configuration of the generator, discriminator, or
@@ -1215,19 +1186,13 @@ model configuration described in the appendix of the paper.
 
 If you explore any of these extensions, I’d love to know.
 
-19.8
 
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-### 19.9. Summary
 
-19.8.1
-
-420
-
-Papers
+## Papers
 
 - Conditional Image Synthesis With Auxiliary Classifier GANs, 2016.
 https://arxiv.org/abs/1610.09585
@@ -1236,9 +1201,8 @@ https://openreview.net/forum?id=rJXTf9Bxg
 - Conditional Image Synthesis with Auxiliary Classifier GANs, NIPS 2016, YouTube.
 https://www.youtube.com/watch?v=myP2TN0_MaE
 
-19.8.2
 
-API
+## API
 
 - Keras Datasets API..
 https://keras.io/datasets/
@@ -1255,7 +1219,8 @@ https://docs.scipy.org/doc/numpy/reference/routines.random.html
 - NumPy Array manipulation routines.
 https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html
 
-Articles
+
+## Articles
 
 - How to Train a GAN? Tips and tricks to make GANs work.
 https://github.com/soumith/ganhacks
@@ -1263,10 +1228,11 @@ https://github.com/soumith/ganhacks
 https://github.com/zalandoresearch/fashion-mnist
 
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to develop an auxiliary classifier generative adversarial
 network for generating photographs of clothing. Specifically, you learned:
+
 - The auxiliary classifier GAN is a type of conditional GAN that requires that the discriminator predict the class label of a given image.
 - How to develop generator, discriminator, and composite models for the AC-GAN.
 - How to train, evaluate, and use an AC-GAN to generate photographs of clothing from the
@@ -1274,6 +1240,6 @@ Fashion-MNIST dataset.
 
 
 
-Next
+## Next
 
 In the next tutorial, you will discover the semi-supervised GAN that trains a classifier in concert with the GAN model that can achieve good results on very limited training data.

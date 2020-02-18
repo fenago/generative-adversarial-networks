@@ -15,10 +15,8 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
+## How to Develop a Wasserstein GAN (WGAN)
 
-### Chapter 16
-How to Develop a Wasserstein GAN
-(WGAN)
 The Wasserstein Generative Adversarial Network, or Wasserstein GAN, is an extension to the
 generative adversarial network that both improves the stability when training the model and
 provides a loss function that correlates with the quality of generated images. The development of
@@ -26,32 +24,26 @@ the WGAN has a dense mathematical motivation, although in practice requires only
 modifications to the established standard deep convolutional generative adversarial network,
 or DCGAN. In this tutorial, you will discover how to implement the Wasserstein generative
 adversarial network from scratch. After completing this tutorial, you will know:
+
 - The differences between the standard DCGAN and the new Wasserstein GAN.
 - How to implement the specific details of the Wasserstein GAN from scratch.
 - How to develop a WGAN for image generation and interpret model behavior.
 
 Let’s get started.
 
-16.1
 
 Tutorial Overview
 
-This tutorial is divided into five parts; they are:
+## This tutorial is divided into five parts; they are:
 1. Wasserstein Generative Adversarial Network
 2. How to Implement Wasserstein Loss
 3. Wasserstein GAN Implementation Details
 4. How to Train a Wasserstein GAN Model
 5. How to Generate Images With WGAN
 
-306
 
-### 16.2. What Is a Wasserstein GAN?
 
-16.2
-
-307
-
-What Is a Wasserstein GAN?
+## What Is a Wasserstein GAN?
 
 The Wasserstein GAN, or WGAN for short, was introduced by Martin Arjovsky, et al. in their
 2017 paper titled Wasserstein GAN. It is an extension of the GAN that seeks an alternate way
@@ -64,50 +56,56 @@ of the distance between the distribution of the data observed in the training da
 distribution observed in generated examples. The argument contrasts different distribution
 distance measures, such as Kullback-Leibler (KL) divergence, Jensen-Shannon (JS) divergence,
 and the Earth-Mover (EM) distance, the latter also referred to as Wasserstein distance.
+
 The most fundamental difference between such distances is their impact on the
 convergence of sequences of probability distributions.
+
 — Wasserstein GAN, 2017.
+
 They demonstrate that a critic neural network can be trained to approximate the Wasserstein
 distance, and, in turn, used to effectively train a generator model. Importantly, the Wasserstein
 distance has the properties that it is continuous and differentiable and continues to provide a
 linear gradient, even after the critic is well trained.
+
 The fact that the EM distance is continuous and differentiable a.e. means that we
 can (and should) train the critic till optimality. [...] the more we train the critic,
 the more reliable gradient of the Wasserstein we get, which is actually useful by the
 fact that Wasserstein is differentiable almost everywhere.
+
 — Wasserstein GAN, 2017.
+
 This is unlike the discriminator model of the DCGAN that, once trained, may fail to provide
 useful gradient information for updating the generator model. The benefit of the WGAN is
 that the training process is more stable and less sensitive to model architecture and choice of
 hyperparameter configurations.
+
 ... training WGANs does not require maintaining a careful balance in training of the
 discriminator and the generator, and does not require a careful design of the network
 architecture either. The mode dropping phenomenon that is typical in GANs is also
 drastically reduced.
+
 — Wasserstein GAN, 2017.
+
 Perhaps most importantly, the loss of the discriminator appears to relate to the quality of
 images created by the generator. Specifically, the lower the loss of the critic when evaluating
 generated images, the higher the expected quality of the generated images. This is important as
 unlike other GANs that seek stability in terms of finding an equilibrium between two models,
 the WGAN seeks convergence, lowering generator loss.
 
-### 16.3. How to Implement Wasserstein Loss
-
-308
 
 To our knowledge, this is the first time in GAN literature that such a property is
 shown, where the loss of the GAN shows properties of convergence. This property is
 extremely useful when doing research in adversarial networks as one does not need
 to stare at the generated samples to figure out failure modes and to gain information
 on which models are doing better over others.
+
 — Wasserstein GAN, 2017.
 
-16.3
-
-How to Implement Wasserstein Loss
+## How to Implement Wasserstein Loss
 
 The Wasserstein loss function seeks to increase the gap between the scores for real and generated
 images. We can summarize the function as it is described in the paper as follows:
+
 - Critic Loss = [average critic score on real images] - [average critic score on fake images]
 - Generator Loss = -[average critic score on fake images]
 
@@ -141,9 +139,6 @@ loss. For example, average scores on fake images of [0.5, 0.8, and 1.0] across t
 fake images would become [-0.5, -0.8, and -1.0] when calculating weight updates.
 - Loss For Fake Images = -1 × Average Critic Score
 
-### 16.3. How to Implement Wasserstein Loss
-
-309
 
 No change is needed for the case of real scores, as we want to encourage smaller average
 scores for real images.
@@ -154,9 +149,11 @@ real images and 1 for fake images and implementing the loss function as the expe
 multiplied by the average score. The -1 label will be multiplied by the average score for real
 images and encourage a larger predicted average, and the 1 label will be multiplied by the
 average score for fake images and have no effect, encouraging a smaller predicted average.
+
 - Wasserstein Loss = Label × Average Critic Score
 
 Or
+
 - Wasserstein Loss(Real Images) = 1 × Average Predicted Score
 - Wasserstein Loss(Fake Images) = -1 × Average Predicted Score
 
@@ -167,9 +164,7 @@ developers do implement the WGAN in this alternate way, which is just as correct
 we know how to implement the Wasserstein loss function in Keras, let’s clarify one common
 point of misunderstanding.
 
-16.3.1
-
-Common Point of Confusion With Expected Labels
+## Common Point of Confusion With Expected Labels
 
 Recall we are using the expected labels of -1 for real images and 1 for fake images. A common
 point of confusion is that a perfect critic model will output -1 for every real image and 1 for
@@ -191,23 +186,17 @@ and positive scores for fake images, but this is not required. All scores could 
 scores could be negative. The loss function only encourages a separation between scores for fake
 and real images as larger and smaller, not necessarily positive and negative.
 
-### 16.4. Wasserstein GAN Implementation Details
-
-16.4
-
-310
-
-Wasserstein GAN Implementation Details
+## Wasserstein GAN Implementation Details
 
 Although the theoretical grounding for the WGAN is dense, the implementation of a WGAN
 requires a few minor changes to the standard Deep Convolutional GAN, or DCGAN. The image
 below provides a summary of the main training loop for training a WGAN, taken from the
 paper. Take note of the listing of recommended hyperparameters used in the model.
 
-![](../images/-.jpg)
+![](../images/327-75.jpg)
 
-Wasserstein GAN.
 The differences in implementation for the WGAN are as follows:
+
 1. Use a linear activation function in the output layer of the critic model (instead of sigmoid).
 2. Use -1 labels for real images and 1 labels for fake images (instead of 1 and 0).
 3. Use Wasserstein loss to train the critic and generator models.
@@ -216,22 +205,18 @@ The differences in implementation for the WGAN are as follows:
 5. Update the critic model more times than the generator each iteration (e.g. 5).
 6. Use the RMSProp version of gradient descent with a small learning rate and no momentum
 (e.g. 0.00005).
+
 Using the standard DCGAN model as a starting point, let’s take a look at each of these
 implementation details in turn.
 
-16.4.1
-
-Linear Activation in Critic Output Layer
+## Linear Activation in Critic Output Layer
 
 The DCGAN uses the sigmoid activation function in the output layer of the discriminator to
 predict the likelihood of a given image being real. In the WGAN, the critic model requires a
 linear activation to predict the score of realness for a given image. This can be achieved by
 setting the activation argument to ‘linear’ in the output layer of the critic model.
 
-### 16.4. Wasserstein GAN Implementation Details
-
-311
-
+```
 # define output layer of the critic model
 ...
 model.add(Dense(1, activation='linear'))
@@ -240,16 +225,15 @@ model.add(Dense(1, activation='linear'))
 
 The linear activation is the default activation for a layer, so we can, in fact, leave the
 activation unspecified to achieve the same result.
+
+ ```           
 # define output layer of the critic model
 ...
 model.add(Dense(1))
 
 ```
 
-
-16.4.2
-
-Class Labels for Real and Fake Images
+## Class Labels for Real and Fake Images
 
 The DCGAN uses the class 0 for fake images and class 1 for real images, and these class labels
 are used to train the GAN. In the DCGAN, these are precise labels that the discriminator
@@ -259,6 +243,8 @@ via the Wasserstein function that cleverly makes use of positive and negative cl
 WGAN can be implemented where -1 class labels are used for real images and 1 class labels are
 used for fake or generated images. This can be achieved using the ones() NumPy function. For
 example:
+
+```
 ...
 # generate class labels, -1 for 'real'
 y = -ones((n_samples, 1))
@@ -268,10 +254,7 @@ y = ones((n_samples, 1))
 
 ```
 
-
-16.4.3
-
-Wasserstein Loss Function
+## Wasserstein Loss Function
 
 We can implement the Wasserstein loss as a custom function in Keras that calculates the average
 score for real or fake images. The score is maximizing for real examples and minimizing for
@@ -280,6 +263,8 @@ multiply the class label by the mean score (e.g. -1 for real and 1 for fake whic
 which ensures that the loss for real and fake images is minimizing to the network. An efficient
 implementation of this loss function for Keras is listed below.
 from keras import backend
+
+```
 # implementation of wasserstein loss
 def wasserstein_loss(y_true, y_pred):
 return backend.mean(y_true * y_pred)
@@ -287,12 +272,10 @@ return backend.mean(y_true * y_pred)
 ```
 
 
-### 16.4. Wasserstein GAN Implementation Details
-
-312
-
 This loss function can be used to train a Keras model by specifying the function name when
 compiling the model. For example:
+
+```
 ...
 # compile the model
 model.compile(loss=wasserstein_loss, ...)
@@ -300,17 +283,17 @@ model.compile(loss=wasserstein_loss, ...)
 ```
 
 
-16.4.4
-
-Critic Weight Clipping
+## Critic Weight Clipping
 
 The DCGAN does not use any gradient clipping, although the WGAN requires gradient clipping
 for the critic model. We can implement weight clipping as a Keras constraint. This is a class
 that must extend the Constraint class and define an implementation of the call () function
-for applying the operation and the get config() function for returning any configuration. We
 can also define an init () function to set the configuration, in this case, the symmetrical
+for applying the operation and the get config() function for returning any configuration. We
 size of the bounding box for the weight hypercube, e.g. 0.01. The ClipConstraint class is
 defined below.
+
+```
 # clip model weights to a given hypercube
 class ClipConstraint(Constraint):
 # set clip value when initialized
@@ -327,6 +310,8 @@ return {'clip_value': self.clip_value}
 
 To use the constraint, the class can be constructed, then used in a layer by setting the
 kernel constraint argument; for example:
+
+```
 ...
 # define the constraint
 const = ClipConstraint(0.01)
@@ -337,20 +322,17 @@ model.add(Conv2D(..., kernel_constraint=const))
 ```
 
 The constraint is only required when updating the critic model.
+ 
 
-16.4.5
 
-Update Critic More Than Generator
+## Update Critic More Than Generator
 
 In the DCGAN, the generator and the discriminator model must be updated in equal amounts.
 Specifically, the discriminator is updated with a half batch of real and a half batch of fake
 samples each iteration, whereas the generator is updated with a single batch of generated
 samples (described in Chapter 4). For example:
 
-### 16.4. Wasserstein GAN Implementation Details
-
-313
-
+```
 ...
 # main gan training loop
 for i in range(n_steps):
@@ -377,6 +359,8 @@ In the WGAN model, the critic model must be updated more than the generator mode
 Specifically, a new hyperparameter is defined to control the number of times that the critic is
 updated for each update to the generator model, called n critic, and is set to 5. This can be
 implemented as a new loop within the main GAN update loop; for example:
+
+```
 ...
 # main gan training loop
 for i in range(n_steps):
@@ -401,18 +385,14 @@ g_loss = gan_model.train_on_batch(X_gan, y_gan)
 ```
 
 
-### 16.5. How to Train a Wasserstein GAN Model
-
-16.4.6
-
-314
-
-Use RMSProp Stochastic Gradient Descent
+## Use RMSProp Stochastic Gradient Descent
 
 The DCGAN uses the Adam version of stochastic gradient descent with a small learning rate
 and modest momentum. The WGAN recommends the use of RMSProp instead, with a small
 learning rate of 0.00005. This can be implemented in Keras when the model is compiled. For
 example:
+
+```
 ...
 # compile model
 opt = RMSprop(lr=0.00005)
@@ -420,10 +400,7 @@ model.compile(loss=wasserstein_loss, optimizer=opt)
 
 ```
 
-
-16.5
-
-How to Train a Wasserstein GAN Model
+## How to Train a Wasserstein GAN Model
 
 Now that we know the specific implementation details for the WGAN, we can implement the
 model for image generation. In this section, we will develop a WGAN to generate a single
@@ -439,6 +416,8 @@ updates and is optimized using the custom wasserstein loss() function, and the R
 version of stochastic gradient descent with a learning rate of 0.00005. The define critic()
 function below implements this, defining and compiling the critic model and returning it. The
 input shape of the image is parameterized as a default function argument to make it clear.
+
+```
 # define the standalone critic model
 def define_critic(in_shape=(28,28,1)):
 # weight initialization
@@ -461,10 +440,6 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Flatten())
 model.add(Dense(1))
 
-### 16.5. How to Train a Wasserstein GAN Model
-
-315
-
 # compile model
 opt = RMSprop(lr=0.00005)
 model.compile(loss=wasserstein_loss, optimizer=opt)
@@ -483,6 +458,8 @@ the output layer.
 The define generator() function below defines the generator model but intentionally does
 not compile it as it is not trained directly, then returns the model. The size of the latent space
 is parameterized as a function argument.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 # weight initialization
@@ -518,14 +495,12 @@ model to ensure that only the weights of the generator model are updated. This c
 trainability of the critic weights only has an effect when training the combined GAN model, not
 when training the critic standalone.
 
-### 16.5. How to Train a Wasserstein GAN Model
-
-316
-
 This larger GAN model takes as input a point in the latent space, uses the generator model
 to generate an image, which is fed as input to the critic model, then scored as real or fake. The
 model is fit using RMSProp with the custom wasserstein loss() function. The define gan()
 function below implements this, taking the already defined generator and critic models as input.
+
+```
 # define the combined generator and critic model, for updating the generator
 def define_gan(generator, critic):
 # make weights in the critic not trainable
@@ -550,6 +525,8 @@ selected (about 5,000) that belongs to class 7, e.g. are a handwritten depiction
 seven. Then the pixel values must be scaled to the range [-1,1] to match the output of the
 generator model. The load real samples() function below implements this, returning the
 loaded and scaled subset of the MNIST training dataset ready for modeling.
+
+```
 # load images
 def load_real_samples():
 # load dataset
@@ -567,12 +544,13 @@ return X
 
 ```
 
-dataset.
 We will require one batch (or a half batch) of real images from the dataset each update to
 the GAN model. A simple way to achieve this is to select a random sample of images from the
 dataset each time. The generate real samples() function below implements this, taking the
 prepared dataset as an argument, selecting and returning a random sample of images and their
 corresponding label for the critic, specifically target = −1 indicating that they are real images.
+
+
 # select real samples
 
 ### 16.5. How to Train a Wasserstein GAN Model
@@ -610,6 +588,8 @@ the generator model and size of the latent space as arguments, then generating p
 latent space and using them as input to the generator model. The function returns the generated
 images and their corresponding label for the critic model, specifically target = 1 to indicate
 they are fake or generated.
+
+```
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n_samples):
 # generate points in latent space
@@ -628,14 +608,12 @@ subjectively evaluate them. The summarize performance() function below takes the
 model at a given point during training and uses it to generate 100 images in a 10 × 10 grid,
 that are then plotted and saved to file. The model is also saved to file at this time, in case we
 would like to use it later to generate more images.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, latent_dim, n_samples=100):
 # prepare fake examples
 X, _ = generate_fake_samples(g_model, latent_dim, n_samples)
-
-### 16.5. How to Train a Wasserstein GAN Model
-
-318
 
 # scale from [-1,1] to [0,1]
 X = (X + 1) / 2.0
@@ -663,6 +641,8 @@ model over time. The loss for the critic for real and fake samples can be tracke
 update, as can the loss for the generator for each update. These can then be used to create line
 plots of loss at the end of the training run. The plot history() function below implements
 this and saves the results to file.
+
+```
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
 # plot history
@@ -675,7 +655,6 @@ pyplot.close()
 
 ```
 
-curves.
 We are now ready to fit the GAN model. The model is fit for 10 training epochs, which is
 arbitrary, as the model begins generating plausible number-7 digits after perhaps the first few
 epochs. A batch size of 64 samples is used, and each training epoch involves 6265
@@ -692,13 +671,11 @@ The train() function below implements this, taking the defined models, dataset, 
 of the latent dimension as arguments and parameterizing the number of epochs and batch size
 with default arguments. The generator model is saved at the end of training. The performance
 
-### 16.5. How to Train a Wasserstein GAN Model
-
-319
-
 of the critic and generator models is reported each iteration. Sample images are generated and
 saved every epoch, and line plots of model performance are created and saved at the end of the
 run.
+
+```
 # train the generator and critic
 def train(g_model, c_model, gan_model, dataset, latent_dim, n_epochs=10, n_batch=64,
 n_critic=5):
@@ -747,6 +724,8 @@ plot_history(c1_hist, c2_hist, g_hist)
 
 Now that all of the functions have been defined, we can create the models, load the dataset,
 and begin the training process.
+
+```
 ...
 # size of the latent space
 latent_dim = 50
@@ -767,6 +746,8 @@ train(generator, critic, gan_model, dataset, latent_dim)
 ```
 
 Tying all of this together, the complete example is listed below.
+
+```
 # example of a wgan for generating handwritten digits
 from numpy import expand_dims
 from numpy import mean
@@ -804,12 +785,6 @@ return backend.mean(y_true * y_pred)
 # define the standalone critic model
 def define_critic(in_shape=(28,28,1)):
 # weight initialization
-
-320
-
-### 16.5. How to Train a Wasserstein GAN Model
-
-321
 
 init = RandomNormal(stddev=0.02)
 # weight constraint
@@ -866,7 +841,6 @@ model = Sequential()
 # add generator
 model.add(generator)
 
-### 16.5. How to Train a Wasserstein GAN Model
 # add the critic
 model.add(critic)
 # compile model
@@ -919,9 +893,6 @@ X, _ = generate_fake_samples(g_model, latent_dim, n_samples)
 # scale from [-1,1] to [0,1]
 X = (X + 1) / 2.0
 
-322
-
-### 16.5. How to Train a Wasserstein GAN Model
 # plot images
 for i in range(10 * 10):
 # define subplot
@@ -977,12 +948,6 @@ c2_tmp.append(c_loss2)
 c1_hist.append(mean(c1_tmp))
 c2_hist.append(mean(c2_tmp))
 
-323
-
-### 16.5. How to Train a Wasserstein GAN Model
-
-324
-
 # prepare points in latent space as input for the generator
 X_gan = generate_latent_points(latent_dim, n_batch)
 # create inverted labels for the fake samples
@@ -1020,8 +985,10 @@ the critic in generated samples, and g is the loss of the generator trained via 
 scores are inverted as part of the loss function; this means if they are reported as negative, then
 they are really positive, and if they are reported as positive, they are really negative. The sign
 of the c2 scores is unchanged.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 Recall that the Wasserstein loss seeks scores for real and fake that are more different during
 training. We can see this towards the end of the run, such as the final epoch where the c1 loss
 for real examples is 5.338 (really -5.338) and the c2 loss for fake examples is -14.260, and this
@@ -1030,6 +997,8 @@ that in this case, the model is scoring the loss of the generator at around 20. 
 we update the generator via the critic model and treat the generated examples as real with the
 target of -1, therefore the score can be interpreted as a value around -20, close to the loss for
 fake samples.
+
+```
 ...
 >961, c1=5.110, c2=-15.388 g=19.579
 
@@ -1088,38 +1057,29 @@ for generated images as reported by the critic (orange line). This sign of this 
 by the target label (e.g. the target label is 1.0), therefore, a well-performing WGAN should
 show this line trending down as the image quality of the generated model is increased.
 
-![](../images/-.jpg)
+![](../images/342-76.jpg)
 
-
-### 16.5. How to Train a Wasserstein GAN Model
-
-326
 
 In this case, more training seems to result in better quality generated images, with a major
 hurdle occurring around epoch 200-300 after which quality remains pretty good for the model.
 Before and around this hurdle, image quality is poor; for example:
 
-![](../images/-.jpg)
+![](../images/343-77.jpg)
 
-Wasserstein GAN.
 After this epoch, the WGAN begins to generate plausible handwritten digits.
 
-### 16.6. How to Generate Images With WGAN
 
-327
+![](../images/344-78.jpg)
 
-![](../images/-.jpg)
 
-Wasserstein GAN.
-
-16.6
-
-How to Generate Images With WGAN
+## How to Generate Images With WGAN
 
 We can use the saved generator model to create new images on demand. This can be achieved
 by first selecting a final model based on image quality, then loading it and providing new points
 from the latent space as input in order to generate new plausible images from the domain. In
 this case, we will use the model saved after 10 epochs, or 970 training iterations.
+
+```
 # example of loading the generator model and generating images
 from keras.models import load_model
 from numpy.random import randn
@@ -1133,9 +1093,6 @@ x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
 # create a plot of generated images (reversed grayscale)
 
-### 16.6. How to Generate Images With WGAN
-
-328
 
 def plot_generated(examples, n):
 # plot images
@@ -1158,35 +1115,26 @@ plot_generated(X, 5)
 
 ```
 
-images.
+
 Running the example generates a plot of 5 × 5, or 25, new and plausible handwritten number
 seven digits.
 
-![](../images/-.jpg)
+![](../images/345-79.jpg)
 
 
-### 16.7. Further Reading
 
-16.7
-
-329
-
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-16.7.1
-
-Papers
+## Papers
 
 - Wasserstein GAN, 2017.
 https://arxiv.org/abs/1701.07875
 - Improved Training of Wasserstein GANs, 2017.
 https://arxiv.org/abs/1704.00028
 
-16.7.2
-
-API
+## API 
 
 - Keras Datasets API..
 https://keras.io/datasets/
@@ -1203,9 +1151,8 @@ https://docs.scipy.org/doc/numpy/reference/routines.random.html
 - NumPy Array manipulation routines.
 https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html
 
-16.7.3
 
-Articles
+## Articles
 
 - Wasserstein GAN, GitHub.
 https://github.com/martinarjovsky/WassersteinGAN
@@ -1221,7 +1168,28 @@ wgan.py
 
 In this tutorial, you discovered how to implement the Wasserstein generative adversarial network
 from scratch. Specifically, you learned:
+
 - The differences between the standard DCGAN and the new Wasserstein GAN.
 - How to implement the specific details of the Wasserstein GAN from scratch.
 - How to develop a WGAN for image generation and interpret model behavior.
 
+## Next
+
+This was the final tutorial in this part. In the next part, you will explore a suite of different
+conditional GAN models.
+
+**Part V**
+**Conditional GANs**
+
+## Overview
+
+In this part you will discover conditional GANs that add some control over the types of images
+generated by the model. After reading the chapters in this part, you will know:
+
+- Discover how to generate class-conditional images with the cGAN (Chapter 17).
+- Discover how to add control variables to influence image generation with the InfoGAN
+(Chapter 18).
+- Discover how to improve the image generation process by adding an auxiliary classifier
+model with the AC-GAN (Chapter 19).
+- Discover how to train a semi-supervised model along with the discriminator in the SGAN
+(Chapter 20)

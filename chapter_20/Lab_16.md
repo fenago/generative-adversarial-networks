@@ -16,9 +16,9 @@ You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
 
-### Chapter 20
-How to Develop a Semi-Supervised
-GAN (SGAN)
+
+## How to Develop a Semi-Supervised GAN (SGAN)
+
 Semi-supervised learning is the challenging problem of training a classifier in a dataset that
 contains a small number of labeled examples and a much larger number of unlabeled examples.
 The Generative Adversarial Network, or GAN, is an architecture that makes effective use of
@@ -31,6 +31,7 @@ and a generator model. The result is both a supervised classification model that
 well to unseen examples and a generator model that outputs plausible examples of images from
 the domain. In this tutorial, you will discover how to develop a Semi-Supervised Generative
 Adversarial Network from scratch. After completing this tutorial, you will know:
+
 - The semi-supervised GAN is an extension of the GAN architecture for training a classifier
 model while making use of labeled and unlabeled data.
 - There are at least three approaches to implementing the supervised and unsupervised
@@ -40,24 +41,19 @@ classifier for making predictions.
 
 Let’s get started.
 
-20.1
 
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into four parts; they are:
+
 1. What Is the Semi-Supervised GAN?
 2. How to Implement the Semi-Supervised Discriminator
 3. How to Develop a Semi-Supervised GAN for MNIST
 4. How to Use the Final SGAN Classifier Model
-422
 
-### 20.2. What Is the Semi-Supervised GAN?
 
-20.2
 
-423
-
-What Is the Semi-Supervised GAN?
+## What Is the Semi-Supervised GAN?
 
 Semi-supervised learning refers to a problem where a predictive model is required and there
 are few labeled examples and many unlabeled examples. The most common example is a
@@ -67,11 +63,14 @@ set of labeled examples and somehow harness the larger dataset of unlabeled exam
 order to generalize to classifying new examples in the future. The Semi-Supervised GAN, or
 sometimes SGAN for short, is an extension of the Generative Adversarial Network architecture
 for addressing semi-supervised learning problems.
+
 One of the primary goals of this work is to improve the effectiveness of generative
 adversarial networks for semi-supervised learning (improving the performance of
 a supervised task, in this case, classification, by learning on additional unlabeled
 examples).
+
 — Improved Techniques for Training GANs, 2016.
+
 The discriminator in a traditional GAN is trained to predict whether a given image is real
 (from the dataset) or fake (generated), allowing it to learn features from unlabeled images.
 The discriminator can then be used via transfer learning as a starting point when developing
@@ -81,14 +80,19 @@ updated to predict K + 1 classes, where K is the number of classes in the predic
 and the additional class label is added for a new fake class. It involves directly training the
 discriminator model for both the unsupervised GAN task and the supervised classification task
 simultaneously.
+
 We train a generative model G and a discriminator D on a dataset with inputs
 belonging to one of N classes. At training time, D is made to predict which of N + 1
 classes the input belongs to, where an extra class is added to correspond to the
 outputs of G.
+
 — Semi-Supervised Learning with Generative Adversarial Networks, 2016.
+
 As such, the discriminator is trained in two modes: a supervised and unsupervised mode.
+
 - Unsupervised Training: In the unsupervised mode, the discriminator is trained in the
 same way as the traditional GAN, to predict whether the example is either real or fake.
+
 - Supervised Training: In the supervised mode, the discriminator is trained to predict
 the class label of real examples.
 
@@ -98,41 +102,28 @@ the extracted features and apply class labels. The result is a classifier model 
 state-of-the-art results on standard problems such as MNIST when trained on very few labeled
 examples, such as tens, hundreds, or one thousand. Additionally, the training process can also
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-424
-
 result in better quality images output by the generator model. For example, Augustus Odena
 in his 2016 paper titled Semi-Supervised Learning with Generative Adversarial Networks shows
 how a GAN-trained classifier is able to perform as well as or better than a standalone CNN
 model on the MNIST handwritten digit recognition task when trained with 25, 50, 100, and
 1,000 labeled examples.
 
-![](../images/-.jpg)
+![](../images/441-104.jpg)
 
-and SGAN on MNIST. Taken from: Semi-Supervised Learning with Generative Adversarial
-Networks.
+
 Tim Salimans, et al. from OpenAI in their 2016 paper titled Improved Techniques for
 Training GANs achieved at the time state-of-the-art results on a number of image classification
 tasks using a semi-supervised GAN, including MNIST.
 
-![](../images/-.jpg)
+![](../images/441-105.jpg)
 
-models to a SGAN on MNIST. Taken From: Improved Techniques for Training GANs.
 
-20.3
-
-How to Implement the Semi-Supervised Discriminator
+## How to Implement the Semi-Supervised Discriminator
 
 There are a number of ways that we can implement the discriminator model for the semisupervised GAN. In this section, we will review three candidate approaches.
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
 
-20.3.1
-
-425
-
-Traditional Discriminator Model
+## Traditional Discriminator Model
 
 Consider a discriminator model for the standard GAN model. It must take an image as input
 and predict whether it is real or fake. More specifically, it predicts the likelihood of the input
@@ -143,6 +134,8 @@ with the size of 28 × 28 pixels and predicts a probability of the image being r
 best practices and downsample the image using convolutional layers with a 2 × 2 stride and
 a leaky ReLU activation function. The define discriminator() function below implements
 this and defines our standard discriminator model.
+
+```
 # example of defining the discriminator model
 from keras.models import Model
 from keras.layers import Input
@@ -185,34 +178,26 @@ plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer
 
 Running the example creates a plot of the discriminator model, clearly showing the 28×28×1
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-426
 
 shape of the input image and the prediction of a single probability value.
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-![](../images/-.jpg)
+![](../images/443-106.jpg)
 
 
-20.3.2
 
-Separate Discriminator Models With Shared Weights
+## Separate Discriminator Models With Shared Weights
 
 Starting with the standard GAN discriminator model, we can update it to create two models
 that share feature extraction weights. Specifically, we can define one classifier model that
 predicts whether an input image is real or fake, and a second classifier model that predicts the
 class of a given model.
-- Binary Classifier Model. Predicts whether the image is real or fake, sigmoid activation
+- **Binary Classifier Model.** Predicts whether the image is real or fake, sigmoid activation
 function in the output layer, and optimized using the binary cross-entropy loss function.
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-427
-
-- Multiclass Classifier Model. Predicts the class of the image, softmax activation
+- **Multiclass Classifier Model.** Predicts the class of the image, softmax activation
 function in the output layer, and optimized using the categorical cross-entropy loss
 function.
 
@@ -220,6 +205,8 @@ Both models have different output layers but share all feature extraction layers
 that updates to one of the classifier models will impact both models. The example below creates
 the traditional discriminator model with binary output first, then re-uses the feature extraction
 layers and creates a new multiclass prediction model, in this case with 10 classes.
+
+```
 # example of defining semi-supervised discriminator model
 from keras.models import Model
 from keras.layers import Input
@@ -265,10 +252,6 @@ d_model, c_model = define_discriminator()
 plot_model(d_model, to_file='discriminator1_plot.png', show_shapes=True,
 show_layer_names=True)
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-428
-
 plot_model(c_model, to_file='discriminator2_plot.png', show_shapes=True,
 show_layer_names=True)
 
@@ -277,20 +260,16 @@ show_layer_names=True)
 Running the example creates and plots both models. The plot for the first model is the
 same as before. The plot of the second model shows the same expected input shape and same
 feature extraction layers, with a new 10 class classification output layer.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-![](../images/-.jpg)
+![](../images/445-107.jpg)
 
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
 
-20.3.3
-
-429
-
-Single Discriminator Model With Multiple Outputs
+## Single Discriminator Model With Multiple Outputs
 
 Another approach to implementing the semi-supervised discriminator model is to have a single
 model with multiple output layers. Specifically, this is a single model with one output layer for
@@ -307,6 +286,8 @@ architecture. We can see that the model is defined with two output layers and th
 layer for the supervised task is defined with n classes + 1, in this case 11, making room for
 the additional unknown class label. We can also see that the model is compiled to two loss
 functions, one for each output layer of the model.
+
+```
 # example of defining semi-supervised discriminator model
 from keras.models import Model
 from keras.layers import Input
@@ -343,10 +324,6 @@ model = Model(in_image, [d_out_layer, c_out_layer])
 model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'],
 optimizer=Adam(lr=0.0002, beta_1=0.5), metrics=['accuracy'])
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-430
-
 return model
 # create model
 model = define_discriminator()
@@ -358,21 +335,15 @@ show_layer_names=True)
 
 Running the example creates and plots the single multi-output model. The plot clearly
 shows the shared layers and the separate unsupervised and supervised output layers.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-![](../images/-.jpg)
+![](../images/447-108.jpg)
 
-Supervised Output Layers.
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-20.3.4
-
-431
-
-Stacked Discriminator Models With Shared Weights
+## Stacked Discriminator Models With Shared Weights
 
 A final approach is very similar to the prior two semi-supervised approaches and involves creating
 separate logical unsupervised and supervised models but attempts to reuse the output layers of
@@ -382,20 +353,13 @@ Techniques for Training GANs. In the paper, they describe an efficient implement
 first the supervised model is created with K output classes and a softmax activation function.
 The unsupervised model is then defined that takes the output of the supervised model prior to
 the softmax activation, then calculates a normalized sum of the exponential outputs.
-K
 
-X
-Z(x)
-D(x) =
-, where Z(x) =
-exp[lk (x)]
-Z(x) + 1
-k=1
-
-(20.1)
+![](../images/6.jpg)
 
 To make this clearer, we can implement this activation function in NumPy and run some
 sample activations through it to see what happens. The complete example is listed below.
+
+```
 # example of custom activation function
 import numpy as np
 # custom activation function
@@ -427,13 +391,12 @@ not normalized, as this would be performed by the softmax activation. The custom
 function will output a value between 0.0 and 1.0. A value close to 0.0 is output for a small or
 negative activation and a value close to 1.0 for a positive or large activation. We can see this
 when we run the example.
+
+```
 0.00013618124143106674
 0.5246331135813284
 0.75
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-432
 
 0.890768227426964
 0.9999848669190928
@@ -451,6 +414,8 @@ of the output layer of the supervised model before the softmax activation, and t
 of the nodes pass through our custom activation function via the Lambda layer. No need for
 a sigmoid activation function as we have already normalized the activation. As before, the
 unsupervised model is fit using binary cross-entropy loss.
+
+```
 # example of defining semi-supervised discriminator model
 from keras.models import Model
 from keras.layers import Input
@@ -488,9 +453,6 @@ fe = Flatten()(fe)
 fe = Dropout(0.4)(fe)
 # output layer nodes
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
-
-433
 
 fe = Dense(n_classes)(fe)
 # supervised output
@@ -515,46 +477,37 @@ show_layer_names=True)
 
 ```
 
-activation function.
+
 Running the example creates and plots the two models, which look much the same as the
 two models in the first example. Stacked version of the unsupervised discriminator model:
 
-### 20.3. How to Implement the Semi-Supervised Discriminator
 
-434
 
-![](../images/-.jpg)
+![](../images/451-109.jpg)
 
-Semi-Supervised GAN.
 Stacked version of the supervised discriminator model:
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
 
-435
-
-![](../images/-.jpg)
+![](../images/452-110.jpg)
 
 Now that we have seen how to implement the discriminator model in the semi-supervised
 GAN, we can develop a complete example for image generation and semi-supervised classification.
 
-20.4
 
-How to Develop a Semi-Supervised GAN for MNIST
+## How to Develop a Semi-Supervised GAN for MNIST
 
 In this section, we will develop a semi-supervised GAN model for the MNIST handwritten digit
 dataset (described in Section 7.2). The dataset has 10 classes for the digits 0-9, therefore the
 classifier model will have 10 output nodes. The model will be fit on the training dataset that
 contains 60,000 examples. Only 100 of the images in the training dataset will be used with
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-436
-
 labels, 10 from each of the 10 classes. We will start off by defining the models. We will use the
 stacked discriminator model, exactly as defined in the previous section. Next, we can define
 the generator model. In this case, the generator model will take as input a point in the latent
 space and will use transpose convolutional layers to output a 28 × 28 grayscale image. The
 define generator() function below implements this and returns the defined generator model.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 # image generator input
@@ -585,6 +538,8 @@ passed directly to the unsupervised discriminator model, and the weights of the 
 are marked as not trainable. The define gan() function below implements this, taking the
 already-defined generator and discriminator models as input and returning the composite model
 used to train the weights of the generator model.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model):
 # make weights in the discriminator not trainable
@@ -602,11 +557,9 @@ return model
 
 We can load the training dataset and scale the pixels to the range [-1, 1] to match the output
 values of the generator model.
+
+```
 # load the images
-
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-437
 
 def load_real_samples():
 # load dataset
@@ -626,6 +579,8 @@ We can also define a function to select a subset of the training dataset in whic
 function below implements this and is careful to ensure that the selection of examples is random
 and that the classes are balanced. The number of labeled examples is parameterized and set at
 100, meaning that each of the 10 classes will have 10 randomly selected examples.
+
+```
 # select a supervised subset of the dataset, ensures classes are balanced
 def select_supervised_samples(dataset, n_samples=100, n_classes=10):
 X, y = dataset
@@ -646,7 +601,9 @@ return asarray(X_list), asarray(y_list)
 Next, we can define a function for retrieving a batch of real training examples. A sample
 of images and labels is selected, with replacement. This same function can be used to retrieve
 examples from the labeled and unlabeled dataset, later when we train the models. In the case
-of the unlabeled dataset, we will ignore the labels.
+of the unlabeled dataset, we will ignore the labels.\
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # split into images and labels
@@ -662,15 +619,13 @@ return [X, labels], y
 ```
 
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-438
-
 Next, we can define functions to help in generating images using the generator model. First,
 the generate latent points() function will create a batch worth of random points in the
 latent space that can be used as input for generating images. The generate fake samples()
 function will call this function to generate a batch worth of images that can be fed to the
 unsupervised discriminator model or the composite GAN model during training.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
 # generate points in the latent space
@@ -690,7 +645,7 @@ return images, y
 
 ```
 
-images.
+
 Next, we can define a function to be called when we want to evaluate the performance of the
 model. This function will generate and plot 100 images using the current state of the generator
 model. This plot of images can be used to subjectively evaluate the performance of the generator
@@ -699,6 +654,8 @@ and the classification accuracy is reported. Finally, the generator model and th
 discriminator model are saved to file, to be used later. The summarize performance() function
 below implements this and can be called periodically, such as the end of every training epoch.
 The results can be reviewed at the end of the run to select a classifier and even generator models.
+
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, c_model, latent_dim, dataset, n_samples=100):
 # prepare fake examples
@@ -719,9 +676,7 @@ pyplot.savefig(filename1)
 pyplot.close()
 # evaluate the classifier model
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
 
-439
 
 X, y = dataset
 _, acc = c_model.evaluate(X, y, verbose=0)
@@ -736,7 +691,7 @@ print('>Saved: %s, %s, and %s' % (filename1, filename2, filename3))
 
 ```
 
-file.
+
 Next, we can define a function to train the models. The defined models and loaded training
 dataset are provided as arguments, and the number of training epochs and batch size are
 parameterized with default values, in this case 20 epochs and a batch size of 100. The chosen
@@ -754,6 +709,8 @@ The shared weights of the discriminator model get updated with 1.5 batches worth
 whereas the weights of the generator model are updated with one batch worth of samples each
 iteration. Changing this so that each model is updated by the same amount might improve the
 model training process.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, c_model, gan_model, dataset, latent_dim, n_epochs=20,
 n_batch=100):
@@ -776,9 +733,6 @@ c_loss, c_acc = c_model.train_on_batch(Xsup_real, ysup_real)
 # update unsupervised discriminator (d)
 [X_real, _], y_real = generate_real_samples(dataset, half_batch)
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-440
 
 d_loss1 = d_model.train_on_batch(X_real, y_real)
 X_fake, y_fake = generate_fake_samples(g_model, latent_dim, half_batch)
@@ -796,6 +750,8 @@ summarize_performance(i, g_model, c_model, latent_dim, dataset)
 ```
 
 Finally, we can define the models and call the function to train and save the models.
+
+```
 ...
 # size of the latent space
 latent_dim = 100
@@ -814,6 +770,8 @@ train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 
 Tying all of this together, the complete example of training a semi-supervised GAN on the
 MNIST handwritten digit image classification task is listed below.
+
+```
 # example of semi-supervised gan for mnist
 from numpy import expand_dims
 from numpy import zeros
@@ -836,7 +794,7 @@ from keras.layers import Lambda
 from keras.layers import Activation
 from matplotlib import pyplot
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
+
 from keras import backend
 # custom activation function
 def custom_activation(output):
@@ -891,9 +849,7 @@ gen = Conv2DTranspose(128, (4,4), strides=(2,2), padding='same')(gen)
 gen = LeakyReLU(alpha=0.2)(gen)
 # output
 
-441
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
 out_layer = Conv2D(1, (7,7), activation='tanh', padding='same')(gen)
 # define model
 model = Model(in_lat, out_layer)
@@ -947,9 +903,7 @@ X, labels = images[ix], labels[ix]
 # generate class labels
 y = ones((n_samples, 1))
 
-442
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
 return [X, labels], y
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
@@ -1002,12 +956,6 @@ n_batch=100):
 # select supervised dataset
 X_sup, y_sup = select_supervised_samples(dataset)
 print(X_sup.shape, y_sup.shape)
-
-443
-
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-444
 
 # calculate the number of batches per training epoch
 bat_per_epo = int(dataset[0].shape[0] / n_batch)
@@ -1054,6 +1002,7 @@ train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 At the start of the run, the size of the training dataset is summarized, as is the supervised
 subset, confirming our configuration. The performance of each model is summarized at the end
 of each update, including the loss and accuracy of the supervised discriminator model (c), the
@@ -1061,14 +1010,13 @@ loss of the unsupervised discriminator model on real and generated examples (d),
 of the generator model updated via the composite model (g). The loss for the supervised model
 will shrink to a small value close to zero and accuracy will hit 100%, which will be maintained
 
-### 20.4. How to Develop a Semi-Supervised GAN for MNIST
-
-445
-
 for the entire run. The loss of the unsupervised discriminator and generator should remain at
 modest values throughout the run if they are kept in equilibrium.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 (60000, 28, 28, 1) (60000,)
 (100, 28, 28, 1) (100,)
 n_epochs=20, n_batch=100, 1/2=50, b/e=600, steps=12000
@@ -1085,6 +1033,8 @@ The supervised classification model is evaluated on the entire training dataset 
 every training epoch, in this case after every 600 training updates. At this time, the performance
 of the model is summarized, showing that it rapidly achieves good skill. This is surprising given
 that the model is only trained on 10 labeled examples of each class.
+
+```
 ...
 Classifier
 Classifier
@@ -1106,22 +1056,16 @@ Accuracy:
 
 ```
 
-dataset.
 The models are also saved at the end of each training epoch and plots of generated images
 are also created. The quality of the generated images is good given the relatively small number
 of training epochs.
 
-### 20.5. How to Use the Final SGAN Classifier Model
 
-446
 
-![](../images/-.jpg)
+![](../images/463-111.jpg)
 
-Updates.
 
-20.5
-
-How to Use the Final SGAN Classifier Model
+## How to Use the Final SGAN Classifier Model
 
 Now that we have trained the generator and discriminator models, we can make use of them. In
 the case of the semi-supervised GAN, we are less interested in the generator model and more
@@ -1130,6 +1074,8 @@ specific saved model that is known to have good performance on the test dataset.
 the model saved after 12 training epochs, or 7,200 updates, that had a classification accuracy of
 about 95.432% on the training dataset. We can load the model directly via the load model()
 Keras function.
+
+```
 ...
 # load the model
 model = load_model('c_model_7200.h5')
@@ -1140,12 +1086,10 @@ Once loaded, we can evaluate it on the entire training dataset again to confirm 
 then evaluate it on the holdout test dataset. Recall, the feature extraction layers expect the
 input images to have the pixel values scaled to the range [-1,1], therefore, this must be performed
 
-### 20.6. Extensions
-
-447
-
 before any images are provided to the model. The complete example of loading the saved
 semi-supervised classifier model and evaluating it in the complete MNIST dataset is listed below.
+
+```
 # example of loading the classifier model and generating images
 from numpy import expand_dims
 from keras.models import load_model
@@ -1171,13 +1115,17 @@ print('Test Accuracy: %.3f%%' % (test_acc * 100))
 
 ```
 
-Running the example loads the model and evaluates it on the MNIST dataset.
+Running the example loads the model and evaluates it on the MNIST dataset.\
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
 In this case, we can see that the model achieves the expected performance of 95.432% on
 the training dataset, confirming we have loaded the correct model. We can also see that the
 accuracy on the holdout test dataset is as good, or slightly better, at about 95.920%. This
 shows that the learned classifier has good generalization.
+
+```
 Train Accuracy: 95.432%
 Test Accuracy: 95.920%
 
@@ -1186,9 +1134,10 @@ Test Accuracy: 95.920%
 We have successfully demonstrated the training and evaluation of a semi-supervised classifier
 model fit via the GAN architecture.
 
-Extensions
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
+
 - Standalone Classifier. Fit a standalone classifier model on the labeled dataset directly
 and compare performance to the SGAN model.
 - Number of Labeled Examples. Repeat the example of more or fewer labeled examples
@@ -1199,13 +1148,12 @@ further lift the performance of the supervised model closer toward state-of-the-
 If you explore any of these extensions, I’d love to know.
 
 
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-20.7.1
 
-Papers
+## Papers
 
 - Semi-Supervised Learning with Generative Adversarial Networks, 2016.
 https://arxiv.org/abs/1606.01583
@@ -1220,7 +1168,7 @@ https://arxiv.org/abs/1705.08850
 https://arxiv.org/abs/1805.08957
 
 
-API
+## API
 
 - Keras Datasets API..
 https://keras.io/datasets/
@@ -1238,10 +1186,11 @@ https://docs.scipy.org/doc/numpy/reference/routines.random.html
 https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html
 
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to develop a Semi-Supervised Generative Adversarial
 Network from scratch. Specifically, you learned:
+
 - The semi-supervised GAN is an extension of the GAN architecture for training a classifier
 model while making use of labeled and unlabeled data.
 - There are at least three approaches to implementing the supervised and unsupervised
@@ -1249,3 +1198,28 @@ discriminator models in Keras used in the semi-supervised GAN.
 - How to train a semi-supervised GAN from scratch on MNIST and load and use the trained
 classifier for making predictions.
 
+## Next
+This was the final tutorial in this part. In the next part, you will discover image-to-image
+translation with GAN models.
+
+## Part VI
+## Image Translation
+
+## Overview
+
+In this part you will discover how to develop GAN models for image-to-image translation with
+paired and unpaired image datasets using the Pix2Pix and CycleGAN approaches. The models
+in this part are somewhat complex, therefore we will carefully step through their description,
+development, and finally application in separate chapters. After reading the chapters in this
+part, you will know:
+
+- The Pix2Pix approach to modeling paired image-to-image translation (Chapter 21).
+- How to implement the PatchGAN discriminator and U-Net generator of the Pix2Pix
+architecture (Chapter 22).
+- How to develop a Pix2Pix application for transforming satellite photos to Google maps,
+and the reverse (Chapter 23).
+- The CycleGAN approach to modeling unpaired image-to-image translation (Chapter 24).
+- How to implement the PatchGAN discriminator and Encoder-Decoder generator of the
+CycleGAN architecture (Chapter 25).
+- How to develop a CycleGAN application for transforming photos of horses to zebra, and
+the reverse (Chapter 26)

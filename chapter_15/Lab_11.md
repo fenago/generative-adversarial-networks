@@ -16,9 +16,9 @@ You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
 
-### Chapter 15
-How to Develop a Least Squares GAN
-(LSGAN)
+
+## How to Develop a Least Squares GAN (LSGAN)
+
 The Least Squares Generative Adversarial Network, or LSGAN for short, is an extension to the
 GAN architecture that addresses the problem of vanishing gradients and loss saturation. It is
 motivated by the desire to provide a signal to the generator about fake samples that are far from
@@ -28,6 +28,7 @@ generator, encouraging the generation of more realistic images. The LSGAN can be
 with a minor change to the output layer of the discriminator layer and the adoption of the least
 squares, or L2, loss function. In this tutorial, you will discover how to develop a least squares
 generative adversarial network. After completing this tutorial, you will know:
+
 - The LSGAN addresses vanishing gradients and loss saturation of the deep convolutional
 GAN.
 - The LSGAN can be implemented by a mean squared error or L2 loss function for the
@@ -37,24 +38,15 @@ dataset.
 
 Let’s get started.
 
-15.1
-
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into three parts; they are:
 - What Is Least Squares GAN
 - How to Develop an LSGAN for MNIST
 - How to Generate Images With LSGAN
 
-288
 
-### 15.2. What Is Least Squares GAN
-
-15.2
-
-289
-
-What Is Least Squares GAN
+## What Is Least Squares GAN
 
 The standard Generative Adversarial Network, or GAN for short, is an effective architecture for
 training an unsupervised generative model. The architecture involves training a discriminator
@@ -64,10 +56,13 @@ a way that it is encouraged to generate images that are more likely to fool the 
 The discriminator is a binary classifier and is trained using binary cross-entropy loss function.
 A limitation of this loss function is that it is primarily concerned with whether the predictions
 are correct or not, and less so with how correct or incorrect they might be.
+
 ... when we use the fake samples to update the generator by making the discriminator
 believe they are from real data, it will cause almost no error because they are on the
 correct side, i.e., the real data side, of the decision boundary
+
 — Least Squares Generative Adversarial Networks, 2016.
+
 This can be conceptualized in two dimensions as a line or decision boundary separating dots
 that represent real and fake images. The discriminator is responsible for devising the decision
 boundary to best separate real and fake images and the generator is responsible for creating new
@@ -77,6 +72,7 @@ gradient information to the generator on how to generate better images. This sma
 generated images far from the decision boundary is referred to as a vanishing gradient problem
 or a loss saturation. The loss function is unable to give a strong signal as to how to best update
 the model.
+
 The Least Squares Generative Adversarial Network, or LSGAN for short, is an extension to
 the GAN architecture proposed by Xudong Mao, et al. in their 2016 paper titled Least Squares
 Generative Adversarial Networks. The LSGAN is a modification to the GAN architecture that
@@ -85,29 +81,31 @@ The motivation for this change is that the least squares loss will penalize gene
 on their distance from the decision boundary. This will provide a strong gradient signal for
 generated images that are very different or far from the existing data and address the problem
 of saturated loss.
+
 ... minimizing the objective function of regular GAN suffers from vanishing gradients,
 which makes it hard to update the generator. LSGANs can relieve this problem
 because LSGANs penalize samples based on their distances to the decision boundary,
 which generates more gradients to update the generator.
+
 — Least Squares Generative Adversarial Networks, 2016.
+
 This can be conceptualized with a plot, below, taken from the paper, that shows on the left
 the sigmoid decision boundary (blue) and generated fake points far from the decision boundary
 (pink), and on the right the least squares decision boundary (red) and the points far from the
 boundary (pink) given a gradient that moves them closer to the boundary.
 
-### 15.2. What Is Least Squares GAN
 
-290
+![](../images/307-69.jpg)
 
-![](../images/-.jpg)
-
-for Updating the Generator. Taken from: Least Squares Generative Adversarial Networks.
 In addition to avoiding loss saturation, the LSGAN also results in a more stable training
 process and the generation of higher quality and larger images than the traditional deep
 convolutional GAN.
+
 First, LSGANs are able to generate higher quality images than regular GANs.
 Second, LSGANs perform more stable during the learning process.
+
 — Least Squares Generative Adversarial Networks, 2016.
+
 The LSGAN can be implemented by using the target values of 1.0 for real and 0.0 for fake
 images and optimizing the model using the mean squared error (MSE) loss function, e.g. L2
 loss. The output layer of the discriminator model must be a linear activation function. The
@@ -115,17 +113,10 @@ authors propose a generator and discriminator model architecture, inspired by th
 architecture, and use interleaving upsampling and normal convolutional layers in the generator
 model, seen on the left in the image below.
 
-![](../images/-.jpg)
+![](../images/307-70.jpg)
 
-used in LSGAN Experiments. Taken from: Least Squares Generative Adversarial Networks.
 
-### 15.3. How to Develop an LSGAN for MNIST
-
-15.3
-
-291
-
-How to Develop an LSGAN for MNIST
+## How to Develop an LSGAN for MNIST
 
 In this section, we will develop an LSGAN for the MNIST handwritten digit dataset (described
 in Section 7.2). The first step is to define the models. Both the discriminator and the generator
@@ -137,6 +128,8 @@ grayscale input images with the shape 28 × 28, the shape of images in the MNIST
 the output layer is a single node with a linear activation function. The model is optimized using
 the mean squared error (MSE) loss function as per the LSGAN. The define discriminator()
 function below defines the discriminator model.
+
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
 # weight initialization
@@ -165,6 +158,8 @@ The generator model takes a point in latent space as input and outputs a graysca
 with the shape 28 × 28 pixels, where pixel values are in the range [-1,1] via the Tanh activation
 function on the output layer. The define generator() function below defines the generator
 model. This model is not compiled as it is not trained in a standalone manner.
+
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 # weight initialization
@@ -178,10 +173,6 @@ model.add(BatchNormalization())
 model.add(Activation('relu'))
 model.add(Reshape((7, 7, 256)))
 # upsample to 14x14
-
-### 15.3. How to Develop an LSGAN for MNIST
-
-292
 
 model.add(Conv2DTranspose(128, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init))
@@ -209,6 +200,8 @@ real or fake. The weights are updated as though the generated images are real (e
 of 1.0), allowing the generator to be updated toward generating more realistic images. The
 define gan() function defines and compiles the composite model for updating the generator
 model via the discriminator, again optimized via mean squared error as per the LSGAN.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(generator, discriminator):
 # make weights in the discriminator not trainable
@@ -229,6 +222,8 @@ Next, we can define a function to load the MNIST handwritten digit dataset and s
 pixel values to the range [-1,1] to match the images output by the generator model. Only the
 training part of the MNIST dataset is used, which contains 60,000 centered grayscale images of
 digits zero through nine.
+
+```
 # load mnist images
 def load_real_samples():
 # load dataset
@@ -236,10 +231,6 @@ def load_real_samples():
 # expand to 3d, e.g. add channels
 X = expand_dims(trainX, axis=-1)
 # convert from ints to floats
-
-### 15.3. How to Develop an LSGAN for MNIST
-
-293
 
 X = X.astype('float32')
 # scale from [0,255] to [-1,1]
@@ -251,6 +242,8 @@ return X
 We can then define a function to retrieve a batch of randomly selected images from the training
 dataset. The real images are returned with corresponding target values for the discriminator
 model, e.g. y=1.0, to indicate they are real.
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # choose random instances
@@ -266,6 +259,8 @@ return X, y
 Next, we can develop the corresponding functions for the generator. First, a function for
 generating random points in the latent space to use as input for generating images via the
 generator model.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
 # generate points in the latent space
@@ -279,6 +274,8 @@ return x_input
 Next, a function that will use the generator model to generate a batch of fake images for
 updating the discriminator model, along with the target value (y=0) to indicate the images are
 fake.
+
+```
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(generator, latent_dim, n_samples):
 # generate points in latent space
@@ -297,10 +294,7 @@ summarize performance() function below can be called during training to generate
 plot of images and save the generator model. Images are plotted using a reverse grayscale color
 map to make the digits black on a white background.
 
-### 15.3. How to Develop an LSGAN for MNIST
-
-294
-
+```
 # generate samples and save as a plot and save the model
 def summarize_performance(step, g_model, latent_dim, n_samples=100):
 # prepare fake examples
@@ -330,6 +324,8 @@ We are also interested in the behavior of loss during training. As such, we can 
 lists across each training iteration, then create and save a line plot of the learning dynamics of the
 models. Creating and saving the plot of learning curves is implemented in the plot history()
 function.
+
+```
 # create a line plot of loss for the gan and save to file
 def plot_history(d1_hist, d2_hist, g_hist):
 pyplot.plot(d1_hist, label='dloss1')
@@ -351,13 +347,11 @@ to the discriminator. Next, the generator is updated via the composite model, pr
 (y=1) target as the expected output for the model. The loss is reported each training iteration,
 and the model performance is summarized in terms of a plot of generated images at the end of
 every epoch. The plot of learning curves is created and saved at the end of the run.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=20, n_batch=64):
 # calculate the number of batches per training epoch
-
-### 15.3. How to Develop an LSGAN for MNIST
-
-295
 
 bat_per_epo = int(dataset.shape[0] / n_batch)
 # calculate the number of training iterations
@@ -394,6 +388,8 @@ plot_history(d1_hist, d2_hist, g_hist)
 
 Tying all of this together, the complete code example of training an LSGAN on the MNIST
 handwritten digit dataset is listed below.
+
+```
 # example of lsgan for mnist
 from numpy import expand_dims
 from numpy import zeros
@@ -415,7 +411,6 @@ from keras.initializers import RandomNormal
 from matplotlib import pyplot
 # define the standalone discriminator model
 
-### 15.3. How to Develop an LSGAN for MNIST
 def define_discriminator(in_shape=(28,28,1)):
 # weight initialization
 init = RandomNormal(stddev=0.02)
@@ -471,9 +466,7 @@ model = Sequential()
 # add generator
 model.add(generator)
 
-296
 
-### 15.3. How to Develop an LSGAN for MNIST
 # add the discriminator
 model.add(discriminator)
 # compile model with L2 loss
@@ -526,9 +519,7 @@ for i in range(10 * 10):
 # define subplot
 pyplot.subplot(10, 10, 1 + i)
 
-297
 
-### 15.3. How to Develop an LSGAN for MNIST
 # turn off axis
 pyplot.axis('off')
 # plot raw pixel data
@@ -584,11 +575,6 @@ if (i+1) % (bat_per_epo * 1) == 0:
 summarize_performance(i, g_model, latent_dim)
 # create line plot of training history
 
-298
-
-### 15.3. How to Develop an LSGAN for MNIST
-
-299
 
 plot_history(d1_hist, d2_hist, g_hist)
 # size of the latent space
@@ -610,13 +596,17 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+
 Running the example will report the loss of the discriminator on real (d1) and fake (d2)
 examples and the loss of the generator via the discriminator on generated examples presented
 as real (g). These scores are printed at the end of each training run and are expected to remain
 small values throughout the training process. Values of zero for an extended period may indicate
 a failure mode and the training process should be restarted.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1,
 >2,
 >3,
@@ -647,38 +637,26 @@ g=1.619
 Plots of generated images are created at the end of every epoch. The generated images at
 the beginning of the run are rough.
 
-### 15.3. How to Develop an LSGAN for MNIST
 
-300
-
-![](../images/-.jpg)
+![](../images/317-71.jpg)
 
 After a handful of training epochs, the generated images begin to look crisp and realistic.
 Recall that more training epochs may or may not correspond to a generator that outputs higher
 quality images. Review the generated plots and choose a final model with the best quality
 images.
 
-### 15.3. How to Develop an LSGAN for MNIST
 
-301
-
-![](../images/-.jpg)
+![](../images/318-72.jpg)
 
 At the end of the training run, a plot of learning curves is created for the discriminator and
 generator. In this case, we can see that training remains somewhat stable throughout the run,
 with some very large peaks observed, which wash out the scale of the plot.
 
-### 15.4. How to Generate Images With LSGAN
 
-302
+![](../images/319-73.jpg)
 
-![](../images/-.jpg)
 
-Training.
-
-15.4
-
-How to Generate Images With LSGAN
+## How to Generate Images With LSGAN
 
 We can use the saved generator model to create new images on demand. This can be achieved
 by first selecting a final model based on image quality, then loading it and providing new points
@@ -687,6 +665,8 @@ this case, we will use the model saved after 20 epochs, or 18,740 ( 60000
 or 937 batches per epoch
 64
 ×20 epochs) training iterations.
+
+```
 # example of loading the generator model and generating images
 from keras.models import load_model
 from numpy.random import randn
@@ -698,10 +678,6 @@ x_input = randn(latent_dim * n_samples)
 # reshape into a batch of inputs for the network
 x_input = x_input.reshape(n_samples, latent_dim)
 return x_input
-
-### 15.4. How to Generate Images With LSGAN
-
-303
 
 # create a plot of generated images (reversed grayscale)
 def plot_generated(examples, n):
@@ -725,31 +701,23 @@ plot_generated(X, 10)
 
 ```
 
-images.
 Running the example generates a plot of 10 × 10, or 100, new and plausible handwritten
 digits.
 
-### 15.5. Further Reading
 
-![](../images/-.jpg)
+![](../images/321-74.jpg)
 
-
-15.5
-
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-15.5.1
-
-Papers
+## Papers
 
 - Least Squares Generative Adversarial Networks, 2016.
 https://arxiv.org/abs/1611.04076
 
-15.5.2
 
-API
+## API
 
 - Keras Datasets API..
 https://keras.io/datasets/
@@ -757,12 +725,6 @@ https://keras.io/datasets/
 https://keras.io/models/sequential/
 - Keras Convolutional Layers API.
 https://keras.io/layers/convolutional/
-
-304
-
-### 15.6. Summary
-
-305
 
 - How can I “freeze” Keras layers?.
 https://keras.io/getting-started/faq/#how-can-i-freeze-keras-layers
@@ -773,9 +735,8 @@ https://docs.scipy.org/doc/numpy/reference/routines.random.html
 - NumPy Array manipulation routines.
 https://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html
 
-15.5.3
 
-Articles
+## Articles
 
 - Least Squares GAN, 2017.
 https://wiseodd.github.io/techblog/2017/03/02/least-squares-gan/
@@ -784,12 +745,12 @@ https://github.com/xudonmao/LSGAN
 - Keras-GAN Project, GitHub.
 https://github.com/eriklindernoren/Keras-GAN
 
-15.6
 
-Summary
+## Summary
 
 In this tutorial, you discovered how to develop a least squares generative adversarial network.
 Specifically, you learned:
+
 - The LSGAN addresses vanishing gradients and loss saturation of the deep convolutional
 GAN.
 - The LSGAN can be implemented by a mean squared error or L2 loss function for the
@@ -797,9 +758,8 @@ discriminator model.
 - How to implement the LSGAN model for generating handwritten digits for the MNIST
 dataset.
 
-15.6.1
 
-Next
+## Next
 
 In the next tutorial, you will discover the Wasserstein loss function and the WGAN and how to
 implement it from scratch.

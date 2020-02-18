@@ -17,8 +17,8 @@ You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
 
-### Chapter 22
-How to Implement Pix2Pix Models
+## How to Implement Pix2Pix Models
+
 The Pix2Pix GAN is a generator model for performing image-to-image translation trained
 on paired examples. For example, the model can be used to translate images of daytime to
 nighttime, or from sketches of products like shoes to photographs of products. The benefit
@@ -28,6 +28,7 @@ translation tasks. The model is very impressive but has an architecture that app
 complicated to implement for beginners. In this tutorial, you will discover how to implement
 the Pix2Pix GAN architecture from scratch using the Keras deep learning framework. After
 completing this tutorial, you will know:
+
 - How to develop the PatchGAN discriminator model for the Pix2Pix GAN.
 - How to develop the U-Net encoder-decoder generator model for the Pix2Pix GAN.
 - How to implement the composite model for updating the generator and how to train both
@@ -35,26 +36,19 @@ models.
 
 Let’s get started.
 
-22.1
 
-Tutorial Overview
+## Tutorial Overview
 
 This tutorial is divided into five parts; they are:
+
 1. What Is the Pix2Pix GAN?
 2. How to Implement the PatchGAN Discriminator Model
 3. How to Implement the U-Net Generator Model
 4. How to Implement Adversarial and L1 Loss
 5. How to Update Model Weights
 
-464
 
-### 22.2. What Is the Pix2Pix GAN?
-
-22.2
-
-465
-
-What Is the Pix2Pix GAN?
+## What Is the Pix2Pix GAN?
 
 Pix2Pix is a Generative Adversarial Network, or GAN, model designed for general purpose
 image-to-image translation. The approach was presented by Phillip Isola, et al. in their 2016
@@ -79,10 +73,8 @@ such as converting maps to satellite photographs, black and white photographs to
 sketches of products to product photographs. Now that we are familiar with the Pix2Pix GAN,
 let’s explore how we can implement it using the Keras deep learning library.
 
-22.3
 
-How to Implement the PatchGAN Discriminator
-Model
+## How to Implement the PatchGAN Discriminator Model
 
 The discriminator model in the Pix2Pix GAN is implemented as a PatchGAN. The PatchGAN
 is designed based on the size of the receptive field, sometimes called the effective receptive field.
@@ -91,18 +83,17 @@ the input image (actually volume as it proceeded down the input channels). A Pat
 the size 70 × 70 is used, which means that the output (or each output) of the model maps to a
 70 × 70 square of the input image. In effect, a 70 × 70 PatchGAN will classify 70 × 70 patches
 of the input image as real or fake.
+
 ... we design a discriminator architecture - which we term a PatchGAN - that only
 penalizes structure at the scale of patches. This discriminator tries to classify if each
 N × N patch in an image is real or fake. We run this discriminator convolutionally
 across the image, averaging all responses to provide the ultimate output of D.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 Before we dive into the configuration details of the PatchGAN, it is important to get a handle
 on the calculation of the receptive field. The receptive field is not the size of the output of the
 discriminator model, e.g. it does not refer to the shape of the activation map output by the
-
-### 22.3. How to Implement the PatchGAN Discriminator Model
-
-466
 
 model. It is a definition of the model in terms of one pixel in the output activation map to the
 input image. The output of the model may be a single value or a square activation map of values
@@ -117,9 +108,8 @@ can be helpful to work through an example for the 70 × 70 PatchGAN receptive fi
 The 70 × 70 PatchGAN has a fixed number of three layers (excluding the output and second
 last layers), regardless of the size of the input image. The calculation of the receptive field in
 one dimension is calculated as:
-receptive field = (output size − 1) × stride + kernel size
 
-(22.1)
+![](../images/7.jpg)
 
 Where output size is the size of the prior layers activation map, stride is the number of
 pixels the filter is moved when applied to the activation, and kernel size is the size of the filter
@@ -129,6 +119,8 @@ starting with one pixel in the output of the model and working backward to the i
 We can develop a Python function called receptive field() to calculate the receptive field,
 then calculate and print the receptive field for each layer in the Pix2Pix PatchGAN model. The
 complete example is listed below.
+
+```
 # example of calculating the receptive field for the PatchGAN
 # calculate the effective receptive field size
 def receptive_field(output_size, kernel_size, stride_size):
@@ -156,10 +148,7 @@ to a 70 × 70 receptive field in the input layer.
 
 https://github.com/phillipi/pix2pix/blob/master/scripts/receptive_field_sizes.m
 
-### 22.3. How to Implement the PatchGAN Discriminator Model
-
-467
-
+```
 4
 7
 16
@@ -172,49 +161,60 @@ The authors of the Pix2Pix paper explore different PatchGAN configurations, incl
 1 × 1 receptive field called a PixelGAN and a receptive field that matches the 256 × 256 pixel
 images input to the model (resampled to 286 × 286) called an ImageGAN. They found that the
 70 × 70 PatchGAN resulted in the best trade-off of performance and image quality.
+
 The 70 × 70 PatchGAN [...] achieves slightly better scores. Scaling beyond this, to
 the full 286 × 286 ImageGAN, does not appear to improve the visual quality of the
 results.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 The configuration for the PatchGAN is provided in the appendix of the paper and can be
 confirmed by reviewing the defineD n layers()2 function in the official Torch implementation.
 The model takes two images as input, specifically a source and a target image. These images
 are concatenated together at the channel level, e.g. 3 color channels of each image become 6
 channels of the input.
+
 Let Ck denote a Convolution-BatchNorm-ReLU layer with k filters. [...] All convolutions are 4 × 4 spatial filters applied with stride 2. [...] The 70 × 70 discriminator
 architecture is: C64-C128-C256-C512. After the last layer, a convolution is applied
 to map to a 1-dimensional output, followed by a Sigmoid function. As an exception
 to the above notation, BatchNorm is not applied to the first C64 layer. All ReLUs
 are leaky, with slope 0.2.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 The PatchGAN configuration is defined using a shorthand notation as: C64-C128-C256C512, where C refers to a block of Convolution-BatchNorm-LeakyReLU layers and the number
 indicates the number of filters. Batch normalization is not used in the first layer. As mentioned,
 the kernel size is fixed at 4 × 4 and a stride of 2 × 2 is used on all but the last 2 layers of the
 model. The slope of the LeakyReLU is set to 0.2, and a sigmoid activation function is used in
 the output layer.
+
 Random jitter was applied by resizing the 256 × 256 input images to 286 × 286 and
 then randomly cropping back to size 256 × 256. Weights were initialized from a
 Gaussian distribution with mean 0 and standard deviation 0.02.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
-2
+
 
 https://github.com/phillipi/pix2pix/blob/master/models.lua#L180
 
-### 22.3. How to Implement the PatchGAN Discriminator Model
 
-468
 
 Model weights were initialized via random Gaussian with a mean of 0.0 and standard
 deviation of 0.02. Images input to the model are 256 × 256.
+
 ... we divide the objective by 2 while optimizing D, which slows down the rate at
 which D learns relative to G. We use minibatch SGD and apply the Adam solver,
 with a learning rate of 0.0002, and momentum parameters β1 = 0.5, β2 = 0.999.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 The model is trained with a batch size of one image and the Adam version of stochastic
 gradient descent is used with a small learning range and modest momentum. The loss for the
 discriminator is weighted by 50% for each model update. Tying this all together, we can define
 a function named define discriminator() that creates the 70 × 70 PatchGAN discriminator
 model. The complete example of defining the model is listed below.
+
+```
 # example of defining a 70x70 patchgan discriminator model
 from keras.optimizers import Adam
 from keras.initializers import RandomNormal
@@ -254,9 +254,7 @@ d = LeakyReLU(alpha=0.2)(d)
 # second last output layer
 d = Conv2D(512, (4,4), padding='same', kernel_initializer=init)(d)
 
-### 22.3. How to Implement the PatchGAN Discriminator Model
 
-469
 
 d = BatchNormalization()(d)
 d = LeakyReLU(alpha=0.2)(d)
@@ -286,9 +284,11 @@ is transformed across the layers and the number of parameters in the model. The 
 omitted here for brevity. A plot of the model is created showing much the same information in
 a graphical form. The model is not complex, with a linear path with two input images and a
 single output prediction.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
+
 We can see that the two input images are concatenated together to create one 256 × 256 × 6
 input to the first hidden convolutional layer. This concatenation of input images could occur
 before the input layer of the model, but allowing the model to perform the concatenation makes
@@ -301,22 +301,16 @@ in this case, the likelihood of whether the input image is real or from the targ
 patch of values can be averaged to give a real/fake prediction by the model. When trained, the
 target is compared to a matrix of target values, 0 for fake and 1 for real.
 
-### 22.3. How to Implement the PatchGAN Discriminator Model
 
-470
 
-![](../images/-.jpg)
+![](../images/487-123.jpg)
 
 Now that we know how to implement the PatchGAN discriminator model, we can now look
 at implementing the U-Net generator model.
 
-### 22.4. How to Implement the U-Net Generator Model
 
-22.4
 
-471
-
-How to Implement the U-Net Generator Model
+## How to Implement the U-Net Generator Model
 
 The generator model for the Pix2Pix GAN is implemented as a U-Net. The U-Net model is an
 encoder-decoder model for image translation where skip connections are used to connect layers
@@ -325,44 +319,51 @@ The encoder part of the model is comprised of convolutional layers that use a 2 
 downsample the input source image down to a bottleneck layer. The decoder part of the model
 reads the bottleneck output and uses transpose convolutional layers to upsample to the required
 output image size.
+
 ... the input is passed through a series of layers that progressively downsample, until
 a bottleneck layer, at which point the process is reversed.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
 
-![](../images/-.jpg)
+![](../images/488-124.jpg)
 
-With Conditional Adversarial Networks.
+
 Skip connections are added between the layers with the same sized feature maps so that the
 first downsampling layer is connected with the last upsampling layer, the second downsampling
 layer is connected with the second last upsampling layer, and so on. The connections concatenate
 the channels of the feature map in the downsampling layer with the feature map in the upsampling
 layer.
+
 Specifically, we add skip connections between each layer i and layer n − i, where n
 is the total number of layers. Each skip connection simply concatenates all channels
 at layer i with those at layer n − i.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 Unlike traditional generator models in the GAN architecture, the U-Net generator does not
 take a point from the latent space as input. Instead, dropout layers are used as a source of
 randomness both during training and when the model is used to make a prediction, e.g. generate
 an image at inference time. Similarly, batch normalization is used in the same way during
 
-### 22.4. How to Implement the U-Net Generator Model
-
-472
 
 training and inference, meaning that statistics are calculated for each batch and not fixed at
 the end of the training process. This is referred to as instance normalization, specifically when
 the batch size is set to 1 as it is with the Pix2Pix model.
+
 At inference time, we run the generator net in exactly the same manner as during
 the training phase. This differs from the usual protocol in that we apply dropout at
 test time, and we apply batch normalization using the statistics of the test batch,
 rather than aggregated statistics of the training batch.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 In Keras, layers like Dropout and BatchNormalization operate differently during training
 and in inference model. We can set the training argument when calling these layers to True
 to ensure that they always operate in training-model, even when used during inference. For
 example, a Dropout layer that will drop out during inference as well as training can be added
 to the model as follows:
+
+```
 ...
 g = Dropout(0.5)(g, training=True)
 
@@ -374,43 +375,51 @@ defineG unet() function in the official Torch implementation3 . The encoder uses
 of Convolution-BatchNorm-LeakyReLU like the discriminator model, whereas the decoder
 model uses blocks of Convolution-BatchNorm-Dropout-ReLU with a dropout rate of 50%. All
 convolutional layers use a filter size of 4 × 4 and a stride of 2 × 2.
+
 Let Ck denote a Convolution-BatchNorm-ReLU layer with k filters. CDk denotes
 a Convolution-BatchNormDropout-ReLU layer with a dropout rate of 50%. All
 convolutions are 4 × 4 spatial filters applied with stride 2.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 The architecture of the U-Net model is defined using the shorthand notation as:
+
 - Encoder: C64-C128-C256-C512-C512-C512-C512-C512
 - Decoder: CD512-CD1024-CD1024-C1024-C1024-C512-C256-C128
 
 The last layer of the encoder is the bottleneck layer, which does not use batch normalization,
 according to an amendment to the paper and confirmation in the code, and uses a ReLU
 activation instead of leaky ReLU.
+
 ... the activations of the bottleneck layer are zeroed by the batchnorm operation,
 effectively making the innermost layer skipped. This issue can be fixed by removing
 batchnorm from this layer, as has been done in the public code
-3
+
 
 https://github.com/phillipi/pix2pix/blob/master/models.lua#L47
 
-### 22.4. How to Implement the U-Net Generator Model
-
-473
 
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 The number of filters in the U-Net decoder is a little misleading as it is the number of filters
 for the layer after concatenation with the equivalent layer in the encoder. This may become more
 clear when we create a plot of the model. The output of the model uses a single convolutional
 layer with three channels, and Tanh activation function is used in the output layer, common to
 GAN generator models. Batch normalization is not used in the first layer of the decoder.
+
 After the last layer in the decoder, a convolution is applied to map to the number
 of output channels (3 in general [...]), followed by a Tanh function [...] BatchNorm
 is not applied to the first C64 layer in the encoder. All ReLUs in the encoder are
 leaky, with slope 0.2, while ReLUs in the decoder are not leaky.
+
 — Image-to-Image Translation with Conditional Adversarial Networks, 2016.
+
 Tying this all together, we can define a function named define generator() that defines
 the U-Net encoder-decoder generator model. Two helper functions are also provided for defining
 encoder blocks of layers and decoder blocks of layers. The complete example of defining the
 model is listed below.
+
+```
 # example of defining a u-net encoder-decoder generator model
 from keras.initializers import RandomNormal
 from keras.models import Model
@@ -443,9 +452,6 @@ def decoder_block(layer_in, skip_in, n_filters, dropout=True):
 init = RandomNormal(stddev=0.02)
 # add upsampling layer
 
-### 22.4. How to Implement the U-Net Generator Model
-
-474
 
 g = Conv2DTranspose(n_filters, (4,4), strides=(2,2), padding='same',
 kernel_initializer=init)(layer_in)
@@ -503,32 +509,32 @@ show_layer_names=True)
 ```
 
 
-### 22.5. How to Implement Adversarial and L1 Loss
-
-475
-
 Running the example first summarizes the model. The output of the model summary was
 omitted here for brevity. The model has a single input and output, but the skip connections
 make the summary difficult to read. A plot of the model is created showing much the same
 information in a graphical form. The model is complex, and the plot helps to understand the
 skip connections and their impact on the number of filters in the decoder.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
+
 Working backward from the output layer, if we look at the Concatenate layers and the first
 Conv2DTranspose layer of the decoder, we can see the number of channels as:
+
 - 128, 256, 512, 1024, 1024, 1024, 1024, 512
 
 Reversing this list gives the stated configuration of the number of filters for each layer in the
 decoder from the paper of:
+
 - CD512-CD1024-CD1024-C1024-C1024-C512-C256-C128
 
 The model summary and plot where left out here for brevity. Now that we have defined
 both models, we can look at how the generator model is updated via the discriminator model.
 
-22.5
 
-How to Implement Adversarial and L1 Loss
+
+## How to Implement Adversarial and L1 Loss
 
 The discriminator model can be updated directly, whereas the generator model must be updated
 via the discriminator model. This can be achieved by defining a new composite model in Keras
@@ -541,6 +547,7 @@ to avoid the misleading update. Additionally, the generator needs to be updated 
 the targeted translation of the input image. This means that the composite model must also
 output the generated image directly, allowing it to be compared to the target image. Therefore,
 we can summarize the inputs and outputs of this composite model as follows:
+
 - Inputs: Source image
 - Outputs: Classification of real/fake, generated target image.
 
@@ -548,13 +555,9 @@ The weights of the generator will be updated via both adversarial loss via the d
 output and L1 loss via the direct image output. The loss scores are added together, where the
 L1 loss is treated as a regularizing term and weighted via a hyperparameter called lambda (λ),
 set to 100.
-loss = adversarial loss + λ × L1 loss
 
-(22.2)
+![](../images/8.jpg)
 
-### 22.5. How to Implement Adversarial and L1 Loss
-
-476
 
 The define gan() function below implements this, taking the defined generator and discriminator models as input and creating the composite GAN model that can be used to update
 the generator model weights. The source image input is provided both to the generator and the
@@ -562,6 +565,8 @@ discriminator as input and the output of the generator is also connected to the 
 input. Two loss functions are specified when the model is compiled for the discriminator and
 generator outputs respectively. The loss weights argument is used to define the weighting of
 each loss when added together to update the generator model weights.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model, image_shape):
 # make weights in the discriminator not trainable
@@ -583,6 +588,8 @@ return model
 
 Tying this together with the model definitions from the previous sections, the complete
 example is listed below.
+
+```
 # example of defining a composite model for training the generator model
 from keras.optimizers import Adam
 from keras.initializers import RandomNormal
@@ -609,7 +616,7 @@ in_target_image = Input(shape=image_shape)
 merged = Concatenate()([in_src_image, in_target_image])
 # C64
 
-### 22.5. How to Implement Adversarial and L1 Loss
+
 d = Conv2D(64, (4,4), strides=(2,2), padding='same', kernel_initializer=init)(merged)
 d = LeakyReLU(alpha=0.2)(d)
 # C128
@@ -665,11 +672,6 @@ g = Dropout(0.5)(g, training=True)
 # merge with skip connection
 g = Concatenate()([g, skip_in])
 
-477
-
-### 22.5. How to Implement Adversarial and L1 Loss
-
-478
 
 # relu activation
 g = Activation('relu')(g)
@@ -725,9 +727,6 @@ return model
 image_shape = (256,256,3)
 # define the models
 
-### 22.5. How to Implement Adversarial and L1 Loss
-
-479
 
 d_model = define_discriminator(image_shape)
 g_model = define_generator(image_shape)
@@ -740,10 +739,12 @@ plot_model(gan_model, to_file='gan_model_plot.png', show_shapes=True, show_layer
 
 ```
 
-generator.
+
 Running the example first summarizes the composite model, showing the 256 × 256 image
 input, the same shaped output from model 2 (the generator) and the PatchGAN classification
 prediction from model 1 (the discriminator).
+
+```
 ________________________________________________________________________________
 Layer (type)
 Output Shape
@@ -768,29 +769,26 @@ ________________________________________________________________________________
 
 ```
 
-the generator.
+
 A plot of the composite model is also created, showing how the input image flows into the
 generator and discriminator, and that the model has two outputs or end-points from each of the
 two models.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
-### 22.6. How to Update Model Weights
 
-480
+![](../images/497-125.jpg)
 
-![](../images/-.jpg)
 
-GAN Architecture.
-
-22.6
-
-How to Update Model Weights
+## How to Update Model Weights
 
 Training the defined models is relatively straightforward. First, we must define a helper function
 that will select a batch of real source and target images and the associated output (1.0). Here,
 the dataset is a list of two arrays of images.
+
+```
 # select a batch of random samples, returns images and target
 def generate_real_samples(dataset, n_samples, patch_shape):
 # unpack dataset
@@ -807,6 +805,8 @@ return [X1, X2], y
 
 Similarly, we need a function to generate a batch of fake images and the associated output
 (0.0). Here, the samples are an array of source images for which target images will be generated.
+
+```
 # generate a batch of images, returns images and targets
 def generate_fake_samples(g_model, samples, patch_shape):
 # generate fake instance
@@ -820,12 +820,10 @@ return X, y
 Now, we can define the steps of a single training iteration. First, we must select a batch
 of source and target images by calling generate real samples(). Typically, the batch size
 
-### 22.6. How to Update Model Weights
-
-481
-
 (n batch) is set to 1. In this case, we will assume 256 × 256 input images, which means the
 n patch for the PatchGAN discriminator will be 16 to indicate a 16 × 16 output feature map.
+
+```
 ...
 # select a batch of real samples
 [X_realA, X_realB], y_real = generate_real_samples(dataset, n_batch, n_patch)
@@ -834,6 +832,8 @@ n patch for the PatchGAN discriminator will be 16 to indicate a 16 × 16 output 
 
 Next, we can use the batches of selected real source images to generate corresponding batches
 of generated or fake target images.
+
+```
 ...
 # generate a batch of fake samples
 X_fakeB, y_fake = generate_fake_samples(g_model, X_realA, n_patch)
@@ -842,6 +842,8 @@ X_fakeB, y_fake = generate_fake_samples(g_model, X_realA, n_patch)
 
 We can then use the real and fake images, as well as their targets, to update the standalone
 discriminator model.
+
+```
 ...
 # update discriminator for real samples
 d_loss1 = d_model.train_on_batch([X_realA, X_realB], y_real)
@@ -858,6 +860,8 @@ discriminator output of the composite model. The real target images are provided
 the L1 loss between them and the generated target images. We have two loss functions, but
 three loss values calculated for a batch update, where only the first loss value is of interest as it
 is the weighted sum of the adversarial and L1 loss values for the batch.
+
+```
 ...
 # update the generator
 g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
@@ -866,6 +870,8 @@ g_loss, _, _ = gan_model.train_on_batch(X_realA, [y_real, X_realB])
 
 That’s all there is to it. We can define all of this in a function called train() that takes the
 defined models and a loaded dataset (as a list of two NumPy arrays) and trains the models.
+
+```
 # train pix2pix models
 def train(d_model, g_model, gan_model, dataset, n_epochs=100, n_batch=1, n_patch=16):
 # unpack dataset
@@ -877,9 +883,6 @@ n_steps = bat_per_epo * n_epochs
 # manually enumerate epochs
 for i in range(n_steps):
 
-### 22.7. Further Reading
-
-482
 
 # select a batch of real samples
 [X_realA, X_realB], y_real = generate_real_samples(dataset, n_batch, n_patch)
@@ -897,6 +900,8 @@ print('>%d, d1[%.3f] d2[%.3f] g[%.3f]' % (i+1, d_loss1, d_loss2, g_loss))
 ```
 
 The train function can then be called directly with our defined models and loaded dataset.
+
+```
 ...
 # load image data
 dataset = ...
@@ -906,15 +911,14 @@ train(d_model, g_model, gan_model, dataset)
 ```
 
 
-22.7
 
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-22.7.1
 
-Official
+
+## Official
 
 - Image-to-Image Translation with Conditional Adversarial Networks, 2016.
 https://arxiv.org/abs/1611.07004
@@ -929,13 +933,8 @@ https://affinelayer.com/pixsrv/
 - Pix2Pix Datasets
 http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/
 
-### 22.8. Summary
 
-22.7.2
-
-483
-
-API
+## API
 
 - Keras Datasets API.
 https://keras.io/datasets/
@@ -946,9 +945,9 @@ https://keras.io/layers/convolutional/
 - How can I “freeze” Keras layers?
 https://keras.io/getting-started/faq/#how-can-i-freeze-keras-layers
 
-22.7.3
 
-Articles
+
+## Articles
 
 - Question: PatchGAN Discriminator, 2017.
 https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/issues/39
@@ -956,20 +955,20 @@ https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/issues/39
 https://github.com/phillipi/pix2pix/blob/master/scripts/receptive_field_sizes.
 m
 
-22.8
 
-Summary
+
+## Summary
 
 In this tutorial, you discovered how to implement the Pix2Pix GAN architecture from scratch
 using the Keras deep learning framework. Specifically, you learned:
+
 - How to develop the PatchGAN discriminator model for the Pix2Pix GAN.
 - How to develop the U-Net encoder-decoder generator model for the Pix2Pix GAN.
 - How to implement the composite model for updating the generator and how to train both
 models.
 
-22.8.1
 
-Next
+## Next
 
 In the next tutorial, you will discover how to train a Pix2Pix model to translate satellite images
 to Google Maps images.

@@ -16,8 +16,7 @@ You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
 
 
-## How to Explore the Latent Space 
-When Generating Faces
+## How to Explore the Latent Space  When Generating Faces
 
 Generative Adversarial Networks, or GANs, are an architecture for training generative models,
 such as deep convolutional neural networks for generating images. The generative model in the
@@ -88,16 +87,14 @@ robust result.
 
 
 
-![](../images/-.jpg)
+![](../images/190-47.jpg)
 
-With a GAN. Taken from: Unsupervised Representation Learning with Deep Convolutional
-Generative Adversarial Networks.
 
 The second demonstration was the transition between two generated faces, specifically by
 creating a linear path through the latent dimension between the points that generated two faces
 and then generating all of the faces for the points along the path.
 
-![](../images/-.jpg)
+![](../images/190-48.jpg)
 
 
 Exploring the structure of the latent space for a GAN model is both interesting for the
@@ -105,9 +102,7 @@ problem domain and helps to develop an intuition for what has been learned by th
 model. In this tutorial, we will develop a GAN for generating photos of faces, then explore the
 latent space for the model with vector arithmetic.
 
-9.3
-
-Large-Scale CelebFaces Dataset (CelebA)
+## Large-Scale CelebFaces Dataset (CelebA)
 
 The first step is to select a dataset of faces. In this tutorial, we will use the Large-scale
 CelebFaces Attributes Dataset, referred to as CelebA. This dataset was developed and published
@@ -120,7 +115,6 @@ tall. We will use this as the basis for developing our GAN model. The dataset ca
 downloaded from the Kaggle webpage. You will require an account with Kaggle.
 - CelebFaces Attributes (CelebA) Dataset.
 
-1
 
 Specifically, download the file img align celeba.zip which is about 1.3 gigabytes. To do
 this, click on the filename on the Kaggle website and then click the download icon. The download
@@ -129,13 +123,14 @@ unzip the archive. This will create a new directory named img align celeba/ that
 of the images with filenames like 202599.jpg and 202598.jpg. Next, we can look at preparing
 the raw images for modeling.
 
-9.4
 
-How to Prepare the CelebA Faces Dataset
+## How to Prepare the CelebA Faces Dataset
 
 The first step is to develop code to load the images. We can use the Pillow library to load a
 given image file, convert it to RGB format (if needed) and return an array of pixel data. The
 load image() function below implements this.
+
+```
 # load an image as an rgb array
 def load_image(filename):
 # load image from file
@@ -152,14 +147,11 @@ Next, we can enumerate the directory of images, load each as an array of pixels 
 return an array with all of the images. There are 200K images in the dataset, which is probably
 more than we need so we can also limit the number of images to load with an argument. The
 load faces() function below implements this.
-1
 
 https://www.kaggle.com/jessicali9530/celeba-dataset
 
-### 9.4. How to Prepare the CelebA Faces Dataset
 
-175
-
+```
 # load images and extract faces for all images in a directory
 def load_faces(directory, n_faces):
 faces = list()
@@ -179,6 +171,8 @@ return asarray(faces)
 Finally, once the images are loaded, we can plot them using the imshow() function from the
 Matplotlib library. The plot faces() function below does this, plotting images arranged into
 in a square.
+
+```
 # plot a list of loaded faces
 def plot_faces(faces, n):
 for i in range(n * n):
@@ -215,10 +209,6 @@ faces = list()
 # enumerate files
 for filename in listdir(directory):
 
-### 9.4. How to Prepare the CelebA Faces Dataset
-
-176
-
 # load the image
 pixels = load_image(directory + filename)
 # store
@@ -249,17 +239,15 @@ plot_faces(faces, 5)
 
 Running the example loads a total of 25 images from the directory, then summarizes the
 size of the returned array.
+
+```
 Loaded: (25, 218, 178, 3)
 
 ```
 
 Finally, the 25 images are plotted in a 5 × 5 square.
 
-### 9.4. How to Prepare the CelebA Faces Dataset
-
-177
-
-![](../images/-.jpg)
+![](../images/194-49.jpg)
 
 When working with a GAN, it is easier to model a dataset if all of the images are small
 and square in shape. Further, as we are only interested in the face in each photo, and not
@@ -270,12 +258,16 @@ state-of-the-art deep learning model for face detection, described in the 2016 p
 Face Detection and Alignment Using Multitask Cascaded Convolutional Networks. We will use
 the implementation provided by Ivan de Paz Centeno in the ipazc/mtcnn project. This library
 can be installed via pip as follows:
+
+```
 sudo pip install mtcnn
 
 ```
 
 We can confirm that the library was installed correctly by importing the library and printing
 the version; for example:
+
+```
 # confirm mtcnn was installed correctly
 import mtcnn
 # show version
@@ -284,11 +276,9 @@ print(mtcnn.__version__)
 ```
 
 
-### 9.4. How to Prepare the CelebA Faces Dataset
-
-178
-
 Running the example prints the current version of the library.
+
+```
 0.0.9
 
 ```
@@ -313,6 +303,8 @@ extracted face pixels to a fixed size. In this case, we will use the square shap
 The extract face() function below implements this, taking the MTCNN model and pixel
 values for a single photograph as arguments and returning an 80 × 80 × 3 array of pixel values
 with just the face, or None if no face was detected (which can happen rarely).
+
+```
 # extract the face from a loaded image and resize
 def extract_face(model, pixels, required_size=(80, 80)):
 # detect face in the image
@@ -338,15 +330,13 @@ return face_array
 
 We can now update the load faces() function to extract the face from the loaded photo
 and store that in the list of faces returned.
+
+```
 # load images and extract faces for all images in a directory
 def load_faces(directory, n_faces):
 # prepare model
 model = MTCNN()
 faces = list()
-
-### 9.4. How to Prepare the CelebA Faces Dataset
-
-179
 
 # enumerate files
 for filename in listdir(directory):
@@ -367,9 +357,10 @@ return asarray(faces)
 ```
 
 Tying this together, the complete example is listed below.
-
-``` In this case, we increase the total
+ In this case, we increase the total
 number of loaded faces to 50,000 to provide a good training dataset for our GAN model.
+
+```
 # example of extracting and resizing faces into a new dataset
 from os import listdir
 from numpy import asarray
@@ -405,9 +396,6 @@ image = Image.fromarray(face_pixels)
 image = image.resize(required_size)
 face_array = asarray(image)
 
-### 9.4. How to Prepare the CelebA Faces Dataset
-
-180
 
 return face_array
 # load images and extract faces for all images in a directory
@@ -444,6 +432,8 @@ Running the example may take a few minutes given the large number of faces to be
 At the end of the run, the array of extracted and resized faces is saved as a compressed NumPy
 array with the filename img align celeba.npz. The prepared dataset can then be loaded any
 time, as follows.
+
+```
 # load the prepared dataset
 from numpy import load
 # load the face dataset
@@ -455,19 +445,17 @@ print('Loaded: ', faces.shape)
 
 Loading the dataset summarizes the shape of the array, showing 50K images with the size of
 80 × 80 pixels and three color channels.
+
+```
 Loaded: (50000, 80, 80, 3)
 
 ```
 
 We are now ready to develop a GAN model to generate faces using this dataset.
 
-### 9.5. How to Develop a GAN for CelebA
 
-9.5
 
-181
-
-How to Develop a GAN for CelebA
+## How to Develop a GAN for CelebA
 
 In this section, we will develop a GAN for the faces dataset that we have prepared. The first
 step is to define the models. The discriminator model takes as input one 80 × 80 color image
@@ -479,6 +467,8 @@ to downsample, and the Adam version of stochastic gradient descent with a learni
 defining and compiling the discriminator model and returning it. The input shape of the image
 is parameterized as a default function argument in case you want to re-use the function for your
 own image data later.
+
+```
 # define the standalone discriminator model
 def define_discriminator(in_shape=(80,80,3)):
 model = Sequential()
@@ -520,10 +510,7 @@ The define generator() function below defines the generator model but intentiona
 not compile it as it is not trained directly, then returns the model. The size of the latent space
 is parameterized as a function argument.
 
-### 9.5. How to Develop a GAN for CelebA
-
-182
-
+```
 # define the standalone generator model
 def define_generator(latent_dim):
 model = Sequential()
@@ -561,6 +548,8 @@ This larger GAN model takes as input a point in the latent space, uses the gener
 to generate an image, which is fed as input to the discriminator model, then output or classified
 as real or fake. The define gan() function below implements this, taking the already-defined
 generator and discriminator models as input.
+
+```
 # define the combined generator and discriminator model, for updating the generator
 def define_gan(g_model, d_model):
 # make weights in the discriminator not trainable
@@ -579,16 +568,14 @@ return model
 ```
 
 
-### 9.5. How to Develop a GAN for CelebA
-
-183
-
 Now that we have defined the GAN model, we need to train it. But, before we can train
 the model, we require input data. The first step is to load and scale the pre-processed faces
 dataset. The saved NumPy array can be loaded, as we did in the previous section, then the
 pixel values must be scaled to the range [-1,1] to match the output of the generator model. The
 load real samples() function below implements this, returning the loaded and scaled image
 data ready for modeling.
+
+```
 # load and prepare training images
 def load_real_samples():
 # load the face dataset
@@ -608,6 +595,8 @@ dataset each time. The generate real samples() function below implements this, t
 prepared dataset as an argument, selecting and returning a random sample of face images and
 their corresponding class label for the discriminator, specifically class = 1, indicating that they
 are real images.
+
+```
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # choose random instances
@@ -624,6 +613,8 @@ Next, we need inputs for the generator model. These are random points from the l
 space, specifically Gaussian distributed random variables. The generate latent points()
 function implements this, taking the size of the latent space as an argument and the number of
 points required and returning them as a batch of input samples for the generator model.
+
+```
 # generate points in latent space as input for the generator
 def generate_latent_points(latent_dim, n_samples):
 # generate points in the latent space
@@ -637,14 +628,12 @@ return x_input
 Next, we need to use the points in the latent space as input to the generator in order to
 generate new images. The generate fake samples() function below implements this, taking
 
-### 9.5. How to Develop a GAN for CelebA
-
-184
-
 the generator model and size of the latent space as arguments, then generating points in the
 latent space and using them as input to the generator model. The function returns the generated
 images and their corresponding class label for the discriminator model, specifically class = 0 to
 indicate they are fake or generated.
+
+```
 # use the generator to generate n fake examples, with class labels
 def generate_fake_samples(g_model, latent_dim, n_samples):
 # generate points in latent space
@@ -661,7 +650,6 @@ We are now ready to fit the GAN models. The model is fit for 100 training epochs
 arbitrary, as the model begins generating plausible faces after perhaps the first few epochs. A
 batch size of 128 samples is used, and each training epoch involves 50000
 or about 390 batches of
-128
 real and fake samples and updates to the model. First, the discriminator model is updated for
 a half batch of real samples, then a half batch of fake samples, together forming one batch of
 weight updates. The generator is then updated via the combined GAN model. Importantly, the
@@ -670,6 +658,8 @@ toward getting better at generating real samples on the next batch.
 The train() function below implements this, taking the defined models, dataset, and size
 of the latent dimension as arguments and parameterizing the number of epochs and batch size
 with default arguments.
+
+```
 # train the generator and discriminator
 def train(g_model, d_model, gan_model, dataset, latent_dim, n_epochs=100, n_batch=128):
 bat_per_epo = int(dataset.shape[0] / n_batch)
@@ -697,9 +687,6 @@ print('>%d, %d/%d, d1=%.3f, d2=%.3f g=%.3f' %
 (i+1, j+1, bat_per_epo, d_loss1, d_loss2, g_loss))
 # evaluate the model performance, sometimes
 
-### 9.5. How to Develop a GAN for CelebA
-
-185
 
 if (i+1) % 10 == 0:
 summarize_performance(i, g_model, d_model, dataset, latent_dim)
@@ -716,6 +703,8 @@ function generates samples and evaluates the performance of the discriminator on
 fake samples. The classification accuracy is reported and might provide insight into model
 performance. The save plot() is called to create and save a plot of the generated images, and
 then the model is saved to a file.
+
+```
 # create and save a plot of generated images
 def save_plot(examples, epoch, n=10):
 # scale from [-1,1] to [0,1]
@@ -754,8 +743,6 @@ g_model.save(filename)
 
 We can then define the size of the latent space, define all three models, and train them on
 the loaded face dataset.
-
-### 9.5. How to Develop a GAN for CelebA
 
 
 ```
@@ -816,9 +803,7 @@ model.add(LeakyReLU(alpha=0.2))
 model.add(Flatten())
 model.add(Dropout(0.4))
 
-186
 
-### 9.5. How to Develop a GAN for CelebA
 model.add(Dense(1, activation='sigmoid'))
 # compile model
 opt = Adam(lr=0.0002, beta_1=0.5)
@@ -872,9 +857,7 @@ X = X.astype('float32')
 X = (X - 127.5) / 127.5
 return X
 
-187
 
-### 9.5. How to Develop a GAN for CelebA
 # select real samples
 def generate_real_samples(dataset, n_samples):
 # choose random instances
@@ -928,11 +911,6 @@ x_fake, y_fake = generate_fake_samples(g_model, latent_dim, n_samples)
 _, acc_fake = d_model.evaluate(x_fake, y_fake, verbose=0)
 # summarize discriminator performance
 
-188
-
-### 9.5. How to Develop a GAN for CelebA
-
-189
 
 print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
 # save plot
@@ -987,21 +965,21 @@ Note: Running the example may take many hours to run on CPU hardware. I recommen
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
-### 9.5. How to Develop a GAN for CelebA
-
-190
 
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,
 is reported after each batch.
+
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
+
+```
 >1,
 >1,
 >1,
 >1,
 >1,
 
-```
+
 ...
 
 1/390,
@@ -1030,7 +1008,6 @@ g=0.682
 
 ```
 
-faces dataset.
 The discriminator loss may crash down to values of 0.0 for real and generated samples. If
 this happens, it is an example of a training failure from which the model is likely not likely to
 recover and you should restart the training process.
@@ -1067,6 +1044,7 @@ d2=15.942 g=0.006
 d2=15.942 g=0.000
 d2=15.942 g=0.000
 
+
 ```
 
 Review the generated plots and select a model based on the best quality images. The model
@@ -1074,22 +1052,17 @@ should begin to generate faces after about 30 training epochs. The faces are not
 clear, but it is obvious that they are faces, with all the right things (hair, eyes, nose, mouth) in
 roughly the right places.
 
-### 9.6. How to Explore the Latent Space for Generated Faces
 
-191
-
-![](../images/-.jpg)
+![](../images/208-50.jpg)
 
 
-9.6
 
-How to Explore the Latent Space for Generated Faces
+## How to Explore the Latent Space for Generated Faces
 
 In this section, we will use our trained GAN model as the basis for exploring the latent space.
 
-9.6.1
 
-How to Load the Model and Generate Faces
+**How to Load the Model and Generate Faces**
 
 The first step is to load the saved model and confirm that it can generate plausible faces. The
 model can be loaded using the load model() function in the Keras API. We can then generate
@@ -1107,9 +1080,6 @@ def generate_latent_points(latent_dim, n_samples):
 x_input = randn(latent_dim * n_samples)
 # reshape into a batch of inputs for the network
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-192
 
 z_input = x_input.reshape(n_samples, latent_dim)
 return z_input
@@ -1140,14 +1110,10 @@ plot_generated(X, 5)
 Running the example first loads the saved model. Then, 25 random points in the 100dimensional latent space are created and provided to the generator model to create 25 images
 of faces, which are then plotted in a 5 × 5 grid.
 
-### 9.6. How to Explore the Latent Space for Generated Faces
 
-193
-
-![](../images/-.jpg)
+![](../images/210-51.jpg)
 
 
-9.6.2
 
 How to Interpolate Between Generated Faces
 
@@ -1158,6 +1124,8 @@ function to calculate ratios of the contribution from two points, then enumerate
 and construct a vector for each ratio. The interpolate points() function below implements
 this and returns a series of linearly interpolated vectors between two points in latent space,
 including the first and last point.
+
+```
 # uniform interpolation between two points in latent space
 def interpolate_points(p1, p2, n_steps=10):
 # interpolate ratios between the points
@@ -1172,13 +1140,12 @@ return asarray(vectors)
 ```
 
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-194
 
 We can then generate two points in the latent space, perform the interpolation, then generate
 an image for each interpolated vector. The result will be a series of images that transition
 between the two original images. The example below demonstrates this for two faces.
+
+```
 # example of interpolating between generated faces
 from numpy import asarray
 from numpy.random import randn
@@ -1228,16 +1195,11 @@ plot_generated(X, len(interpolated))
 
 ```
 
-
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-195
-
 Running the example calculates the interpolation path between the two points in latent
 space, generates images for each, and plots the result. You can see the clear linear progression
 in ten steps from the first face on the left to the final face on the right.
 
-![](../images/-.jpg)
+![](../images/212-52.jpg)
 
 We can update the example to repeat this process multiple times so we can see the transition
 between multiple generated faces on a single plot. The complete example is listed below.
@@ -1282,10 +1244,6 @@ pyplot.show()
 model = load_model('generator_model_030.h5')
 # generate points in latent space
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-196
-
 n = 20
 pts = generate_latent_points(100, n)
 # interpolate pairs
@@ -1306,16 +1264,11 @@ plot_generated(results, 10)
 
 ```
 
-space.
 Running the example creates 10 different face starting points and 10 matching face endpoints,
 and the linear interpolation between each.
 
-![](../images/-.jpg)
+![](../images/213-53.jpg)
 
-
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-197
 
 In these cases, we have performed a linear interpolation which assumes that the latent space
 is a uniformly distributed hypercube. Technically, our chosen latent space is a 100-dimension
@@ -1370,13 +1323,10 @@ if so == 0:
 return (1.0-val) * low + val * high
 return sin((1.0-val)*omega) / so * low + sin(val*omega) / so * high
 # uniform interpolation between two points in latent space
-2
+
 
 https://github.com/soumith/dcgan.torch/issues/14
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-198
 
 def interpolate_points(p1, p2, n_steps=10):
 # interpolate ratios between the points
@@ -1424,22 +1374,19 @@ plot_generated(results, 10)
 The result is 10 more transitions between generated faces, this time using the correct Slerp
 interpolation method. The difference is subtle but somehow visually more correct.
 
-### 9.6. How to Explore the Latent Space for Generated Faces
 
-199
-
-![](../images/-.jpg)
+![](../images/216-54.jpg)
 
 
-9.6.3
-
-How to Explore the Latent Space for Faces
+## How to Explore the Latent Space for Faces
 
 Finally, we can explore the latent space by performing vector arithmetic with the generated faces.
 First, we must generate a large number of faces and save both the faces and their corresponding
 latent vectors. We can then review the plot of generated faces and select faces with features we’re
 interested in, note their index (number), and retrieve their latent space vectors for manipulation.
 The example below will load the GAN model and use it to generate 100 random faces.
+
+```
 # example of loading the generator model and generating images
 from numpy.random import randn
 from keras.models import load_model
@@ -1453,9 +1400,6 @@ x_input = randn(latent_dim * n_samples)
 z_input = x_input.reshape(n_samples, latent_dim)
 return z_input
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-200
 
 # create a plot of generated images
 def plot_generated(examples, n):
@@ -1491,9 +1435,10 @@ named generated faces.png. In this case, we have a good collection of faces to w
 Each face has an index that we can use to retrieve the latent vector. For example, the first face
 is 1, which corresponds to the first vector in the saved array (index 0). We will perform the
 operation:
+
 smiling woman − neutral woman + neutral man = smiling man
 
-(9.2)
+
 
 Therefore, we need three faces for each of smiling woman, neutral woman, and neutral man.
 In this case, we will use the following indexes in the image:
@@ -1501,14 +1446,13 @@ In this case, we will use the following indexes in the image:
 - Neutral Woman: 9, 21, 79
 - Neutral Man: 10, 30, 45
 
-### 9.6. How to Explore the Latent Space for Generated Faces
 
-201
-
-![](../images/-.jpg)
+![](../images/218-55.jpg)
 
 Now that we have latent vectors to work with and a target arithmetic, we can get started.
 First, we can specify our preferred images and load the saved NumPy array of latent points.
+
+```
 # retrieve specific points
 smiling_woman_ix = [92, 98, 99]
 neutral_woman_ix = [9, 21, 79]
@@ -1524,15 +1468,13 @@ woman). We could perform vector arithmetic with single images directly, but we w
 more robust result if we work with an average of a few faces with the desired property. The
 average points() function below takes the loaded array of latent space points, retrieves each,
 calculates the average, and returns all of the vectors.
+
+```
 # average list of latent space vectors
 def average_points(points, ix):
 # convert to zero offset points
 zero_ix = [i-1 for i in ix]
 # retrieve required points
-
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-202
 
 vectors = points[zero_ix]
 # average the vectors
@@ -1545,6 +1487,8 @@ return all_vectors
 
 We can now use this function to retrieve all of the required points in latent space and
 generate images.
+
+```
 # average vectors
 smiling_woman = average_points(points, smiling_woman_ix)
 neutral_woman = average_points(points, neutral_woman_ix)
@@ -1561,6 +1505,8 @@ plot_generated(images, 3, 4)
 
 Finally, we can use the average vectors to perform vector arithmetic in latent space and plot
 the result.
+
+```
 # smiling woman - neutral woman + neutral man = smiling man
 result_vector = smiling_woman[-1] - neutral_woman[-1] + neutral_man[-1]
 # generate image
@@ -1573,7 +1519,7 @@ pyplot.show()
 
 ```
 
-result.
+
 Tying this together, the complete example is listed below.
 
 ```
@@ -1591,9 +1537,6 @@ zero_ix = [i-1 for i in ix]
 # retrieve required points
 vectors = points[zero_ix]
 
-### 9.6. How to Explore the Latent Space for Generated Faces
-
-203
 
 # average the vectors
 avg_vector = mean(vectors, axis=0)
@@ -1649,24 +1592,15 @@ selected faces were retrieved correctly and that the average of the points in th
 captures the salient feature we are going for on each line (e.g. smiling woman, neutral woman,
 etc.).
 
-### 9.6. How to Explore the Latent Space for Generated Faces
 
-204
-
-![](../images/-.jpg)
+![](../images/221-56.jpg)
 
 Next, vector arithmetic is performed and the result is a smiling man, as we would expect.
 
-![](../images/-.jpg)
+![](../images/221-57.jpg)
 
 
-### 9.7. Extensions
-
-9.7
-
-205
-
-Extensions
+## Extensions
 
 This section lists some ideas for extending the tutorial that you may wish to explore.
 - Additional Arithmetic. Try arithmetic with different image features or different arithmetic and review the results of the generated faces.
@@ -1677,15 +1611,11 @@ better quality faces can be generated.
 
 If you explore any of these extensions, I’d love to know.
 
-9.8
-
-Further Reading
+## Further Reading
 
 This section provides more resources on the topic if you are looking to go deeper.
 
-9.8.1
-
-Papers
+## Papers
 
 - Joint Face Detection and Alignment Using Multitask Cascaded Convolutional Networks,
 2016.
@@ -1696,9 +1626,8 @@ https://arxiv.org/abs/1511.06434
 - Sampling Generative Networks, 2016.
 https://arxiv.org/abs/1609.04468
 
-9.8.2
 
-APIs
+## APIs
 
 - Keras API.
 https://keras.io/
@@ -1711,10 +1640,6 @@ https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html
 - numpy.random.randn API.
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randn.html
 
-### 9.9. Summary
-
-206
-
 - numpy.zeros API.
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html
 - numpy.ones API.
@@ -1722,9 +1647,8 @@ https://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html
 - numpy.hstack API.
 https://docs.scipy.org/doc/numpy/reference/generated/numpy.hstack.html
 
-9.8.3
 
-Articles
+## Articles
 
 - Large-scale CelebFaces Attributes (CelebA) Dataset.
 http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
@@ -1735,9 +1659,9 @@ https://github.com/ipazc/mtcnn
 - linear interpolation?, dcgan.torch Project, GitHub.
 https://github.com/soumith/dcgan.torch/issues/14
 
-9.9
 
-Summary
+
+## Summary
 
 In this tutorial, you discovered how to develop a generative adversarial network for face generation
 and explore the structure of latent space and the effect on generated faces. Specifically, you
@@ -1748,8 +1672,6 @@ one face to another.
 - How to perform vector arithmetic in latent space and achieve targeted effects in the
 resulting generated faces.
 
-9.9.1
-
-Next
+## Next
 
 In the next tutorial, you will explore common failure modes seen when training GAN models.
