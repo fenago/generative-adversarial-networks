@@ -1,6 +1,6 @@
 <img align="right" src="../logo-small.png">
 
-# Lab : Introduction to neural learning: gradient descent
+# Lab : 
 
 #### Pre-reqs:
 - Google Chrome (Recommended)

@@ -1,6 +1,6 @@
 <img align="right" src="../logo-small.png">
 
-# Lab : Introduction to neural learning: gradient descent
+# Lab : How to Upsample with Convolutional Neural Networks
 
 #### Pre-reqs:
 - Google Chrome (Recommended)
@@ -14,8 +14,6 @@ All Notebooks are present in `work/generative-adversarial-networks` folder. To c
 
 You can access jupyter lab at `<host-ip>:<port>/lab/workspaces/`
 
-
-## How to Upsample with Convolutional Neural Networks
 
 
 Generative Adversarial Networks, or GANs, are an architecture for training generative models,
