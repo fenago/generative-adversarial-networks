@@ -108,6 +108,8 @@ pyplot.show()
 
 ```
 
+##### Run Notebook
+Click notebook `01_plot_target_function.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example calculates the output value for each input value and creates a plot
 of input vs. output values. We can see that values far from 0.0 result in larger output values,
@@ -159,6 +161,9 @@ pyplot.scatter(data[:, 0], data[:, 1])
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `02_sample_target_function.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example generates 100 random inputs and their calculated output and plots
 the sample as a scatter plot, showing the familiar u-shape.
@@ -231,6 +236,9 @@ model.summary()
 plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `03_define_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example defines the discriminator model and summarizes it.
 
@@ -412,6 +420,9 @@ train_discriminator(model)
 
 ```
 
+##### Run Notebook
+Click notebook `04_fit_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example generates real and fake examples and updates the model, then evaluates
 the model on the same examples and prints the classification accuracy.
 
@@ -515,6 +526,9 @@ model.summary()
 plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `05_define_generator.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example defines the generator model and summarizes it.
 ```
@@ -627,6 +641,10 @@ model = define_generator(latent_dim)
 generate_fake_samples(model, latent_dim, 100)
 
 ```
+
+##### Run Notebook
+Click notebook `06_use_generator_model.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Running the example generates 100 random points from the latent space, uses this as input
 to the generator and generates 100 fake samples from our one-dimensional function domain. As
@@ -758,6 +776,9 @@ gan_model.summary()
 plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `07_define_composite_model.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first creates a summary of the composite model. You might get a
 UserWarning about not calling the compile() function that you can safely ignore.
@@ -1128,6 +1149,9 @@ gan_model = define_gan(generator, discriminator)
 train(generator, discriminator, gan_model, latent_dim)
 
 ```
+
+##### Run Notebook
+Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example reports model performance every 2,000 training iterations (batches)
 and creates a plot.

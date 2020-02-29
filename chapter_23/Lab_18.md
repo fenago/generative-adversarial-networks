@@ -171,6 +171,9 @@ print('Saved dataset: ', filename)
 
 ```
 
+##### Run Notebook
+Click notebook `01_prepare_dataset.ipynb` in jupterLab UI and run jupyter notebook
+
 Running the example loads all images in the training dataset, summarizes their shape to
 ensure the images were loaded correctly, then saves the arrays to a new file called maps 256.npz
 in compressed NumPy array format.
@@ -209,6 +212,9 @@ pyplot.imshow(tar_images[i].astype('uint8'))
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `02_load_plot_dataset.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running this example loads the prepared dataset and summarizes the shape of each array,
 confirming our expectations of a little over one thousand 256 × 256 image pairs.
@@ -839,6 +845,9 @@ train(d_model, g_model, gan_model, dataset)
 
 ```
 
+##### Run Notebook
+Click notebook `03_train_pix2pix.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1052,6 +1061,9 @@ plot_images(src_image, gen_image, tar_image)
 
 ```
 
+##### Run Notebook
+Click notebook `04_inference_pix2pix.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example will select a random image from the training dataset, translate it to a
 Google Maps, and plot the result compared to the expected image.
 
@@ -1174,6 +1186,9 @@ pyplot.show()
 
 ```
 
+##### Run Notebook
+Click notebook `05_translate_single_image.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example loads the image from file, creates a translation of it, and plots the
 result. The generated image appears to be a reasonable translation of the source image. The
 streets do not appear to be straight lines and the detail of the buildings is a bit lacking. Perhaps
@@ -1212,6 +1227,9 @@ return [X2, X1]
 The order of X1 and X2 is reversed in this version of the function. This means that the model
 will take Google Maps images as input and learn to generate satellite images. The complete
 example is omitted here for brevity. Run the example as before.
+
+##### Run Notebook
+Click notebook `06_train_pix2pix_reverse.ipynb` in jupterLab UI and run jupyter notebook.
 
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started

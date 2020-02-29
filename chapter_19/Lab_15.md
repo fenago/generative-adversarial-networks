@@ -366,6 +366,9 @@ plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer
 
 ```
 
+##### Run Notebook
+Click notebook `01_summarize_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 The model summary was left out for brevity. A plot of the model is created, showing the
 linear processing of the input image and the two clear output layers.
 
@@ -558,6 +561,9 @@ model.summary()
 plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `02_summarize_generator.ipynb` in jupterLab UI and run jupyter notebook.
 
 The model summary was left out for brevity. A plot of the network is created summarizing
 the input and output shapes for each layer. The plot confirms the two inputs to the network
@@ -1045,6 +1051,9 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `03_train_acgan.ipynb` in jupterLab UI and run jupyter notebook.
+
 **Note**: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1157,6 +1166,9 @@ X = (X + 1) / 2.0
 save_plot(X, n_examples)
 
 ```
+
+##### Run Notebook
+Click notebook `04_inference_acgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example, in this case, generates 100 very plausible photos of sneakers.
 

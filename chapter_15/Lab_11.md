@@ -593,6 +593,9 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `01_train_lsgan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -700,6 +703,9 @@ X = model.predict(latent_points)
 plot_generated(X, 10)
 
 ```
+
+##### Run Notebook
+Click notebook `02_inference_lsgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example generates a plot of 10 × 10, or 100, new and plausible handwritten
 digits.

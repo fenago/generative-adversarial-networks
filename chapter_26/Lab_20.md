@@ -135,6 +135,9 @@ print('Saved dataset: ', filename)
 
 ```
 
+##### Run Notebook
+Click notebook `01_load_prepare_dataset.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first loads all images into memory, showing that there are 1,187 photos
 in category A (horses) and 1,474 in category B (zebras). The arrays are then saved in compressed
 NumPy format with the filename horse2zebra 256.npz. This data file is about 570 megabytes,
@@ -174,6 +177,9 @@ pyplot.imshow(dataB[i].astype('uint8'))
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `02_load_plot_dataset.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first loads the dataset, confirming the number of examples and shape
 of the color images match our expectations.
@@ -933,6 +939,10 @@ train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_Bt
 
 ```
 
+##### Run Notebook
+Click notebook 03_train_cyclegan`.ipynb` in jupterLab UI and run jupyter notebook.
+
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1180,6 +1190,9 @@ show_plot(B_real, A_generated, B_reconstructed)
 
 ```
 
+##### Run Notebook
+Click notebook `04_inference_cyclegan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first selects a random photo of a horse, translates it, and then tries to
 reconstruct the original photo.
 
@@ -1291,6 +1304,9 @@ pyplot.imshow(image_tar[0])
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `05_translate_single_image.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example loads the selected image, loads the generator model, translates the
 photograph of a horse to a zebra, and plots the results.

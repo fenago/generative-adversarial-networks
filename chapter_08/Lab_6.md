@@ -88,6 +88,9 @@ print('Test', testX.shape, testy.shape)
 
 ```
 
+##### Run Notebook
+Click notebook `01_load_cifar10.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 50K examples in
 the training set and 10K in the test set and that each image is a square of 32 by 32 pixels.
@@ -127,6 +130,9 @@ pyplot.imshow(trainX[i])
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `02_plot_cifar10.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates a figure with a plot of 49 images from the CIFAR-10 
 dataset, arranged in a 7 × 7 square. In the plot, you can see small photographs of planes, trucks,
@@ -232,6 +238,9 @@ model.summary()
 plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `03_summarize_discriminator.ipynb` in jupterLab UI and run jupyter notebook.t
 
 Running the example first summarizes the model architecture, showing the output shape for
 each layer. We can see that the aggressive 2 × 2 stride acts to downsample the input image, first
@@ -522,6 +531,9 @@ train_discriminator(model, dataset)
 
 ```
 
+##### Run Notebook
+Click notebook `04_train_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first defines the model, loads the CIFAR-10 dataset, then trains the
 discriminator model.
 
@@ -706,6 +718,9 @@ plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_nam
 
 ```
 
+##### Run Notebook
+Click notebook `05_summarize_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example summarizes the layers of the model and their output shape. We can
 see that, as designed, the first hidden layer has 4,096 parameters or 256 × 4 × 4, the activations
 of which are reshaped into 256 4 × 4 feature maps. The feature maps are then upscaled via the
@@ -829,7 +844,6 @@ model = Sequential()
 # foundation for 4x4 image
 n_nodes = 256 * 4 * 4
 
-### 8.4. How to Define and Use the Generator Model
 model.add(Dense(n_nodes, input_dim=latent_dim))
 model.add(LeakyReLU(alpha=0.2))
 model.add(Reshape((4, 4, 256)))
@@ -883,6 +897,8 @@ pyplot.show()
 
 ```
 
+##### Run Notebook
+Click notebook `06_use_generator.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example generates 49 examples of fake CIFAR-10 images and visualizes them on
 a single plot of 7 by 7 images. As the model is not trained, the generated images are completely
@@ -1050,6 +1066,9 @@ gan_model.summary()
 plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `07_summarize_composite.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first creates a summary of the composite model, which is pretty
 uninteresting. We can see that the model expects CIFAR-10 images as input and predicts a
@@ -1487,6 +1506,9 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1638,6 +1660,9 @@ save_plot(X, 10)
 
 ```
 
+##### Run Notebook
+Click notebook `09_load_use_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first loads the model, samples 100 random points in the latent space,
 generates 100 images, then plots the results as a single image. We can see that most of the
 images are plausible, or plausible pieces of small objects. I can see dogs, cats, horses, birds,
@@ -1668,6 +1693,11 @@ pyplot.imshow(X[0, :, :])
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `10_generate_single_image.ipynb` in jupterLab UI and run jupyter notebook.
+
+
 
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.

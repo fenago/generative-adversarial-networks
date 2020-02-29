@@ -206,6 +206,9 @@ model.summary()
 
 ```
 
+##### Run Notebook
+Click notebook `01_strided_downsample.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example shows the shape of the output of the convolutional layer, where the
 feature maps have one quarter of the area.
 
@@ -253,6 +256,9 @@ model.summary()
 
 ```
 
+##### Run Notebook
+Click notebook `02_strided_upsample.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example shows the shape of the output of the convolutional layer, where the
 feature maps have quadruple the area.
 
@@ -299,6 +305,8 @@ model.summary()
 
 ```
 
+##### Run Notebook
+Click notebook `03_leaky_relu.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example demonstrates the structure of the model with a single convolutional
 layer followed by the activation layer.
@@ -349,6 +357,9 @@ model.summary()
 
 ```
 
+##### Run Notebook
+Click notebook `04_batch_norm.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example shows the desired usage of batch norm between the outputs of the
 convolutional layer and the activation function.
 
@@ -398,6 +409,9 @@ kernel_initializer=init, input_shape=(64,64,3)))
 
 ```
 
+ ##### Run Notebook
+Click notebook `05_gauss_weight_init.ipynb` in jupterLab UI and run jupyter notebook.
+
 ## Use Adam Stochastic Gradient Descent
 
 Stochastic gradient descent, or SGD for short, is the standard algorithm used to optimize
@@ -423,6 +437,8 @@ model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
 
 ```
 
+##### Run Notebook
+Click notebook `06_adam_sgd.ipynb` in jupterLab UI and run jupyter notebook.
 
 ## Scale Images to the Range [-1,1]
 
@@ -456,6 +472,9 @@ scaled = scale_images(images)
 print(scaled.min(), scaled.max())
 
 ```
+
+##### Run Notebook
+Click notebook `07_image_scaling.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example contrives a single color image with random pixel values in [0,255]. The
 pixel values are then scaled to the range [-1,1] and the minimum and maximum pixel values are
@@ -518,6 +537,9 @@ samples = generate_latent_points(n_dim, n_samples)
 print(samples.shape, samples.mean(), samples.std())
 
 ```
+
+##### Run Notebook
+Click notebook `08_gauss_latent.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example summarizes the generation of 500 points, each comprised of 100 random
 Gaussian values with a mean close to zero and a standard deviation close to 1, e.g. a standard
@@ -583,6 +605,9 @@ print(y.shape, y.min(), y.max())
 
 ```
 
+##### Run Notebook
+Click notebook `09_positive_label_smoothing.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example summarizes the min and max values for the smooth values, showing
 they are close to the expected values.
 
@@ -617,6 +642,9 @@ print(y.shape, y.min(), y.max())
 (1000, 1) 0.00019305316963429408 0.299785314665858
 
 ```
+
+##### Run Notebook
+Click notebook `10_negative_label_smoothing.ipynb` in jupterLab UI and run jupyter notebook
 
 ## Use Noisy Labels
 
@@ -663,6 +691,10 @@ y = noisy_labels(y, 0.05)
 print(y.sum())
 
 ```
+
+##### Run Notebook
+Click notebook `11_noisy_labels.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Try running the example a few times. The results show that approximately 50 of the 1s are
 flipped to 0s for the positive labels (e.g. 5% of 1,000) and approximately 50 0s are flopped to 1s
@@ -733,4 +765,6 @@ from scratch.
 
 - How to implement four additional best practices from Soumith Chintala’s GAN Hacks
 presentation and list.
+
+
 

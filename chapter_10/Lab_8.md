@@ -607,6 +607,9 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `01_normal_train_gain.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU.
 
@@ -952,6 +955,9 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `02_mode_collapse.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example will report the loss and accuracy each step of training, as before.
 In this case, the loss for the discriminator sits in a sensible range, although the loss for the
 generator jumps up and down. The accuracy for the discriminator also shows higher values,
@@ -1244,6 +1250,10 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `03_convergence_failure.ipynb` in jupterLab UI and run jupyter notebook.
+
+
 Running the example reports loss and accuracy for each model update. A clear sign of this
 type of failure is the rapid drop of the discriminator loss towards zero, where it remains. This is
 what we see in this case.
@@ -1525,6 +1535,9 @@ print(dataset.shape)
 train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
+
+##### Run Notebook
+Click notebook `04_different_convergence_failure.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example reports the loss and accuracy for each step during training, as before.
 As we expected, the loss for the discriminator rapidly falls to a value close to zero, where it

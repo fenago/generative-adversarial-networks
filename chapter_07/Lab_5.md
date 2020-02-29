@@ -88,6 +88,10 @@ print('Test', testX.shape, testy.shape)
 
 ```
 
+##### Run Notebook
+Click notebook `01_load_mnist.ipynb` in jupterLab UI and run jupyter notebook
+
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 60K examples in
 the training set and 10K in the test set and that each image is a square of 28 by 28 pixels.
@@ -143,6 +147,9 @@ pyplot.imshow(trainX[i], cmap='gray_r')
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook 02_plot_mnist`.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates a plot of 25 images from the MNIST training dataset, arranged
 in a 5 × 5 square.
@@ -233,6 +240,9 @@ model.summary()
 plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `03_summarize_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first summarizes the model architecture, showing the input and output
 from each layer. We can see that the aggressive 2 × 2 stride acts to downsample the input
@@ -528,6 +538,9 @@ train_discriminator(model, dataset)
 
 ```
 
+##### Run Notebook
+Click notebook `04_train_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first defines the model, loads the MNIST dataset, then trains the
 discriminator model.
 
@@ -689,6 +702,10 @@ model.summary()
 plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `05_summarize_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Running the example summarizes the layers of the model and their output shape. We can
 see that, as designed, the first hidden layer has 6,272 parameters or 128 × 7 × 7, the activations
@@ -855,6 +872,9 @@ pyplot.show()
 
 ```
 
+##### Run Notebook
+Click notebook `06_use_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example generates 25 examples of fake MNIST images and visualizes them on
 a single plot of 5 by 5 images. As the model is not trained, the generated images are completely
 random pixel values in [0, 1].
@@ -1009,6 +1029,9 @@ gan_model.summary()
 plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `07_summarize_composite.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first creates a summary of the composite model. We can see that the
 model expects MNIST images as input and predicts a single value as output.
@@ -1442,6 +1465,9 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1576,6 +1602,9 @@ save_plot(X, 5)
 
 ```
 
+##### Run Notebook
+Click notebook `09_load_use_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first loads the model, samples 25 random points in the latent space,
 generates 25 images, then plots the results as a single image.
 
@@ -1609,6 +1638,10 @@ pyplot.imshow(X[0, :, :, 0], cmap='gray_r')
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `10_generate_single_image.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Note: Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.

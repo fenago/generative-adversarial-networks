@@ -237,6 +237,10 @@ plot_faces(faces, 5)
 
 ```
 
+##### Run Notebook
+Click notebook `01_plot_faces.ipynb` in jupterLab UI and run jupyter notebook.
+
+
 Running the example loads a total of 25 images from the directory, then summarizes the
 size of the returned array.
 
@@ -274,7 +278,8 @@ import mtcnn
 print(mtcnn.__version__)
 
 ```
-
+##### Run Notebook
+Click notebook `02_check_mtcnn.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example prints the current version of the library.
 
@@ -428,6 +433,9 @@ savez_compressed('img_align_celeba.npz', all_faces)
 
 ```
 
+##### Run Notebook
+Click notebook `03_prepare_dataset.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example may take a few minutes given the large number of faces to be loaded.
 At the end of the run, the array of extracted and resized faces is saved as a compressed NumPy
 array with the filename img align celeba.npz. The prepared dataset can then be loaded any
@@ -442,6 +450,9 @@ faces = data['arr_0']
 print('Loaded: ', faces.shape)
 
 ```
+
+##### Run Notebook
+Click notebook `04_load_saved_dataset.ipynb` in jupterLab UI and run jupyter notebook.
 
 Loading the dataset summarizes the shape of the array, showing 50K images with the size of
 80 × 80 pixels and three color channels.
@@ -961,6 +972,9 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `05_train_gan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1107,6 +1121,9 @@ plot_generated(X, 5)
 
 ```
 
+##### Run Notebook
+Click notebook `06_load_and_generate.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first loads the saved model. Then, 25 random points in the 100dimensional latent space are created and provided to the generator model to create 25 images
 of faces, which are then plotted in a 5 × 5 grid.
 
@@ -1195,6 +1212,9 @@ plot_generated(X, len(interpolated))
 
 ```
 
+##### Run Notebook
+Click notebook `07_interpolate_latent.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example calculates the interpolation path between the two points in latent
 space, generates images for each, and plots the result. You can see the clear linear progression
 in ten steps from the first face on the left to the final face on the right.
@@ -1263,6 +1283,9 @@ results = vstack((results, X))
 plot_generated(results, 10)
 
 ```
+
+##### Run Notebook
+Click notebook `08_multiple_interpolate_latent.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates 10 different face starting points and 10 matching face endpoints,
 and the linear interpolation between each.
@@ -1371,6 +1394,9 @@ plot_generated(results, 10)
 
 ```
 
+##### Run Notebook
+Click notebook `09_multiple_slerp_latent.ipynb` in jupterLab UI and run jupyter notebook.
+
 The result is 10 more transitions between generated faces, this time using the correct Slerp
 interpolation method. The difference is subtle but somehow visually more correct.
 
@@ -1427,6 +1453,9 @@ X = (X + 1) / 2.0
 plot_generated(X, 10)
 
 ```
+
+##### Run Notebook
+Click notebook `10_generate_random_faces.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example loads the model, generates faces, and saves the latent vectors and
 generated faces. The latent vectors are saved to a compressed NumPy array with the filename
@@ -1585,6 +1614,10 @@ pyplot.imshow(result_image[0])
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `11_vector_arithmetic.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Running the example first loads the points in latent space for our specific images, calculates
 the average of the points, and generates the faces for the points. We can see that, indeed, our

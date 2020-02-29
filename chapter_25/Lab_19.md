@@ -313,6 +313,9 @@ show_layer_names=True)
 
 ```
 
+##### Run Notebook
+Click notebook `01_define_summarize_patchgan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
@@ -561,6 +564,9 @@ plot_model(model, to_file='generator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `02_define_summarize_encoder_decoder.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first summarizes the model. A plot of the generator model is also
 created, showing the skip connections in the ResNet blocks. The output of the model summary
@@ -916,6 +922,9 @@ c_model_AtoB = define_composite_model(g_model_AtoB, d_model_B, g_model_BtoA, ima
 c_model_BtoA = define_composite_model(g_model_BtoA, d_model_A, g_model_AtoB, image_shape)
 
 ```
+
+##### Run Notebook
+Click notebook `03_define_summarize_composite.ipynb` in jupterLab UI and run jupyter notebook.
 
 ## How to Update Model Weights
 

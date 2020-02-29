@@ -55,7 +55,7 @@ Below is an overview of the 5 steps in the neural network model life-cycle in Ke
 Let's take a look at each step in turn using the easy-to-use Keras Sequential API.
 
 
-Step 1. Define Network
+**Step 1.** Define Network
 
 The first step is to define your neural network. Neural networks are defined in Keras as a
 sequence of layers. The container for these layers is the Sequential class. The first step is to
@@ -113,7 +113,7 @@ neuron the output layer.
 - Multiclass Classification (>2 class): Softmax activation function, or softmax, and
 one output neuron per class value, assuming a one hot encoded output pattern.
 
-Step 2. Compile Network
+**Step 2.** Compile Network
 
 Once we have defined our network, we must compile it. Compilation is an efficiency step. It
 transforms the simple sequence of layers that we defined into a highly efficient series of matrix
@@ -165,7 +165,7 @@ problems. The metrics to collect are specified by name in an array. For example:
 model.compile(optimizer='sgd', loss='mean_squared_error', metrics=['accuracy'])
 ```
 
-Step 3. Fit Network
+**Step 3.** Fit Network
 
 Once the network is compiled, it can be fit, which means adapt the weights on a training dataset.
 Fitting the network requires the training data to be specified, both a matrix of input patterns, X,
@@ -197,7 +197,7 @@ verbose to 0. For example:
 history = model.fit(X, y, batch_size=10, epochs=100, verbose=0)
 ```
 
-Step 4. Evaluate Network
+**Step 4.** Evaluate Network
 
 Once the network is trained, it can be evaluated. The network can be evaluated on the training
 data, but this will not provide a useful indication of the performance of the network as a
@@ -220,7 +220,7 @@ evaluating the model. We can turn this off by setting the verbose argument to 0.
 loss, accuracy = model.evaluate(X, y, verbose=0)
 ```
 
-Step 5. Make Predictions
+**Step 5.** Make Predictions
 
 Once we are satisfied with the performance of our fit model, we can use it to make predictions
 on new data. This is as easy as calling the predict() function on the model with an array of
@@ -575,4 +575,3 @@ and recurrent neural networks.
 
 # Next
 In the next part, you will discover how you can prepare text data ready for modeling.
-

@@ -141,6 +141,9 @@ print(rf)
 
 ```
 
+##### Run Notebook
+Click notebook 01_receptive_field`.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example prints the size of the receptive field for each layer in the model from
 the output layer to the input layer. We can see that each 1 × 1 pixel in the output layer maps
 to a 70 × 70 receptive field in the input layer.
@@ -278,6 +281,9 @@ plot_model(model, to_file='discriminator_model_plot.png', show_shapes=True,
 show_layer_names=True)
 
 ```
+
+##### Run Notebook
+Click notebook `02_define_summarize_patchgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first summarizes the model, providing insight into how the input shape
 is transformed across the layers and the number of parameters in the model. The output is
@@ -508,6 +514,8 @@ show_layer_names=True)
 
 ```
 
+##### Run Notebook
+Click notebook `03_define_summarize_unet.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first summarizes the model. The output of the model summary was
 omitted here for brevity. The model has a single input and output, but the skip connections
@@ -739,6 +747,8 @@ plot_model(gan_model, to_file='gan_model_plot.png', show_shapes=True, show_layer
 
 ```
 
+##### Run Notebook
+Click notebook `04_define_summarize_composite.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example first summarizes the composite model, showing the 256 × 256 image
 input, the same shaped output from model 2 (the generator) and the PatchGAN classification

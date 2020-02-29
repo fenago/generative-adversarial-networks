@@ -246,6 +246,9 @@ print('FID (different): %.3f' % fid)
 
 ```
 
+##### Run Notebook
+Click notebook `01_fid_numpy.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first reports the FID between the act1 activations and itself, which is
 0.0 as we expect (note that the sign of the score can be ignored). The distance between the two
 collections of random activations is also as we expect: a large number, which in this case was
@@ -483,6 +486,9 @@ print('FID (different): %.3f' % fid)
 
 ```
 
+##### Run Notebook
+Click notebook `02_fid_keras.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first summarizes the shapes of the fabricated images and their rescaled
 versions, matching our expectations.
 
@@ -604,6 +610,9 @@ fid = calculate_fid(model, images1, images2)
 print('FID: %.3f' % fid)
 
 ```
+
+##### Run Notebook
+Click notebook `03_fid_cifar10.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example may take some time depending on the speed of your workstation. It
 may also require a large amount of RAM. If you have trouble with the example, try halving the

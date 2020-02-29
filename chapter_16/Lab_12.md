@@ -977,6 +977,8 @@ print(dataset.shape)
 train(generator, critic, gan_model, dataset, latent_dim)
 
 ```
+##### Run Notebook
+Click notebook `01_train_wgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU. First, the loss of the critic and generator models is reported to the console each iteration
@@ -1114,7 +1116,8 @@ X = model.predict(latent_points)
 plot_generated(X, 5)
 
 ```
-
+##### Run Notebook
+Click notebook `02_inference_wgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example generates a plot of 5 × 5, or 25, new and plausible handwritten number
 seven digits.

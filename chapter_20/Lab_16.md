@@ -176,6 +176,9 @@ plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer
 
 ```
 
+##### Run Notebook
+Click notebook `01_summarize_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example creates a plot of the discriminator model, clearly showing the 28×28×1
 
 
@@ -257,6 +260,9 @@ show_layer_names=True)
 
 ```
 
+##### Run Notebook
+Click notebook `02_summarize_separate_discriminators.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example creates and plots both models. The plot for the first model is the
 same as before. The plot of the second model shows the same expected input shape and same
 feature extraction layers, with a new 10 class classification output layer.
@@ -333,6 +339,9 @@ show_layer_names=True)
 
 ```
 
+##### Run Notebook
+Click notebook `03_summarize_multi_output_discriminator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example creates and plots the single multi-output model. The plot clearly
 shows the shared layers and the separate unsupervised and supervised output layers.
 
@@ -384,6 +393,9 @@ output = np.asarray([10.0, 10.0, 10.0])
 print(custom_activation(output))
 
 ```
+
+##### Run Notebook
+Click notebook `04_custom_activation.ipynb` in jupterLab UI and run jupyter notebook.
 
 Remember, the output of the unsupervised model prior to the softmax activation function
 will be the activations of the nodes directly. They will be small positive or negative values, but
@@ -477,6 +489,8 @@ show_layer_names=True)
 
 ```
 
+##### Run Notebook
+Click notebook `05_summarize_discriminator_cust_act.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates and plots the two models, which look much the same as the
 two models in the first example. Stacked version of the unsupervised discriminator model:
@@ -999,6 +1013,9 @@ train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `06_train_sgan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1114,6 +1131,9 @@ _, test_acc = model.evaluate(testX, testy, verbose=0)
 print('Test Accuracy: %.3f%%' % (test_acc * 100))
 
 ```
+
+##### Run Notebook
+Click notebook `07_inference_sgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example loads the model and evaluates it on the MNIST dataset.\
 

@@ -544,6 +544,9 @@ plot_model(gan_model, to_file='gan_plot.png', show_shapes=True, show_layer_names
 
 ```
 
+##### Run Notebook
+Click notebook `01_define_plot_models.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example creates all three models, then creates the composite GAN model and
 saves a plot of the model architecture.
 
@@ -973,6 +976,9 @@ train(g_model, d_model, gan_model, dataset, latent_dim, n_cat)
 
 ```
 
+##### Run Notebook
+Click notebook `02_train_infogan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1081,6 +1087,10 @@ create_plot(X, n_samples)
 
 ```
 
+##### Run Notebook
+Click notebook `03_inference_infogan.ipynb` in jupterLab UI and run jupyter notebook.
+
+
 Running the example will load the saved generator model and use it to generate 100 random
 images and plot the images on a 10 × 10 grid.
 
@@ -1165,6 +1175,8 @@ save_plot(X, n_samples)
 
 ```
 
+##### Run Notebook
+Click notebook `04_inference_control_code.ipynb` in jupterLab UI and run jupyter notebook.
 
 The result is a grid of 25 generated images generated with the categorical code set to the
 value 1.

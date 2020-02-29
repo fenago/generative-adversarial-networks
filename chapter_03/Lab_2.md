@@ -198,6 +198,9 @@ print(yhat)
 
 ```
 
+##### Run Notebook
+Click notebook `01_upsample_layer.ipynb` in jupterLab UI and run jupyter notebook
+
 Running the example first creates and summarizes our 2 × 2 input data. Next, the model is
 summarized. We can see that it will output a 4 × 4 result as we expect, and importantly, the
 layer has no parameters or model weights. This is because it is not learning anything; it is just
@@ -334,6 +337,9 @@ model.add(Conv2D(1, (3,3), padding='same'))
 model.summary()
 
 ```
+
+##### Run Notebook
+Click notebook `02_upsample_generator.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates the model and summarizes the output shape of each layer. We
 can see that the Dense layer outputs 3,200 activations that are then reshaped into 128 feature
@@ -653,6 +659,9 @@ yhat = yhat.reshape((4, 4))
 print(yhat)
 
 ```
+##### Run Notebook
+Click notebook `03_transpose_layer.ipynb` in jupterLab UI and run jupyter notebook.
+
 
 Running the example first creates and summarizes our 2 × 2 input data. Next, the model is
 summarized. We can see that it will output a 4 × 4 result as we expect, and importantly, the
@@ -782,6 +791,9 @@ model.summary()
 
 ```
 
+##### Run Notebook
+Click notebook `04_transpose_generator.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example creates the model and summarizes the output shape of each layer.
 We can see that the Dense layer outputs 3,200 activations that are then reshaped into 128
 feature maps with the shape 5 × 5. The widths and heights are doubled to 10 × 10 by the
@@ -871,3 +883,6 @@ input and learn how to fill in details during the model training process.
 
 In the next tutorial, you will discover the algorithm for training generative adversarial network
 models.
+
+
+

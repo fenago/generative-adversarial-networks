@@ -163,6 +163,9 @@ print('Test', testX.shape, testy.shape)
 
 ```
 
+##### Run Notebook
+Click notebook `01_load_fasion_mnist.ipynb` in jupterLab UI and run jupyter notebook
+
 Running the example loads the dataset and prints the shape of the input and output
 components of the train and test splits of images. We can see that there are 60K examples in
 the training set and 10K in the test set and that each image is a square of 28 by 28 pixels.
@@ -218,6 +221,9 @@ pyplot.imshow(trainX[i], cmap='gray_r')
 pyplot.show()
 
 ```
+
+##### Run Notebook
+Click notebook `02_plot_fashion_mnist.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates a figure with a plot of 100 images from the MNIST training
 dataset, arranged in a 10 × 10 square.
@@ -628,6 +634,9 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `03_train_unconditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -716,6 +725,8 @@ show_plot(X, 10)
 
 ```
 
+##### Run Notebook
+Click notebook `04_inference_unconditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example creates a plot of 100 randomly generated items of clothing arranged
 into a 10 × 10 grid.
@@ -1197,6 +1208,9 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 
 ```
 
+##### Run Notebook
+Click notebook `05_train_conditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
+
 Note: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
@@ -1252,6 +1266,9 @@ X = (X + 1) / 2.0
 save_plot(X, 10)
 
 ```
+
+##### Run Notebook
+Click notebook `06_inference_conditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example loads the saved conditional GAN model and uses it to generate 100
 items of clothing. The clothing is organized in columns. From left to right, they are t-shirt,

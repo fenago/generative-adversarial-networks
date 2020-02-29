@@ -212,6 +212,9 @@ print(score)
 
 ```
 
+##### Run Notebook
+Click notebook `01_inception_score_confident.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example gives the expected score of 3.0 (or a number extremely close).
 
 ```
@@ -230,6 +233,9 @@ score = calculate_inception_score(p_yx)
 print(score)
 
 ```
+
+##### Run Notebook
+Click notebook `02_inception_score_uniform.ipynb` in jupterLab UI and run jupyter notebook.
 
 In this case, we would expect the inception score to be the worst possible where there is no
 difference between the conditional and marginal distributions, e.g. an inception score of 1.0.
@@ -450,6 +456,9 @@ print('score', is_avg, is_std)
 
 ```
 
+##### Run Notebook
+Click notebook `03_inception_score_keras.ipynb` in jupterLab UI and run jupyter notebook.
+
 Running the example first defines the 50 fake images, then calculates the inception score on
 each batch and reports the expected inception score of 1.0, with a standard deviation of 0.0.
 Note: the first time the InceptionV3 model is used, Keras will download the model weights
@@ -602,6 +611,9 @@ is_avg, is_std = calculate_inception_score(images)
 print('score', is_avg, is_std)
 
 ```
+
+##### Run Notebook
+Click notebook `04_inception_score_cifar10.ipynb` in jupterLab UI and run jupyter notebook.
 
 Running the example may take some time depending on the speed of your workstation. It
 may also require a large amount of RAM. If you have trouble with the example, try reducing
