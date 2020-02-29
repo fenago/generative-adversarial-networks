@@ -1018,7 +1018,7 @@ Click notebook `06_train_sgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 At the start of the run, the size of the training dataset is summarized, as is the supervised
 subset, confirming our configuration. The performance of each model is summarized at the end

@@ -1511,7 +1511,7 @@ Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter noteb
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 The chosen configuration results in the stable training of both the generative and discriminative model. The model performance is reported every batch, including the loss of both the
 discriminative (d) and generative (g) models.

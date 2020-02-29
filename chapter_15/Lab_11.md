@@ -598,7 +598,7 @@ Click notebook `01_train_lsgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 Running the example will report the loss of the discriminator on real (d1) and fake (d2)
 examples and the loss of the generator via the discriminator on generated examples presented

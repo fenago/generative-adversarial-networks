@@ -850,7 +850,7 @@ Click notebook `03_train_pix2pix.ipynb` in jupterLab UI and run jupyter notebook
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 The loss is reported each training iteration, including the discriminator loss on real examples
 (d1), discriminator loss on generated or fake examples (d2), and generator loss, which is a
@@ -1233,7 +1233,7 @@ Click notebook `06_train_pix2pix_reverse.ipynb` in jupterLab UI and run jupyter 
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 As before, the loss of the model is reported each training iteration. If loss for the discriminator
 goes to zero and stays there for a long time, consider re-starting the training run as it is an

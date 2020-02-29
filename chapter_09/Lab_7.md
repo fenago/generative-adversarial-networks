@@ -977,7 +977,7 @@ Click notebook `05_train_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,

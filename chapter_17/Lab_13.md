@@ -103,7 +103,7 @@ Their approach is demonstrated in the MNIST handwritten digit dataset where the 
 are one hot encoded and concatenated with the input to both the generator and discriminator
 models. The image below provides a summary of the model architecture.
 
-![](../images/352-64.jpg)
+![](../images/352-80.jpg)
 
 There have been many advancements in the design and training of GAN models, most notably
 the deep convolutional GAN, or DCGAN for short, that outlines the model configuration and
@@ -639,7 +639,7 @@ Click notebook `03_train_unconditional_gan.ipynb` in jupterLab UI and run jupyte
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,
 is reported after each batch.
@@ -652,38 +652,11 @@ over the course of training.
 
 ```
 ...
->100,
->100,
->100,
->100,
->100,
-
-464/468,
-465/468,
-466/468,
-467/468,
-468/468,
-
-d1=0.681,
-d1=0.691,
-d1=0.691,
-d1=0.698,
-d1=0.699,
-
-d2=0.685
-d2=0.700
-d2=0.703
-d2=0.699
-d2=0.695
-
-
-
-g=0.693
-g=0.703
-g=0.706
-g=0.699
-g=0.708
-
+>100, 464/468, d1=0.681, d2=0.685 g=0.693
+>100, 465/468, d1=0.691, d2=0.700 g=0.703
+>100, 466/468, d1=0.691, d2=0.703 g=0.706
+>100, 467/468, d1=0.698, d2=0.699 g=0.699
+>100, 468/468, d1=0.699, d2=0.695 g=0.708
 ```
 
 At the end of training, the generator model will be saved to file with the filename generator.h5.
@@ -1011,36 +984,14 @@ from numpy.random import randn
 from numpy.random import randint
 from keras.datasets.fashion_mnist import load_data
 from keras.optimizers import Adam
-from keras.models import Model
-from keras.layers import Input
+from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Reshape
 from keras.layers import Flatten
 from keras.layers import Conv2D
-
-from
-from
-from
-from
-from
-
-keras.layers
-keras.layers
-keras.layers
-keras.layers
-keras.layers
-
-import
-import
-import
-import
-import
-
-Conv2DTranspose
-LeakyReLU
-Dropout
-Embedding
-Concatenate
+from keras.layers import Conv2DTranspose
+from keras.layers import LeakyReLU
+from keras.layers import Dropout
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1), n_classes=10):
@@ -1213,7 +1164,7 @@ Click notebook `05_train_conditional_gan.ipynb` in jupterLab UI and run jupyter 
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 At the end of the run, the model is saved to the file with name cgan generator.h5.
 
 

@@ -981,7 +981,7 @@ Click notebook `02_train_infogan.ipynb` in jupterLab UI and run jupyter notebook
 
 <h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 The loss across the models is reported each training iteration. If the loss for the discriminator
 remains at 0.0 or goes to 0.0 for an extended time, this may be a sign of a training failure and

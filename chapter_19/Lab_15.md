@@ -1056,7 +1056,7 @@ Click notebook `03_train_acgan.ipynb` in jupterLab UI and run jupyter notebook.
 
 **Note**: Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
-quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
+quickly by using an AWS EC2 instance to train the model.
 
 The loss is reported each training iteration, including the real/fake and class loss for the
 discriminator on real examples (dr), the discriminator on fake examples (df ), and the generator
