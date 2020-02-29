@@ -441,32 +441,18 @@ model on real and generated (fake) images is listed below.
 ```
 # example of training the discriminator model on real and random mnist images
 from numpy import expand_dims
-
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-
-numpy import ones
-numpy import zeros
-numpy.random import rand
-numpy.random import randint
-keras.datasets.mnist import load_data
-keras.optimizers import Adam
-keras.models import Sequential
-keras.layers import Dense
-keras.layers import Conv2D
-keras.layers import Flatten
-keras.layers import Dropout
-keras.layers import LeakyReLU
+from numpy import ones
+from numpy import zeros
+from numpy.random import rand
+from numpy.random import randint
+from keras.datasets.mnist import load_data
+from keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Conv2D
+from keras.layers import Flatten
+from keras.layers import Dropout
+from keras.layers import LeakyReLU
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
@@ -1276,34 +1262,19 @@ from numpy import expand_dims
 from numpy import zeros
 from numpy import ones
 from numpy import vstack
-
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-from
-
-numpy.random import randn
-numpy.random import randint
-keras.datasets.mnist import load_data
-keras.optimizers import Adam
-keras.models import Sequential
-keras.layers import Dense
-keras.layers import Reshape
-keras.layers import Flatten
-keras.layers import Conv2D
-keras.layers import Conv2DTranspose
-keras.layers import LeakyReLU
-keras.layers import Dropout
-matplotlib import pyplot
+from numpy.random import randn
+from numpy.random import randint
+from keras.datasets.mnist import load_data
+from keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Reshape
+from keras.layers import Flatten
+from keras.layers import Conv2D
+from keras.layers import Conv2DTranspose
+from keras.layers import LeakyReLU
+from keras.layers import Dropout
+from matplotlib import pyplot
 
 # define the standalone discriminator model
 def define_discriminator(in_shape=(28,28,1)):
