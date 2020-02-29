@@ -848,7 +848,7 @@ train(d_model, g_model, gan_model, dataset)
 ##### Run Notebook
 Click notebook `03_train_pix2pix.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
@@ -860,7 +860,7 @@ weighted average of adversarial and L1 loss (g). If loss for the discriminator g
 stays there for a long time, consider re-starting the training run as it is an example of a training
 failure.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```
@@ -1067,7 +1067,7 @@ Click notebook `04_inference_pix2pix.ipynb` in jupterLab UI and run jupyter note
 Running the example will select a random image from the training dataset, translate it to a
 Google Maps, and plot the result compared to the expected image.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, we can see that the generated image captures large roads with orange and
@@ -1231,7 +1231,7 @@ example is omitted here for brevity. Run the example as before.
 ##### Run Notebook
 Click notebook `06_train_pix2pix_reverse.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
@@ -1239,7 +1239,7 @@ As before, the loss of the model is reported each training iteration. If loss fo
 goes to zero and stays there for a long time, consider re-starting the training run as it is an
 example of a training failure.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```

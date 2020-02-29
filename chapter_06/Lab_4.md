@@ -266,7 +266,7 @@ _________________________________________________________________
 A plot of the model is also created and we can see that the model expects two inputs and
 will predict a single output.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -426,7 +426,7 @@ Click notebook `04_fit_discriminator.ipynb` in jupterLab UI and run jupyter note
 Running the example generates real and fake examples and updates the model, then evaluates
 the model on the same examples and prints the classification accuracy.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 In this case, the model rapidly learns to correctly identify the real examples with perfect
 accuracy and is very good at identifying the fake examples with 80% to 90% accuracy.
@@ -554,7 +554,7 @@ _________________________________________________________________
 
 A plot of the model is also created and we can see that the model expects a five-element
 point from the latent space as input and will predict a two-element vector as output.
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -805,7 +805,7 @@ _________________________________________________________________
 A plot of the model is also created and we can see that the model expects a five-element
 point in latent space as input and will predict a single output classification label.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -1156,7 +1156,7 @@ Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter noteb
 Running the example reports model performance every 2,000 training iterations (batches)
 and creates a plot.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 We can see that the training process is relatively unstable. The first column reports the
 iteration number, the second the classification accuracy of the discriminator for real examples,

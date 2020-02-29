@@ -613,7 +613,7 @@ Click notebook `01_normal_train_gain.ipynb` in jupterLab UI and run jupyter note
 Running the example is quick, taking approximately 10 minutes on modern hardware without
 a GPU.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 First, the loss and accuracy of the discriminator and loss for the generator model are reported
 to the console each iteration of the training loop. This is important. A stable GAN will have

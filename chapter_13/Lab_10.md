@@ -492,7 +492,7 @@ Click notebook `02_fid_keras.ipynb` in jupterLab UI and run jupyter notebook.
 Running the example first summarizes the shapes of the fabricated images and their rescaled
 versions, matching our expectations.
 
-Note: the first time the InceptionV3 model is used, Keras will download the model weights
+<h5><span style="color:red;">Note:</span></h5> the first time the InceptionV3 model is used, Keras will download the model weights
 and save them into the ∼/.keras/models/ directory on your workstation. The weights are
 about 100 megabytes and may take a moment to download depending on the speed of your
 internet connection.

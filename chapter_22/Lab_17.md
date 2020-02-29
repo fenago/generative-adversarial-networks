@@ -291,7 +291,7 @@ omitted here for brevity. A plot of the model is created showing much the same i
 a graphical form. The model is not complex, with a linear path with two input images and a
 single output prediction.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -523,7 +523,7 @@ make the summary difficult to read. A plot of the model is created showing much 
 information in a graphical form. The model is complex, and the plot helps to understand the
 skip connections and their impact on the number of filters in the decoder.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -784,7 +784,7 @@ A plot of the composite model is also created, showing how the input image flows
 generator and discriminator, and that the model has two outputs or end-points from each of the
 two models.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 

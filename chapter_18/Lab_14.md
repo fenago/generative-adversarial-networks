@@ -550,7 +550,7 @@ Click notebook `01_define_plot_models.ipynb` in jupterLab UI and run jupyter not
 Running the example creates all three models, then creates the composite GAN model and
 saves a plot of the model architecture.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -979,7 +979,7 @@ train(g_model, d_model, gan_model, dataset, latent_dim, n_cat)
 ##### Run Notebook
 Click notebook `02_train_infogan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
@@ -991,7 +991,7 @@ as it perfectly predicts the categorical variable. Loss for the generator and di
 is likely to hover around 1.0 eventually, to demonstrate a stable training process or equilibrium
 between the training of the two models.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```
@@ -1181,7 +1181,7 @@ Click notebook `04_inference_control_code.ipynb` in jupterLab UI and run jupyter
 The result is a grid of 25 generated images generated with the categorical code set to the
 value 1.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 The values of the control code are expected to influence the generated images; specifically,
 they are expected to influence the digit type. They are not expected to be ordered though, e.g.

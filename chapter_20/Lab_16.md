@@ -183,7 +183,7 @@ Running the example creates a plot of the discriminator model, clearly showing t
 
 
 shape of the input image and the prediction of a single probability value.
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -267,7 +267,7 @@ Running the example creates and plots both models. The plot for the first model 
 same as before. The plot of the second model shows the same expected input shape and same
 feature extraction layers, with a new 10 class classification output layer.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -345,7 +345,7 @@ Click notebook `03_summarize_multi_output_discriminator.ipynb` in jupterLab UI a
 Running the example creates and plots the single multi-output model. The plot clearly
 shows the shared layers and the separate unsupervised and supervised output layers.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -1016,7 +1016,7 @@ train(g_model, d_model, c_model, gan_model, dataset, latent_dim)
 ##### Run Notebook
 Click notebook `06_train_sgan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
@@ -1030,7 +1030,7 @@ will shrink to a small value close to zero and accuracy will hit 100%, which wil
 for the entire run. The loss of the unsupervised discriminator and generator should remain at
 modest values throughout the run if they are kept in equilibrium.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```
@@ -1137,7 +1137,7 @@ Click notebook `07_inference_sgan.ipynb` in jupterLab UI and run jupyter noteboo
 
 Running the example loads the model and evaluates it on the MNIST dataset.\
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, we can see that the model achieves the expected performance of 95.432% on

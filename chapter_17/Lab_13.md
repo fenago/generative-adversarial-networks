@@ -148,7 +148,7 @@ to the Fashion-MNIST dataset via the fashion mnist.load dataset() function. It r
 two tuples, one with the input and output elements for the standard training dataset, and
 another with the input and output elements for the standard test dataset. The example below
 loads the dataset and summarizes the shape of the loaded dataset.
-Note: the first time you load the dataset, Keras will automatically download a compressed
+<h5><span style="color:red;">Note:</span></h5> the first time you load the dataset, Keras will automatically download a compressed
 version of the images and save them under your home directory in ∼/.keras/datasets/. The
 download is fast as the dataset is only about 25 megabytes in its compressed form.
 
@@ -637,14 +637,14 @@ train(generator, discriminator, gan_model, dataset, latent_dim)
 ##### Run Notebook
 Click notebook `03_train_unconditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,
 is reported after each batch.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, the discriminator and generator loss both sit around values of about 0.6 to 0.7
@@ -732,7 +732,7 @@ Running the example creates a plot of 100 randomly generated items of clothing a
 into a 10 × 10 grid.
 
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, we can see an assortment of clothing items such as shoes, sweaters, and pants.
@@ -1211,7 +1211,7 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 ##### Run Notebook
 Click notebook `05_train_conditional_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 At the end of the run, the model is saved to the file with name cgan generator.h5.

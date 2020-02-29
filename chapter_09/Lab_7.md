@@ -975,7 +975,7 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 ##### Run Notebook
 Click notebook `05_train_gan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
@@ -983,7 +983,7 @@ quickly by using an AWS EC2 instance to train the model. See the instructions in
 The loss for the discriminator on real and fake samples, as well as the loss for the generator,
 is reported after each batch.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```

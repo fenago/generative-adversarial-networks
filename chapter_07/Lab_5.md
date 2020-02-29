@@ -73,7 +73,7 @@ access to the MNIST dataset via the mnist.load dataset() function. It returns tw
 one with the input and output elements for the standard training dataset, and another with the
 input and output elements for the standard test dataset. The example below loads the dataset
 and summarizes the shape of the loaded dataset.
-Note: the first time you load the dataset, Keras will automatically download a compressed
+<h5><span style="color:red;">Note:</span></h5> the first time you load the dataset, Keras will automatically download a compressed
 version of the images and save them under your home directory in ∼/.keras/datasets/. The
 download is fast as the dataset is only about eleven megabytes in its compressed form.
 
@@ -297,7 +297,7 @@ _________________________________________________________________
 A plot of the model is also created and we can see that the model expects two inputs and
 will predict a single output.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -544,7 +544,7 @@ Click notebook `04_train_discriminator.ipynb` in jupterLab UI and run jupyter no
 Running the example first defines the model, loads the MNIST dataset, then trains the
 discriminator model.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, the discriminator model learns to tell the difference between real and generated
@@ -755,7 +755,7 @@ _________________________________________________________________
 A plot of the model is also created and we can see that the model expects a 100-element
 vector from the latent space as input and will generate an image as output.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -1058,7 +1058,7 @@ _________________________________________________________________
 A plot of the model is also created and we can see that the model expects a 100-element
 point in latent space as input and will predict a single output classification label.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -1468,14 +1468,14 @@ train(g_model, d_model, gan_model, dataset, latent_dim)
 ##### Run Notebook
 Click notebook `08_complete_example.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 
 The chosen configuration results in the stable training of both the generative and discriminative model. The model performance is reported every batch, including the loss of both the
 discriminative (d) and generative (g) models.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 In this case, the loss remains stable over the course of training.
 
@@ -1608,7 +1608,7 @@ Click notebook `09_load_use_generator.ipynb` in jupterLab UI and run jupyter not
 Running the example first loads the model, samples 25 random points in the latent space,
 generates 25 images, then plots the results as a single image.
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 In this case, we can see that most of the images are plausible, or plausible pieces of
@@ -1643,7 +1643,7 @@ pyplot.show()
 Click notebook `10_generate_single_image.ipynb` in jupterLab UI and run jupyter notebook.
 
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 

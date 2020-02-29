@@ -943,7 +943,7 @@ train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_model_Bt
 Click notebook 03_train_cyclegan`.ipynb` in jupterLab UI and run jupyter notebook.
 
 
-Note: Running the example may take many hours to run on CPU hardware. I recommend
+<h5><span style="color:red;">Note:</span></h5> Running the example may take many hours to run on CPU hardware. I recommend
 running the example on GPU hardware if possible. If you need help, you can get started
 quickly by using an AWS EC2 instance to train the model. See the instructions in Appendix C.
 The loss is reported each training iteration, including the Discriminator-A loss on real and
@@ -951,7 +951,7 @@ fake examples (dA), Discriminator-B loss on real and fake examples (dB), and Gen
 and Generator-BtoA loss, each of which is a weighted average of adversarial, identity, forward,
 and backward cycle loss (g). If loss for the discriminator goes to zero and stays there for a long
 time, consider re-starting the training run as it is an example of a training failure.
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```
@@ -1208,7 +1208,7 @@ it to a horse, then reconstructing the original photo of the zebra.
 ![](../images/590-147.jpg)
 
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 The models are not perfect, especially the zebra to horse model, so you may want to

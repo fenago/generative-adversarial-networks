@@ -316,7 +316,7 @@ show_layer_names=True)
 ##### Run Notebook
 Click notebook `01_define_summarize_patchgan.ipynb` in jupterLab UI and run jupyter notebook.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 

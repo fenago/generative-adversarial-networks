@@ -372,7 +372,7 @@ Click notebook `01_summarize_discriminator.ipynb` in jupterLab UI and run jupyte
 The model summary was left out for brevity. A plot of the model is created, showing the
 linear processing of the input image and the two clear output layers.
 
-Note: Creating a plot of the model assumes that the pydot and graphviz libraries are
+<h5><span style="color:red;">Note:</span></h5> Creating a plot of the model assumes that the pydot and graphviz libraries are
 installed. If this is a problem, you can comment out the import statement and the function call
 for plot model().
 
@@ -1062,7 +1062,7 @@ The loss is reported each training iteration, including the real/fake and class 
 discriminator on real examples (dr), the discriminator on fake examples (df ), and the generator
 updated via the composite model when generating images (g).
 
-Note: Your specific results may vary given the stochastic nature of the learning algorithm.
+<h5><span style="color:red;">Note:</span></h5> Your specific results may vary given the stochastic nature of the learning algorithm.
 Consider running the example a few times and compare the average performance.
 
 ```
